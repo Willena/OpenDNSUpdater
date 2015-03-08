@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">OpenDNSUpdater</string>
     <string name="noty_content">Ip address successfully updated !</string>
+    <string name="password_Description">change your openDNS Password</string>
+    <string name="username_Description">change your openDNS username</string>
+    <string name="version">1.0</string>
 </resources>

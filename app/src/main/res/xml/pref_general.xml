@@ -11,7 +11,8 @@
         android:inputType="textWebEmailAddress"
         android:capitalize="none"
         android:singleLine="true"
-        android:maxLines="1" />
+        android:maxLines="1"
+        android:summary="@string/username_Description"/>
 
     <EditTextPreference
         android:key="OpenDns_Password"
@@ -21,7 +22,8 @@
         android:inputType="textPassword"
         android:capitalize="none"
         android:singleLine="true"
-        android:maxLines="1" />
+        android:maxLines="1"
+        android:summary="@string/password_Description"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

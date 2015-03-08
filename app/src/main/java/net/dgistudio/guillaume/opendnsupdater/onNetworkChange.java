@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
@@ -13,8 +14,10 @@ import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,30 +42,35 @@ public class onNetworkChange extends BroadcastReceiver {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        String username  = prefs.getString("OpenDns_Username","");
-        String password  = prefs.getString("OpenDns_Password","");
+        final String username  = prefs.getString("OpenDns_Username", "");
+        final String password  = prefs.getString("OpenDns_Password", "");
 
         Log.d("pref",""+username);
         Log.d("pref",""+password);
 
-        /*try{
-           HttpClient httpclient = new DefaultHttpClient();
+        Thread thread = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    try{
+                        HttpClient httpclient = new DefaultHttpClient();
+                        HttpGet request = new HttpGet();
+                        URI website = new URI("https://updates.opendns.com/nic/update?hostname=Home");
+                        request.setURI(website);
+                        HttpResponse response = httpclient.execute(request);
+                        String result = EntityUtils.toString(response.getEntity());
+                        Log.d("res", result);
 
-           HttpGet request = new HttpGet();
-           URI website = new URI("http://alanhardin.comyr.com/matt24/matt28.php");
-           request.setURI(website);
-           HttpResponse response = httpclient.execute(request);
-           in = new BufferedReader(new InputStreamReader(
-                   response.getEntity().getContent()));
+                    }catch(Exception e){
+                        Log.e("log_tag", "Error in http connection "+e.toString());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
-           // NEW CODE
-           String line = in.readLine();
-           textv.append(" First line: " + line);
-           // END OF NEW CODE
+        thread.start();
 
-           textv.append(" Connected ");
-       }catch(Exception e){
-           Log.e("log_tag", "Error in http connection "+e.toString());
-       }*/
     }
 }

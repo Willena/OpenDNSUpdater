@@ -38,7 +38,7 @@ public class onNetworkChange extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.d("BroadCast", "Change");
+        //Log.d("BroadCast", "Change");
 
         ConnectivityManager connMgr = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -49,8 +49,8 @@ public class onNetworkChange extends BroadcastReceiver {
         final String username  = prefs.getString("OpenDns_Username", "");
         final String password  = prefs.getString("OpenDns_Password", "");
 
-        Log.d("pref",""+username);
-        Log.d("pref",""+password);
+        //Log.d("pref",""+username);
+        //Log.d("pref",""+password);
 
         Thread thread = new Thread(new Runnable(){
             @Override
@@ -60,10 +60,12 @@ public class onNetworkChange extends BroadcastReceiver {
                         HttpClient httpclient = new DefaultHttpClient();
                         HttpGet request = new HttpGet();
                         URI website = new URI("https://updates.opendns.com/nic/update?hostname=Home");
+                        request.setHeader("Authorization", "Basic " + Base64.encodeToString((username+":"+password).getBytes("UTF-8"), Base64.NO_WRAP));
                         request.setURI(website);
                         HttpResponse response = httpclient.execute(request);
                         String result = EntityUtils.toString(response.getEntity());
                         Log.d("res", result);
+
 
                     }catch(Exception e){
                         Log.e("log_tag", "Error in http connection "+e.toString());
@@ -77,8 +79,6 @@ public class onNetworkChange extends BroadcastReceiver {
         thread.start();
 
 
-    } else {
-        Log.e("co", "We are not connected");
     }
     }
 }

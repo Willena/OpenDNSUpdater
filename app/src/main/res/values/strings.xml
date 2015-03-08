@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">OpenDNSUpdater</string>
+    <string name="noty_content">Ip address successfully updated !</string>
 </resources>

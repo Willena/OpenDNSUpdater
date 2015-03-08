@@ -70,9 +70,9 @@ public class onNetworkChange extends BroadcastReceiver {
                                 Notification.Builder builder = new Notification.Builder(context)
                                         .setWhen(System.currentTimeMillis())
                                         .setTicker("Yeah")
-                                        .setSmallIcon(R.drawable.ic_launcher)
-                                        .setContentTitle("holé")
-                                        .setContentText("holaaaaaaa !");
+                                        .setSmallIcon(R.drawable.icon)
+                                        .setContentTitle(context.getString(R.string.app_name))
+                                        .setContentText(context.getString(R.string.noty_content));
 
                                 mNotification.notify(0, builder.build());
 

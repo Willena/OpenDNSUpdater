@@ -96,7 +96,8 @@ public class onNetworkChange extends BroadcastReceiver {
 
             thread.start();
 
-
+            //TODO : check if it is the firs time -> do nothing and show noty asking to change config
+            //TODO : If bad config -> noty + ask to change cfg
         }
     }
 }

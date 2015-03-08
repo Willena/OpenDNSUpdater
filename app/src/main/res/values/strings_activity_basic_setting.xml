@@ -1,0 +1,10 @@
+<resources>
+    <!-- General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="Title_OpenDns_username">OpenDNS Username</string>
+    <string name="default_username">example@email.com</string>
+
+    <string name="Title_OpenDns_Password">OpenDNS Password</string>
+    <string name="default_password">abc1234</string>
+</resources>

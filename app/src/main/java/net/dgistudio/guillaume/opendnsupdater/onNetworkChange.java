@@ -40,6 +40,10 @@ public class onNetworkChange extends BroadcastReceiver {
 
         Log.d("BroadCast", "Change");
 
+        ConnectivityManager connMgr = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+        Log.d("info", "We are connected");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         final String username  = prefs.getString("OpenDns_Username", "");
@@ -72,5 +76,9 @@ public class onNetworkChange extends BroadcastReceiver {
 
         thread.start();
 
+
+    } else {
+        Log.e("co", "We are not connected");
+    }
     }
 }

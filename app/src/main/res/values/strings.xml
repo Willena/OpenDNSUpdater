@@ -4,4 +4,14 @@
     <string name="password_Description">change your openDNS Password</string>
     <string name="username_Description">change your openDNS username</string>
     <string name="version">1.0</string>
+    <string name="title_activity_first_time">FirstTime</string>
+
+    <string name="hello_world">Hi !
+    \n this is the first time you opened this app, and I need a password to securise it.\n
+    Just enter it in the box bellow.</string>
+    <string name="action_settings">Settings</string>
+    <string name="BtnValidPassword">Valid</string>
+    <string name="btnCancel">Cancel</string>
+    <string name="PasswordLbl">Password</string>
+    <string name="passEnterLbl">Enter a password</string>
 </resources>

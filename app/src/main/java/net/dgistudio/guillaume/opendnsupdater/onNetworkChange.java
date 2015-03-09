@@ -36,9 +36,10 @@ public class onNetworkChange extends BroadcastReceiver {
 
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        if (networkInfo != null && networkInfo.isConnected() && !prefs.getBoolean("disableUp",false)) {
             Log.d("info", "We are connected");
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
             final String username = prefs.getString("OpenDns_Username", "");
             final String password = prefs.getString("OpenDns_Password", "");
@@ -69,7 +70,7 @@ public class onNetworkChange extends BroadcastReceiver {
 
                                 Notification.Builder builder = new Notification.Builder(context)
                                         .setWhen(System.currentTimeMillis())
-                                        .setTicker("Yeah")
+                                        .setTicker(context.getString(R.string.app_name))
                                         .setSmallIcon(R.drawable.icon)
                                         .setContentTitle(context.getString(R.string.app_name))
                                         .setContentText(context.getString(R.string.noty_content));

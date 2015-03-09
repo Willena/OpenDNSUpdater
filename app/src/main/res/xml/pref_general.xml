@@ -24,6 +24,12 @@
         android:singleLine="true"
         android:maxLines="1"
         android:summary="@string/password_Description"/>
+
+        <CheckBoxPreference
+            android:title="Disable updates"
+            android:defaultValue="false"
+            android:summary="When connection change, don't call OpenDNS service"
+            android:key="disableUp" />
     </PreferenceCategory>
 
 </PreferenceScreen>

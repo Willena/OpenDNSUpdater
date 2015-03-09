@@ -14,4 +14,8 @@
     <string name="btnCancel">Cancel</string>
     <string name="PasswordLbl">Password</string>
     <string name="passEnterLbl">Enter a password</string>
+    <string name="Title_Interface_Password">Interface password</string>
+    <string name="interface_password_Description">Redefine the interface password</string>
+    <string name="welcomeText">In order to use this app, you need to define a password. This password will be used to access to the config interface. When you are ready click \"next\"</string>
+    <string name="btnNext">Next</string>
 </resources>

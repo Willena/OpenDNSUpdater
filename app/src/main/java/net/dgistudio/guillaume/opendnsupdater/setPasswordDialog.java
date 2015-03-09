@@ -5,13 +5,15 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
-public class NoticeDialogFragment extends DialogFragment {
+public class setPasswordDialog extends DialogFragment {
 
     /* The activity that creates an instance of this dialog fragment must
      * implement this interface in order to receive event callbacks.
@@ -55,17 +57,19 @@ public class NoticeDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         //TODO: set the password into prefs
-                        mListener.onDialogPositiveClick(NoticeDialogFragment.this);
+                        mListener.onDialogPositiveClick(setPasswordDialog.this);
                         EditText medit = (EditText)dView.findViewById(R.id.password);
                         Log.d("ee", medit.getText().toString());
+
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("Interface_Password",medit.getText().toString() );
+                        editor.commit();
+
+                        Log.d("eee", prefs.getString("Interface_Password",""));
                     }
                 })
-                .setNegativeButton(R.string.btnCancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDialogNegativeClick(NoticeDialogFragment.this);
-                        Log.d("nope", "nope !!!!");
-                    }
-                });
+                .setCancelable(false);
         return builder.create();
     }
 

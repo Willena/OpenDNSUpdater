@@ -38,7 +38,7 @@ public class onNetworkChange extends BroadcastReceiver {
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        if (networkInfo != null && networkInfo.isConnected() && !prefs.getBoolean("disableUp",false)) {
+        if (networkInfo != null && networkInfo.isConnected() && !prefs.getBoolean("disableUp",false) && !prefs.getBoolean("firstTime",true)) {
             Log.d("info", "We are connected");
 
             final String username = prefs.getString("OpenDns_Username", "");
@@ -96,8 +96,6 @@ public class onNetworkChange extends BroadcastReceiver {
             });
 
             thread.start();
-
-            //TODO : check if it is the firs time -> do nothing and show noty asking to change config
             //TODO : If bad config -> noty + ask to change cfg
         }
     }

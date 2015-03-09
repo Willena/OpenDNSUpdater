@@ -30,6 +30,16 @@
             android:defaultValue="false"
             android:summary="When connection change, don't call OpenDNS service"
             android:key="disableUp" />
+
+        <EditTextPreference
+            android:key="Interface_Password"
+            android:title="@string/Title_Interface_Password"
+            android:selectAllOnFocus="true"
+            android:inputType="textPassword"
+            android:capitalize="none"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:summary="@string/interface_password_Description"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

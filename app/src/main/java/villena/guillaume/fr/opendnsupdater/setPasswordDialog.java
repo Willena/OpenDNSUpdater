@@ -1,4 +1,4 @@
-package net.dgistudio.guillaume.opendnsupdater;
+package villena.guillaume.fr.opendnsupdater;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
-public class welcomeTextDialog extends DialogFragment {
+import fr.guillaumevillena.opendnsupdater.R;
+
+public class setPasswordDialog extends DialogFragment {
 
     /* The activity that creates an instance of this dialog fragment must
      * implement this interface in order to receive event callbacks.
@@ -50,14 +52,23 @@ public class welcomeTextDialog extends DialogFragment {
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        final View dView = inflater.inflate(R.layout.first_time_text_dialog, null);
+        final View dView = inflater.inflate(R.layout.password_dialog_layout, null);
         builder.setView(dView)
                 // Add action buttons
-                .setPositiveButton(R.string.btnNext, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.BtnValidPassword, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         //TODO: set the password into prefs
-                        mListener.onDialogPositiveClick(welcomeTextDialog.this);
+                        mListener.onDialogPositiveClick(setPasswordDialog.this);
+                        EditText medit = (EditText)dView.findViewById(R.id.password);
+                        Log.d("ee", medit.getText().toString());
+
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("Interface_Password",medit.getText().toString() );
+                        editor.commit();
+
+                        Log.d("eee", prefs.getString("Interface_Password",""));
                     }
                 })
                 .setCancelable(false);

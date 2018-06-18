@@ -1,9 +1,12 @@
+*.iml
 .gradle
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
 /build
-/.idea/*
-/.idea
-app/src/main/res/drawable-xxhdpi/Thumbs.db
+/captures
+.externalNativeBuild
+
+
+.idea

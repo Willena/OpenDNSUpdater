@@ -1,12 +1,13 @@
-package net.dgistudio.guillaume.opendnsupdater;
+package villena.guillaume.fr.opendnsupdater;
 
 import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import fr.guillaumevillena.opendnsupdater.R;
 
 
 public class BasicSetting extends PreferenceActivity implements setPasswordDialog.NoticeDialogListener, welcomeTextDialog.NoticeDialogListener{

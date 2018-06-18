@@ -1,4 +1,4 @@
-package net.dgistudio.guillaume.opendnsupdater;
+package villena.guillaume.fr.opendnsupdater;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -22,6 +22,8 @@ import java.net.URI;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import fr.guillaumevillena.opendnsupdater.R;
 
 
 /**

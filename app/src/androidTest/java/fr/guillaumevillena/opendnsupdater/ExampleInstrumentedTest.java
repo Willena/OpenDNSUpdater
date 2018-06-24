@@ -1,4 +1,4 @@
-package villena.guillaume.fr.opendnsupdater;
+package fr.guillaumevillena.opendnsupdater;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("villena.guillaume.fr.opendnsupdater", appContext.getPackageName());
+        assertEquals("fr.guillaumevillena.testapp", appContext.getPackageName());
     }
 }

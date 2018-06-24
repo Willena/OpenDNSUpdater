@@ -1,4 +1,4 @@
-package villena.guillaume.fr.opendnsupdater;
+package fr.guillaumevillena.opendnsupdater;
 
 import org.junit.Test;
 

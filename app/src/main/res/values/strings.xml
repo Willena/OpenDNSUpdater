@@ -13,7 +13,7 @@
     <string name="img_status">status</string>
     <string name="text_filtering_X_sites">Filtering Sites</string>
     <string name="text_using_opendns_servers">Using OpenDNS</string>
-    <string name="text_tests">TESTS</string>
+    <string name="text_tests" translatable="false">TESTS</string>
     <string name="text_quick_options">Quick options</string>
     <string name="text_not_known">NA</string>
     <string name="text_filtering_phishing_sites">Filtering Phishing Sites</string>
@@ -90,4 +90,8 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="ip_address_updated">Your IP has successfully been updated</string>
+    <string name="ip_address_updated_error">An error occured while updating your IP. You may not be using OpenDNS service right now.</string>
+    <string name="dns1_opendns_ip" translatable="false">208.67.222.222</string>
+    <string name="dns2_opendns_ip" translatable="false">208.67.220.220</string>
 </resources>

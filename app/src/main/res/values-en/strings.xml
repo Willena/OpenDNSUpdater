@@ -12,4 +12,6 @@
     <string name="text_quick_options">Quick options</string>
     <string name="text_not_known">NA</string>
     <string name="text_filtering_phishing_sites">Filtering Phishing Sites</string>
+    <string name="ip_address_updated">Your IP has successfully been updated</string>
+    <string name="ip_address_updated_error">An error occured while updating your IP. You may not be using OpenDNS service right now.</string>
 </resources>

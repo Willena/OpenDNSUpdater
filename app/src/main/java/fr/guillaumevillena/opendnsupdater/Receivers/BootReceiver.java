@@ -1,4 +1,4 @@
-package fr.guillaumevillena.opendnsupdater.backgroundJobs;
+package fr.guillaumevillena.opendnsupdater.Receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

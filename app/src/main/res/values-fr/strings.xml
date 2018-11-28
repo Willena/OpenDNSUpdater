@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_settings">Paramètres</string>
-    <string name="text_tests">TESTS</string>
     <string name="text_not_known">NC</string>
+    <string name="text_tests">TEST</string>
 </resources>

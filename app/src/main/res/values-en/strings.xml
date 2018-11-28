@@ -7,11 +7,12 @@
     <string name="text_enable_opendns_server">Enable OpenDNS server</string>
     <string name="text_enable_notifications">Enable notifications</string>
     <string name="text_filtering_X_sites">Filtering Sites</string>
-    <string name="text_using_opendns_servers">Using OpenDNS</string>
-    <string name="text_tests">TESTS</string>
+    <string name="text_using_opendns_servers_dns">Using OpenDNS DNS</string>
     <string name="text_quick_options">Quick options</string>
     <string name="text_not_known">NA</string>
     <string name="text_filtering_phishing_sites">Filtering Phishing Sites</string>
     <string name="ip_address_updated">Your IP has successfully been updated</string>
     <string name="ip_address_updated_error">An error occured while updating your IP. You may not be using OpenDNS service right now.</string>
+    <string name="text_tests">TEST</string>
+    <string name="text_opendns_website_check">OpenDNS website check</string>
 </resources>

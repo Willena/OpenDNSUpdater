@@ -8,8 +8,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -19,17 +19,11 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import fr.guillaumevillena.opendnsupdater.AsyncTasks.AsyncTaskFinished;
 import fr.guillaumevillena.opendnsupdater.AsyncTasks.DnsUsageCheckerTask;
 import fr.guillaumevillena.opendnsupdater.AsyncTasks.IpCheckTask;
+import fr.guillaumevillena.opendnsupdater.AsyncTasks.OpenDNSWebsiteCheckTask;
 import fr.guillaumevillena.opendnsupdater.AsyncTasks.ResultItem;
-import fr.guillaumevillena.opendnsupdater.Receivers.ConnectivityJob;
-import fr.guillaumevillena.opendnsupdater.Utils.DnsServersDetector;
 import fr.guillaumevillena.opendnsupdater.Utils.IntentUtils;
 import fr.guillaumevillena.opendnsupdater.Utils.PreferenceCodes;
 import fr.guillaumevillena.opendnsupdater.Utils.RequestCodes;
@@ -49,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private StateSwitcher filterXStateSwitcher;
     private StateSwitcher filterPhishingStateSwitcher;
     private StateSwitcher useOpendnsStateSwitcher;
+    private StateSwitcher openDNSWebsiteStateSwitcher;
+
     private Switch switchEnableNotification;
     private Switch switchEnableAutoUpdate;
     private Switch switchEnableEnableOpendnsServers;
@@ -81,22 +77,29 @@ public class MainActivity extends AppCompatActivity {
         ProgressBar progressBarFilterX = findViewById(R.id.progressBar_filterX);
         ProgressBar progressBarFilterPhishing = findViewById(R.id.progressBar_filter_phising);
         ProgressBar progressBarUsingOpenDns = findViewById(R.id.progressBar_using_opendns);
+        ProgressBar progressBarOpenDnsWebsite = findViewById(R.id.progressBar_status_website_check);
 
 
         ImageView imgStatusFilterX = findViewById(R.id.img_status_filter_X);
         ImageView imgStatusFilterPhishing = findViewById(R.id.img_status_filter_phishing);
         ImageView imgStatusUsingOpendns = findViewById(R.id.img_status_using_opendns);
+        ImageView imgStatusOpenDNSWebiste = findViewById(R.id.img_status_website_check);
 
         this.filterXStateSwitcher = new StateSwitcher();
         this.filterPhishingStateSwitcher = new StateSwitcher();
         this.useOpendnsStateSwitcher = new StateSwitcher();
+        this.openDNSWebsiteStateSwitcher = new StateSwitcher();
 
         initStateSwitcher(this.filterXStateSwitcher, progressBarFilterX, imgStatusFilterX);
         initStateSwitcher(this.filterPhishingStateSwitcher, progressBarFilterPhishing, imgStatusFilterPhishing);
         initStateSwitcher(this.useOpendnsStateSwitcher, progressBarUsingOpenDns, imgStatusUsingOpendns);
+        initStateSwitcher(this.openDNSWebsiteStateSwitcher, progressBarOpenDnsWebsite, imgStatusOpenDNSWebiste);
 
         this.filterPhishingStateSwitcher.setCurrentState(SUCCESS);
         this.filterXStateSwitcher.setCurrentState(RUNNING);
+        this.useOpendnsStateSwitcher.setCurrentState(RUNNING);
+        this.openDNSWebsiteStateSwitcher.setCurrentState(RUNNING
+        );
 
         // Connect events to switches and buttons
 
@@ -243,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
         this.filterPhishingStateSwitcher.setCurrentState(RUNNING);
         this.filterXStateSwitcher.setCurrentState(RUNNING);
         this.useOpendnsStateSwitcher.setCurrentState(RUNNING);
+        this.openDNSWebsiteStateSwitcher.setCurrentState(RUNNING);
 
 
         //Refresh the current interface.
@@ -273,12 +277,24 @@ public class MainActivity extends AppCompatActivity {
         dnsUsageCheckerTask.setFinishListener(new AsyncTaskFinished() {
             @Override
             public void onFinished(ResultItem item) {
-                Log.d(TAG, "onFinished: We have a result ! for DNS ! " );
+                Log.d(TAG, "onFinished: We have a result ! for DNS ! ");
                 MainActivity.this.useOpendnsStateSwitcher.setCurrentState((item.getState()) ? SUCCESS : ERROR);
             }
         });
 
-        dnsUsageCheckerTask.executeOnExecutor(THREAD_POOL_EXECUTOR,this);
+        dnsUsageCheckerTask.executeOnExecutor(THREAD_POOL_EXECUTOR, this);
+
+
+        OpenDNSWebsiteCheckTask openDNSWebsiteCheckTask = new OpenDNSWebsiteCheckTask();
+        openDNSWebsiteCheckTask.setFinishListener(new AsyncTaskFinished() {
+            @Override
+            public void onFinished(ResultItem item) {
+                Log.d(TAG, "onFinished: We have the result ");
+                MainActivity.this.openDNSWebsiteStateSwitcher.setCurrentState((item.getState()) ? SUCCESS : ERROR);
+            }
+        });
+
+        openDNSWebsiteCheckTask.executeOnExecutor(THREAD_POOL_EXECUTOR);
 
     }
 

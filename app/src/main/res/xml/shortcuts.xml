@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_settings"
+        android:shortcutDisabledMessage="@string/action_settings"
+        android:shortcutId="settings"
+        android:shortcutLongLabel="@string/action_settings"
+        android:shortcutShortLabel="@string/action_settings">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="fr.guillaumevillena.opendnsupdater.activity.GlobalSettingsActivity"
+            android:targetPackage="fr.guillaumevillena.opendnsupdater" />
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_icon_orange"
+        android:shortcutDisabledMessage="@string/action_settings"
+        android:shortcutId="toggle"
+        android:shortcutLongLabel="@string/deactivate_activate_opendns"
+        android:shortcutShortLabel="@string/deactivate_activate_opendns">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="fr.guillaumevillena.opendnsupdater.activity.ActivityEnableDisableVPNService"
+            android:targetPackage="fr.guillaumevillena.opendnsupdater">
+            <extra
+                android:name="fr.guillaumevillena.opendnsupdater.activity.ActivityEnableDisableVPNService.LAUNCH_ACTION"
+                android:value="" />
+        </intent>
+    </shortcut>
+</shortcuts>

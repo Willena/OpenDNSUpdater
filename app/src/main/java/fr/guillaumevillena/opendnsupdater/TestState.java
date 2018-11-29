@@ -8,5 +8,5 @@ public enum TestState {
     RUNNING,
     ERROR,
     SUCCESS,
-    Unknown
+    UNKNOWN
 }

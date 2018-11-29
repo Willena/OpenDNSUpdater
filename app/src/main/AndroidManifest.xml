@@ -2,13 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fr.guillaumevillena.opendnsupdater">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
 
     <application
+        android:name=".OpenDnsUpdater"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
@@ -16,24 +18,59 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".GlobalSettingsActivity"
-            android:label="@string/title_activity_global_settings" />
 
-        <receiver android:name=".Receivers.BootReceiver">
-            <intent-filter android:priority="100">
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity>
+
+        <activity
+            android:name=".activity.GlobalSettingsActivity"
+            android:label="@string/title_activity_global_settings"
+            android:screenOrientation="portrait" />
+
+        <receiver android:name=".VpnService.receiver.BootBroadcastReceiver">
+            <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".VpnService.receiver.StatusBarBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION" />
+                <action android:name="org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".VpnService.service.OpenDnsVpnService"
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".VpnService.service.OpenDnsUpdaterTileService"
+            android:icon="@drawable/ic_icon"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
 
         <service android:name=".Receivers.ConnectivityJob">
             <intent-filter>
@@ -41,6 +78,11 @@
             </intent-filter>
         </service>
 
+        <activity
+            android:name=".activity.ActivityEnableDisableVPNService"
+            android:label="@string/title_activity_enable_disable_vpnservice"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoDisplay"></activity>
     </application>
 
 </manifest>

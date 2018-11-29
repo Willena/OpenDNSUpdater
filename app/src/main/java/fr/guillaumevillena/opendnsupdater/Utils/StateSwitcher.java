@@ -1,11 +1,12 @@
-package fr.guillaumevillena.opendnsupdater;
+package fr.guillaumevillena.opendnsupdater.Utils;
 
 import android.graphics.drawable.Drawable;
-import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 
 import java.util.HashMap;
+
+import fr.guillaumevillena.opendnsupdater.TestState;
 
 /**
  * Created by guill on 25/06/2018.
@@ -23,15 +24,15 @@ public class StateSwitcher {
     private HashMap<TestState, View> viewMap;
 
     public StateSwitcher() {
-        this.currentState = TestState.Unknown;
+        this.currentState = TestState.UNKNOWN;
         this.viewMap = new HashMap<>();
         this.drawableMap = new HashMap<>();
 
     }
 
     public void setDefaults(View defaultView, Drawable defaultDrawable) {
-        this.drawableMap.put(TestState.Unknown, defaultDrawable);
-        this.viewMap.put(TestState.Unknown, defaultView);
+        this.drawableMap.put(TestState.UNKNOWN, defaultDrawable);
+        this.viewMap.put(TestState.UNKNOWN, defaultView);
     }
 
 
@@ -50,7 +51,7 @@ public class StateSwitcher {
 
         this.hideAll();
 
-        TestState currentState = TestState.Unknown;
+        TestState currentState = TestState.UNKNOWN;
 
         if (!this.viewMap.containsKey(this.currentState))
             currentState = this.currentState;

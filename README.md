@@ -58,7 +58,8 @@ Anybody can contribute to this project !
 
 ### Credits :
 
-I would like to thank one other project used by this application : https://github.com/rdegges/ipify-api that provide a simple way to check the current user external IP address.
+- The ipify API (https://github.com/rdegges/ipify-api) : for providing a simple way to check the current user external IP address.
+- The Daedalus project (https://github.com/iTXTech/Daedalus) : has been a huge inspiration for the VPN Service that force DNS query to go to OpenDNS servers
 
 
 #### One last thing

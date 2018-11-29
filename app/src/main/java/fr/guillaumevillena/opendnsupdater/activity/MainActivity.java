@@ -1,15 +1,15 @@
-package fr.guillaumevillena.opendnsupdater;
+package fr.guillaumevillena.opendnsupdater.activity;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.VpnService;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -19,18 +19,28 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import fr.guillaumevillena.opendnsupdater.AsyncTasks.AsyncTaskFinished;
 import fr.guillaumevillena.opendnsupdater.AsyncTasks.DnsUsageCheckerTask;
 import fr.guillaumevillena.opendnsupdater.AsyncTasks.IpCheckTask;
 import fr.guillaumevillena.opendnsupdater.AsyncTasks.OpenDNSWebsiteCheckTask;
 import fr.guillaumevillena.opendnsupdater.AsyncTasks.ResultItem;
+import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
+import fr.guillaumevillena.opendnsupdater.R;
+import fr.guillaumevillena.opendnsupdater.Receivers.BootReceiver;
 import fr.guillaumevillena.opendnsupdater.Utils.IntentUtils;
 import fr.guillaumevillena.opendnsupdater.Utils.PreferenceCodes;
 import fr.guillaumevillena.opendnsupdater.Utils.RequestCodes;
-import fr.guillaumevillena.opendnsupdater.Receivers.BootReceiver;
+import fr.guillaumevillena.opendnsupdater.Utils.StateSwitcher;
+import fr.guillaumevillena.opendnsupdater.VpnService.service.OpenDnsVpnService;
+import fr.guillaumevillena.opendnsupdater.VpnService.util.server.DNSServerHelper;
 
 import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
-import static fr.guillaumevillena.opendnsupdater.TestState.*;
+import static fr.guillaumevillena.opendnsupdater.TestState.ERROR;
+import static fr.guillaumevillena.opendnsupdater.TestState.RUNNING;
+import static fr.guillaumevillena.opendnsupdater.TestState.SUCCESS;
+import static fr.guillaumevillena.opendnsupdater.TestState.UNKNOWN;
 import static fr.guillaumevillena.opendnsupdater.Utils.IntentUtils.ACTION_UPDATE_NETWORK_INTERFACE;
 import static fr.guillaumevillena.opendnsupdater.Utils.IntentUtils.ACTION_UPDATE_NETWORK_IP;
 import static fr.guillaumevillena.opendnsupdater.Utils.IntentUtils.getIntentFilterFor;
@@ -51,6 +61,17 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView ipValue;
     private TextView interfaceValue;
+
+    /*
+
+      if (OpenDnsVpnService.isActivated()) {
+                Daedalus.deactivateService(getActivity().getApplicationContext());
+            } else {
+                startActivity(new Intent(getActivity(), MainActivity.class)
+                        .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_ACTIVATE));
+            }
+
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initStateSwitcher(StateSwitcher stateSwitcher, ProgressBar progressBar, ImageView imgStatus) {
         stateSwitcher.setDefaults(imgStatus, ContextCompat.getDrawable(this.getApplicationContext(), R.drawable.ic_block_grey_24dp));
-        stateSwitcher.setCurrentState(Unknown);
+        stateSwitcher.setCurrentState(UNKNOWN);
 
         stateSwitcher.putDrawable(ContextCompat.getDrawable(this.getApplicationContext(), R.drawable.ic_close_red_24dp), ERROR);
         stateSwitcher.putDrawable(ContextCompat.getDrawable(this.getApplicationContext(), R.drawable.ic_check_green_24dp), SUCCESS);
@@ -189,6 +210,21 @@ public class MainActivity extends AppCompatActivity {
 
         prefEditor.putBoolean(PreferenceCodes.APP_DNS, state);
         prefEditor.apply();
+
+        if (state)
+            activateService();
+
+
+    }
+
+    public void activateService() {
+        Intent intent = VpnService.prepare(OpenDnsUpdater.getInstance());
+        if (intent != null) {
+            startActivityForResult(intent, 3);
+        } else {
+            onActivityResult(3, Activity.RESULT_OK, null);
+        }
+
     }
 
     @Override
@@ -198,6 +234,13 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case RequestCodes.SETTIGNS:
                 Log.d(TAG, "onActivityResult: " + resultCode);
+                break;
+            case 3:
+                if (resultCode == Activity.RESULT_OK) {
+                    OpenDnsVpnService.primaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getPrimary());
+                    OpenDnsVpnService.secondaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getSecondary());
+                    OpenDnsUpdater.getInstance().startService(OpenDnsUpdater.getServiceIntent(getApplicationContext()).setAction(OpenDnsVpnService.ACTION_ACTIVATE));
+                }
         }
 
     }

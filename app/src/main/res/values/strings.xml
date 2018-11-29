@@ -95,4 +95,25 @@
     <string name="dns1_opendns_ip" translatable="false">208.67.222.222</string>
     <string name="dns2_opendns_ip" translatable="false">208.67.220.220</string>
     <string name="text_opendns_website_check">OpenDNS website check</string>
+
+
+    <string name="button_text_activate">Activate</string>
+    <string name="button_text_deactivate">Deactivate</string>
+    <string name="server_opendns_primary">OpenDNS Primary</string>
+    <string name="server_opendns_secondary">OpenDNS Secondary</string>
+    <string name="notice_activated">OpenDNS forward is activated.</string>
+    <string name="notice_queries">DNS query times:</string>
+    <string name="quick_toggle">Toggle</string>
+    <string name="settings_server">Server Settings</string>
+    <string name="primary_server">Primary DNS server</string>
+    <string name="secondary_server">Secondary DNS server</string>
+    <string name="settings_system">System Settings</string>
+    <string name="settings_boot">Activate on Boot</string>
+    <string name="settings_notification">Show Notification</string>
+    <string name="title_activity_enable_disable_vpnservice">ActivityEnableDisableVPNService</string>
+    <string name="activate_opendns">Activate OpenDNS</string>
+    <string name="deactivate_opendns">Deactivate OpenDNS</string>
+    <string name="deactivate_activate_opendns">Activate/Deactivate OpenDNS</string>
+
+
 </resources>

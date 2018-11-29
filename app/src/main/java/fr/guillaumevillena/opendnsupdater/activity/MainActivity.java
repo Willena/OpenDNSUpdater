@@ -26,6 +26,7 @@ import fr.guillaumevillena.opendnsupdater.AsyncTasks.DnsUsageCheckerTask;
 import fr.guillaumevillena.opendnsupdater.AsyncTasks.IpCheckTask;
 import fr.guillaumevillena.opendnsupdater.AsyncTasks.OpenDNSWebsiteCheckTask;
 import fr.guillaumevillena.opendnsupdater.AsyncTasks.ResultItem;
+import fr.guillaumevillena.opendnsupdater.BuildConfig;
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.R;
 import fr.guillaumevillena.opendnsupdater.Receivers.BootReceiver;
@@ -80,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Set scheduler to get connectivity changes
         BootReceiver.setScheduler(this);
+
+        TextView textViewVersion = findViewById(R.id.mainactivity_app_version);
+        textViewVersion.setText("v" + BuildConfig.VERSION_NAME);
 
         // Getting useful widget from the view.
 

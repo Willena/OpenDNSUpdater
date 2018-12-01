@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.guillaumevillena.opendnsupdater.VpnService.service.OpenDnsVpnService;
-import fr.guillaumevillena.opendnsupdater.VpnService.util.Configurations;
 import fr.guillaumevillena.opendnsupdater.VpnService.util.server.DNSServer;
 import fr.guillaumevillena.opendnsupdater.VpnService.util.server.DNSServerHelper;
 
@@ -24,7 +23,6 @@ public class OpenDnsUpdater extends Application {
         add(new DNSServer("208.67.220.220", R.string.server_opendns_secondary));
     }};
     private static final String SHORTCUT_ID_ACTIVATE = "shortcut_activate";
-    public static Configurations configurations;
 
     private static OpenDnsUpdater instance = null;
     private SharedPreferences prefs;

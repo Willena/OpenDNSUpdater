@@ -13,8 +13,8 @@ import fr.guillaumevillena.opendnsupdater.activity.GlobalSettingsActivity;
 
 public class StatusBarBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = StatusBarBroadcastReceiver.class.getSimpleName();
-    public static String STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION = "org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION";
-    public static String STATUS_BAR_BTN_SETTINGS_CLICK_ACTION = "org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION";
+    public static String STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION = "fr.guillaumevillena.opendnsupdater.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION";
+    public static String STATUS_BAR_BTN_SETTINGS_CLICK_ACTION = "fr.guillaumevillena.opendnsupdater.StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION";
 
     @Override
     public void onReceive(Context context, Intent intent) {

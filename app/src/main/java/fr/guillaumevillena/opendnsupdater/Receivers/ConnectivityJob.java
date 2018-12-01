@@ -1,6 +1,7 @@
 package fr.guillaumevillena.opendnsupdater.Receivers;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,45 +12,63 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
+import android.os.AsyncTask;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
+import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.RetryStrategy;
+import com.firebase.jobdispatcher.Trigger;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import fr.guillaumevillena.opendnsupdater.AsyncTasks.AsyncTaskFinished;
-import fr.guillaumevillena.opendnsupdater.AsyncTasks.IpCheckTask;
-import fr.guillaumevillena.opendnsupdater.AsyncTasks.IpUpdateTask;
-import fr.guillaumevillena.opendnsupdater.AsyncTasks.ResultItem;
+import androidx.core.app.NotificationCompat;
+import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.R;
-import fr.guillaumevillena.opendnsupdater.Utils.IntentUtils;
-import fr.guillaumevillena.opendnsupdater.Utils.PreferenceCodes;
-
-import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
+import fr.guillaumevillena.opendnsupdater.tasks.TaskFinished;
+import fr.guillaumevillena.opendnsupdater.tasks.UpdateOnlineIP;
+import fr.guillaumevillena.opendnsupdater.utils.IntentUtils;
+import fr.guillaumevillena.opendnsupdater.utils.Notifications;
+import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
 
 /**
  * Created by guill on 26/06/2018.
  * With the help of stack overflow : https://stackoverflow.com/questions/46163131/android-o-detect-connectivity-change-in-background
  */
 
-public class ConnectivityJob extends JobService {
+public class ConnectivityJob extends JobService implements TaskFinished {
 
     private static final String TAG = ConnectivityJob.class.getSimpleName();
     private ConnectivityManager.NetworkCallback networkCallback;
     private BroadcastReceiver connectivityChange;
     private ConnectivityManager connectivityManager;
+    private static boolean jobsStarted;
+    private SharedPreferences prefs;
+
+    public static void setScheduler(Context context) {
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
+        Job job = dispatcher.newJobBuilder().setService(ConnectivityJob.class)
+                .setTag("connectivity-job").setLifetime(Lifetime.FOREVER).setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
+                .setRecurring(true).setReplaceCurrent(true).setTrigger(Trigger.executionWindow(0, 0)).build();
+
+        dispatcher.schedule(job);
+    }
+
+    public static boolean isJobsStarted() {
+        return jobsStarted;
+    }
 
     @Override
     public boolean onStartJob(JobParameters job) {
 
+        prefs = OpenDnsUpdater.getPrefs();
+
 
         Log.d(TAG, "onStartJob: THE JOB STARTED !!!!!!");
-
+        jobsStarted = true;
 
         connectivityManager = (ConnectivityManager) this.getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
 
@@ -79,6 +98,9 @@ public class ConnectivityJob extends JobService {
 
     @Override
     public boolean onStopJob(JobParameters job) {
+
+        jobsStarted = false;
+
         if (networkCallback != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             connectivityManager.unregisterNetworkCallback(networkCallback);
         else if (connectivityChange != null) unregisterReceiver(connectivityChange);
@@ -86,9 +108,6 @@ public class ConnectivityJob extends JobService {
     }
 
     private void handleConnectivityChange() {
-
-
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
 
         if (!prefs.getBoolean(PreferenceCodes.APP_AUTO_UPDATE, false)) {
             Log.d(TAG, "handleConnectivityChange: Auto update disabled, ignoring event.");
@@ -103,47 +122,8 @@ public class ConnectivityJob extends JobService {
 
         IntentUtils.sendActionUpdateNetworkInterface(this.getApplicationContext(), activeNetwork.getTypeName());
 
-        final String username = prefs.getString(PreferenceCodes.OPENDNS_USERNAME, null);
-        final String password = prefs.getString(PreferenceCodes.OPENDNS_PASSWORD, null);
-        final String network = prefs.getString(PreferenceCodes.OPENDNS_NETWORK, null);
 
-        final Boolean shouldCreateNotification = prefs.getBoolean(PreferenceCodes.APP_NOTIFY, false);
-
-        if (username == null || password == null || network == null) {
-            Log.w(TAG, "handleConnectivityChange: Ignoring empty value", null);
-            return;
-        }
-
-        final IpUpdateTask ipUpdateTask = new IpUpdateTask();
-        ipUpdateTask.setFinishListener(new AsyncTaskFinished() {
-            @Override
-            public void onFinished(ResultItem item) {
-                Log.d(TAG, "onFinished: UpdateFinished" + item);
-
-                if (item.getState()) {
-                    if (shouldCreateNotification)
-                        createTimedNotification(item.getState());
-
-                }
-
-
-            }
-        });
-        ipUpdateTask.executeOnExecutor(THREAD_POOL_EXECUTOR, username, password, network);
-
-
-        IpCheckTask ipCheckTask = new IpCheckTask();
-        ipCheckTask.setFinishListener(new AsyncTaskFinished() {
-            @Override
-            public void onFinished(ResultItem item) {
-                Log.d(TAG, "onFinished: We have finished getting the ip :D ");
-                if (item.getState()) {
-                    IntentUtils.sendActionUpdateNetworkIP(ConnectivityJob.this.getApplicationContext(), (String) item.getResultValue());
-                }
-            }
-        });
-
-        ipCheckTask.executeOnExecutor(THREAD_POOL_EXECUTOR);
+        new UpdateOnlineIP(this).execute();
 
     }
 
@@ -154,28 +134,39 @@ public class ConnectivityJob extends JobService {
 
         Context context = this.getApplicationContext();
 
-        final NotificationManager mNotification = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        NotificationCompat.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(Notifications.CHANNEL_ID, Notifications.CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+            manager.createNotificationChannel(channel);
+            builder = new NotificationCompat.Builder(this, Notifications.CHANNEL_ID);
+        } else {
+            builder = new NotificationCompat.Builder(this);
+        }
 
-        Notification.Builder builder = new Notification.Builder(context)
-                .setWhen(System.currentTimeMillis())
-                .setTicker(context.getString(R.string.app_name))
-                .setSmallIcon(R.drawable.icon)
-                .setContentTitle(context.getString(R.string.app_name))
-                .setContentText(context.getString((state) ? R.string.ip_address_updated : R.string.ip_address_updated_error));
-        mNotification.notify(0, builder.build());
+        builder.setWhen(0)
+                .setContentTitle(getResources().getString(state ? R.string.title_ip_adress_updated : R.string.title_ip_update_error))
+                .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
+                .setSmallIcon(R.drawable.ic_icon)
+                .setColor(getResources().getColor(R.color.colorPrimary)) //backward compatibility
+                .setOngoing(false)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(getResources().getString(state ? R.string.ip_address_updated : R.string.ip_address_updated_error)))
+                .setTicker(getResources().getString(state ? R.string.ip_address_updated : R.string.ip_address_updated_error));
 
+        Notification notification = builder.build();
 
-        Runnable task = new Runnable() {
-            public void run() {
-                mNotification.cancel(0);
-            }
-        };
-        final ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
-        worker.schedule(task, 5, TimeUnit.SECONDS);
-
-
+        manager.notify(Notifications.NOTIFICATION_IP_UPDATED, notification);
     }
 
 
+    @Override
+    public void onTaskFinished(AsyncTask task, Boolean result) {
+        final Boolean shouldCreateNotification = prefs.getBoolean(PreferenceCodes.APP_NOTIFY, false);
+        if (shouldCreateNotification)
+            createTimedNotification(result);
+
+        if (result)
+            prefs.edit().putLong(PreferenceCodes.OPENDNS_LAST_UPDATE, System.currentTimeMillis()).apply();
+    }
 }

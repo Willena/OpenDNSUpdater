@@ -5,14 +5,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.VpnService;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -21,38 +18,38 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import fr.guillaumevillena.opendnsupdater.AsyncTasks.AsyncTaskFinished;
-import fr.guillaumevillena.opendnsupdater.AsyncTasks.DnsUsageCheckerTask;
-import fr.guillaumevillena.opendnsupdater.AsyncTasks.IpCheckTask;
-import fr.guillaumevillena.opendnsupdater.AsyncTasks.OpenDNSWebsiteCheckTask;
-import fr.guillaumevillena.opendnsupdater.AsyncTasks.ResultItem;
 import fr.guillaumevillena.opendnsupdater.BuildConfig;
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.R;
-import fr.guillaumevillena.opendnsupdater.Receivers.BootReceiver;
-import fr.guillaumevillena.opendnsupdater.Utils.IntentUtils;
-import fr.guillaumevillena.opendnsupdater.Utils.PreferenceCodes;
-import fr.guillaumevillena.opendnsupdater.Utils.RequestCodes;
-import fr.guillaumevillena.opendnsupdater.Utils.StateSwitcher;
-import fr.guillaumevillena.opendnsupdater.VpnService.service.OpenDnsVpnService;
-import fr.guillaumevillena.opendnsupdater.VpnService.util.server.DNSServerHelper;
+import fr.guillaumevillena.opendnsupdater.Receivers.ConnectivityJob;
+import fr.guillaumevillena.opendnsupdater.tasks.CheckFakePhishingSite;
+import fr.guillaumevillena.opendnsupdater.tasks.CheckUsingOpenDNS;
+import fr.guillaumevillena.opendnsupdater.tasks.TaskFinished;
+import fr.guillaumevillena.opendnsupdater.tasks.UpdateOnlineIP;
+import fr.guillaumevillena.opendnsupdater.utils.DateUtils;
+import fr.guillaumevillena.opendnsupdater.utils.IntentUtils;
+import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
+import fr.guillaumevillena.opendnsupdater.utils.RequestCodes;
+import fr.guillaumevillena.opendnsupdater.utils.SimplerCountdown;
+import fr.guillaumevillena.opendnsupdater.utils.StateSwitcher;
+import fr.guillaumevillena.opendnsupdater.vpnService.service.OpenDnsVpnService;
+import fr.guillaumevillena.opendnsupdater.vpnService.util.server.DNSServerHelper;
 
-import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
 import static fr.guillaumevillena.opendnsupdater.TestState.ERROR;
 import static fr.guillaumevillena.opendnsupdater.TestState.RUNNING;
 import static fr.guillaumevillena.opendnsupdater.TestState.SUCCESS;
 import static fr.guillaumevillena.opendnsupdater.TestState.UNKNOWN;
-import static fr.guillaumevillena.opendnsupdater.Utils.IntentUtils.ACTION_UPDATE_NETWORK_INTERFACE;
-import static fr.guillaumevillena.opendnsupdater.Utils.IntentUtils.ACTION_UPDATE_NETWORK_IP;
-import static fr.guillaumevillena.opendnsupdater.Utils.IntentUtils.getIntentFilterFor;
+import static fr.guillaumevillena.opendnsupdater.utils.IntentUtils.ACTION_UPDATE_NETWORK_INTERFACE;
+import static fr.guillaumevillena.opendnsupdater.utils.IntentUtils.ACTION_UPDATE_NETWORK_IP;
+import static fr.guillaumevillena.opendnsupdater.utils.IntentUtils.getIntentFilterFor;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TaskFinished {
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private StateSwitcher filterXStateSwitcher;
     private StateSwitcher filterPhishingStateSwitcher;
+    private StateSwitcher ipAddressUpdatedStateSwitcher;
     private StateSwitcher useOpendnsStateSwitcher;
     private StateSwitcher openDNSWebsiteStateSwitcher;
 
@@ -62,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView ipValue;
     private TextView interfaceValue;
+    private TextView lastUpdateDateTextView;
 
     /*
 
@@ -79,11 +77,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Set scheduler to get connectivity changes
-        BootReceiver.setScheduler(this);
+
+        lastUpdateDateTextView = findViewById(R.id.mainactivity_last_update);
+        long lastUpdate = OpenDnsUpdater.getPrefs().getLong(PreferenceCodes.OPENDNS_LAST_UPDATE, -1);
+        lastUpdateDateTextView.setText(getString(R.string.main_activity_last_ip_update, lastUpdate != -1 ? DateUtils.getDate(this, lastUpdate) : getString(R.string.text_never)));
 
         TextView textViewVersion = findViewById(R.id.mainactivity_app_version);
-        textViewVersion.setText("v" + BuildConfig.VERSION_NAME);
+        textViewVersion.setText(getString(R.string.app_version, BuildConfig.VERSION_NAME));
 
         // Getting useful widget from the view.
 
@@ -93,78 +93,44 @@ public class MainActivity extends AppCompatActivity {
         ImageButton settingButton = findViewById(R.id.setting_button);
         ImageButton refreshButton = findViewById(R.id.refresh_button);
 
+        ProgressBar progressBarIpAddressUpdate = findViewById(R.id.progressBar_ip_updated);
+        ProgressBar progressBarFilterPhising = findViewById(R.id.progressBar_filter_phising);
+        ProgressBar progressBarUsingOpenDns = findViewById(R.id.progressBar_using_opendns);
+        ProgressBar progressBarOpenDnsWebsite = findViewById(R.id.progressBar_status_website_check);
+
+        ImageView imgStatusIpAdressUpdate = findViewById(R.id.img_status_ip_updated);
+        ImageView imgStatusFilterPhishing = findViewById(R.id.img_status_filter_phishing);
+        ImageView imgStatusUsingOpendns = findViewById(R.id.img_status_using_opendns);
+        ImageView imgStatusOpenDNSWebiste = findViewById(R.id.img_status_website_check);
 
         switchEnableNotification = findViewById(R.id.switch_enable_notifications);
         switchEnableAutoUpdate = findViewById(R.id.switch_auto_update);
         switchEnableEnableOpendnsServers = findViewById(R.id.switch_enable_opendns_server);
 
-
-        ProgressBar progressBarFilterX = findViewById(R.id.progressBar_filterX);
-        ProgressBar progressBarFilterPhishing = findViewById(R.id.progressBar_filter_phising);
-        ProgressBar progressBarUsingOpenDns = findViewById(R.id.progressBar_using_opendns);
-        ProgressBar progressBarOpenDnsWebsite = findViewById(R.id.progressBar_status_website_check);
-
-
-        ImageView imgStatusFilterX = findViewById(R.id.img_status_filter_X);
-        ImageView imgStatusFilterPhishing = findViewById(R.id.img_status_filter_phishing);
-        ImageView imgStatusUsingOpendns = findViewById(R.id.img_status_using_opendns);
-        ImageView imgStatusOpenDNSWebiste = findViewById(R.id.img_status_website_check);
-
-        this.filterXStateSwitcher = new StateSwitcher();
         this.filterPhishingStateSwitcher = new StateSwitcher();
+        this.ipAddressUpdatedStateSwitcher = new StateSwitcher();
         this.useOpendnsStateSwitcher = new StateSwitcher();
         this.openDNSWebsiteStateSwitcher = new StateSwitcher();
 
-        initStateSwitcher(this.filterXStateSwitcher, progressBarFilterX, imgStatusFilterX);
-        initStateSwitcher(this.filterPhishingStateSwitcher, progressBarFilterPhishing, imgStatusFilterPhishing);
+        initStateSwitcher(this.filterPhishingStateSwitcher, progressBarFilterPhising, imgStatusFilterPhishing);
+        initStateSwitcher(this.ipAddressUpdatedStateSwitcher, progressBarIpAddressUpdate, imgStatusIpAdressUpdate);
         initStateSwitcher(this.useOpendnsStateSwitcher, progressBarUsingOpenDns, imgStatusUsingOpendns);
         initStateSwitcher(this.openDNSWebsiteStateSwitcher, progressBarOpenDnsWebsite, imgStatusOpenDNSWebiste);
 
-        this.filterPhishingStateSwitcher.setCurrentState(SUCCESS);
-        this.filterXStateSwitcher.setCurrentState(RUNNING);
+        this.ipAddressUpdatedStateSwitcher.setCurrentState(RUNNING);
+        this.filterPhishingStateSwitcher.setCurrentState(RUNNING);
         this.useOpendnsStateSwitcher.setCurrentState(RUNNING);
-        this.openDNSWebsiteStateSwitcher.setCurrentState(RUNNING
-        );
+        this.openDNSWebsiteStateSwitcher.setCurrentState(RUNNING);
 
         // Connect events to switches and buttons
+        switchEnableAutoUpdate.setOnCheckedChangeListener((compoundButton, state) -> setAutoUpdater(state));
+        switchEnableNotification.setOnCheckedChangeListener((compoundButton, state) -> setNotifications(state));
+        switchEnableEnableOpendnsServers.setOnCheckedChangeListener((compoundButton, state) -> setOpenDnsServers(state));
 
-        switchEnableAutoUpdate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean state) {
-                setAutoUpdater(state);
-            }
-        });
-
-        switchEnableNotification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean state) {
-                setNotifications(state);
-            }
-        });
-
-        switchEnableEnableOpendnsServers.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean state) {
-                setOpenDnsServers(state);
-            }
-        });
-
-
-        settingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openSettings();
-            }
-        });
-
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                refreshOpenDnsStatus();
-            }
-        });
-
+        settingButton.setOnClickListener(view -> openSettings());
+        refreshButton.setOnClickListener(view -> refreshOpenDnsStatus());
         restoreSettings();
+        refreshOpenDnsStatus();
 
 
     }
@@ -217,6 +183,13 @@ public class MainActivity extends AppCompatActivity {
 
         if (state)
             activateService();
+        else {
+            if (OpenDnsVpnService.isActivated()) {
+                OpenDnsUpdater.deactivateService(this);
+            }
+        }
+
+        this.refreshOpenDnsStatus();
 
 
     }
@@ -256,6 +229,28 @@ public class MainActivity extends AppCompatActivity {
 
     private void refreshOpenDnsStatus() {
 
+        this.ipAddressUpdatedStateSwitcher.setCurrentState(RUNNING);
+        this.filterPhishingStateSwitcher.setCurrentState(RUNNING);
+        this.useOpendnsStateSwitcher.setCurrentState(RUNNING);
+        this.openDNSWebsiteStateSwitcher.setCurrentState(RUNNING);
+
+
+        new SimplerCountdown(1500) {
+            @Override
+            public void onFinish() {
+                useOpendnsStateSwitcher.setCurrentState(OpenDnsVpnService.isActivated() ? SUCCESS : ERROR);
+            }
+        };
+
+        new SimplerCountdown(1000) {
+            @Override
+            public void onFinish() {
+                new CheckUsingOpenDNS(MainActivity.this).execute();
+                new UpdateOnlineIP(MainActivity.this).execute();
+                new CheckFakePhishingSite(MainActivity.this).execute();
+            }
+        };
+
     }
 
 
@@ -263,10 +258,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-
         Log.d(TAG, "onResume: Unsubscribe to broadcast listener updates");
-        IntentUtils.getBroadcasManager(this).unregisterReceiver(networkInterfaceUpdateReceiver);
-        IntentUtils.getBroadcasManager(this).unregisterReceiver(networkIPUpdateReceiver);
+        IntentUtils.getBroadcastManager(this).unregisterReceiver(networkInterfaceUpdateReceiver);
+        IntentUtils.getBroadcastManager(this).unregisterReceiver(networkIPUpdateReceiver);
 
     }
 
@@ -275,73 +269,17 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         Log.d(TAG, "onResume: Subscribe to broadcast listener updates");
-        IntentUtils.getBroadcasManager(this).registerReceiver(networkInterfaceUpdateReceiver, getIntentFilterFor(ACTION_UPDATE_NETWORK_INTERFACE));
-        IntentUtils.getBroadcasManager(this).registerReceiver(networkIPUpdateReceiver, getIntentFilterFor(ACTION_UPDATE_NETWORK_IP));
+        IntentUtils.getBroadcastManager(this).registerReceiver(networkInterfaceUpdateReceiver, getIntentFilterFor(ACTION_UPDATE_NETWORK_INTERFACE));
+        IntentUtils.getBroadcastManager(this).registerReceiver(networkIPUpdateReceiver, getIntentFilterFor(ACTION_UPDATE_NETWORK_IP));
+
+
+        if (!ConnectivityJob.isJobsStarted())
+            ConnectivityJob.setScheduler(this);
 
 
         Log.d(TAG, "onResume: Starting to update the UI with fresh informations ");
-        this.refreshUIInformations();
+        this.refreshOpenDnsStatus();
 
-
-    }
-
-    private void refreshUIInformations() {
-
-
-        //First set all stateSwitcher to indeterminate...
-
-        this.filterPhishingStateSwitcher.setCurrentState(RUNNING);
-        this.filterXStateSwitcher.setCurrentState(RUNNING);
-        this.useOpendnsStateSwitcher.setCurrentState(RUNNING);
-        this.openDNSWebsiteStateSwitcher.setCurrentState(RUNNING);
-
-
-        //Refresh the current interface.
-        ConnectivityManager connectivityManager = (ConnectivityManager) this.getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-        IntentUtils.sendActionUpdateNetworkInterface(this.getApplicationContext(), activeNetwork.getTypeName());
-
-
-        //Refresh the IP
-        IpCheckTask ipCheckTask = new IpCheckTask();
-        ipCheckTask.setFinishListener(new AsyncTaskFinished() {
-            @Override
-            public void onFinished(ResultItem item) {
-                Log.d(TAG, "onFinished: We have finished getting the ip :D ");
-                if (item.getState()) {
-                    IntentUtils.sendActionUpdateNetworkIP(MainActivity.this.getApplicationContext(), (String) item.getResultValue());
-                }
-            }
-        });
-
-        ipCheckTask.executeOnExecutor(THREAD_POOL_EXECUTOR);
-
-
-        //Doing all available tests...
-        //TODO : Tests OPENDNS status.
-
-        DnsUsageCheckerTask dnsUsageCheckerTask = new DnsUsageCheckerTask();
-        dnsUsageCheckerTask.setFinishListener(new AsyncTaskFinished() {
-            @Override
-            public void onFinished(ResultItem item) {
-                Log.d(TAG, "onFinished: We have a result ! for DNS ! ");
-                MainActivity.this.useOpendnsStateSwitcher.setCurrentState((item.getState()) ? SUCCESS : ERROR);
-            }
-        });
-
-        dnsUsageCheckerTask.executeOnExecutor(THREAD_POOL_EXECUTOR, this);
-
-
-        OpenDNSWebsiteCheckTask openDNSWebsiteCheckTask = new OpenDNSWebsiteCheckTask();
-        openDNSWebsiteCheckTask.setFinishListener(new AsyncTaskFinished() {
-            @Override
-            public void onFinished(ResultItem item) {
-                Log.d(TAG, "onFinished: We have the result ");
-                MainActivity.this.openDNSWebsiteStateSwitcher.setCurrentState((item.getState()) ? SUCCESS : ERROR);
-            }
-        });
-
-        openDNSWebsiteCheckTask.executeOnExecutor(THREAD_POOL_EXECUTOR);
 
     }
 
@@ -385,4 +323,15 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    public void onTaskFinished(AsyncTask task, Boolean result) {
+        if (task instanceof CheckUsingOpenDNS) {
+            Log.d(TAG, "onTaskFinished: CheckUsinOpenDNS ");
+            openDNSWebsiteStateSwitcher.setCurrentState(result ? SUCCESS : ERROR);
+        } else if (task instanceof UpdateOnlineIP) {
+            ipAddressUpdatedStateSwitcher.setCurrentState(result ? SUCCESS : ERROR);
+        } else if (task instanceof CheckFakePhishingSite) {
+            filterPhishingStateSwitcher.setCurrentState(result ? SUCCESS : ERROR);
+        }
+    }
 }

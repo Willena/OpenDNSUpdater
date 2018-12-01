@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="settings_system"
+        android:title="@string/settings_system">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="settings_boot"
+            android:title="@string/settings_boot" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="settings_notification"
+            android:title="@string/settings_notification" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

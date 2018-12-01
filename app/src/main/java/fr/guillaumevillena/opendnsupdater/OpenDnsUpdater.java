@@ -11,9 +11,9 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.guillaumevillena.opendnsupdater.VpnService.service.OpenDnsVpnService;
-import fr.guillaumevillena.opendnsupdater.VpnService.util.server.DNSServer;
-import fr.guillaumevillena.opendnsupdater.VpnService.util.server.DNSServerHelper;
+import fr.guillaumevillena.opendnsupdater.vpnService.service.OpenDnsVpnService;
+import fr.guillaumevillena.opendnsupdater.vpnService.util.server.DNSServer;
+import fr.guillaumevillena.opendnsupdater.vpnService.util.server.DNSServerHelper;
 
 
 public class OpenDnsUpdater extends Application {
@@ -62,6 +62,7 @@ public class OpenDnsUpdater extends Application {
         context.stopService(getServiceIntent(context));
     }
 
+
     public static OpenDnsUpdater getInstance() {
         return instance;
     }
@@ -71,7 +72,7 @@ public class OpenDnsUpdater extends Application {
         super.onCreate();
 
         instance = this;
-        PreferenceManager.setDefaultValues(this, R.xml.perf_settings, false);
+        PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
     }
 

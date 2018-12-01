@@ -6,7 +6,7 @@
     <string name="text_auto_update">Enable auto updater</string>
     <string name="text_enable_opendns_server">Enable OpenDNS server</string>
     <string name="text_enable_notifications">Enable notifications</string>
-    <string name="text_filtering_X_sites">Filtering Sites</string>
+    <string name="text_ip_adress_updated">Filtering Sites</string>
     <string name="text_using_opendns_servers_dns">Using OpenDNS DNS</string>
     <string name="text_quick_options">Quick options</string>
     <string name="text_not_known">NA</string>

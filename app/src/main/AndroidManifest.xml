@@ -24,8 +24,15 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="opendnsupdater"
+                    android:scheme="main" />
             </intent-filter>
 
             <meta-data
@@ -38,24 +45,17 @@
             android:label="@string/title_activity_global_settings"
             android:screenOrientation="portrait" />
 
-        <receiver android:name=".VpnService.receiver.BootBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </receiver>
         <receiver
-            android:name=".VpnService.receiver.StatusBarBroadcastReceiver"
+            android:name=".vpnService.receiver.StatusBarBroadcastReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION" />
-                <action android:name="org.itxtech.daedalus.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION" />
+                <action android:name="fr.guillaumevillena.opendnsupdater.VpnService.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION" />
+                <action android:name="fr.guillaumevillena.opendnsupdater.VpnService.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION" />
             </intent-filter>
         </receiver>
 
         <service
-            android:name=".VpnService.service.OpenDnsVpnService"
+            android:name=".vpnService.service.OpenDnsVpnService"
             android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
@@ -63,7 +63,7 @@
         </service>
 
         <service
-            android:name=".VpnService.service.OpenDnsUpdaterTileService"
+            android:name=".vpnService.service.OpenDnsUpdaterTileService"
             android:icon="@drawable/ic_icon"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -72,7 +72,9 @@
             </intent-filter>
         </service>
 
-        <service android:name=".Receivers.ConnectivityJob">
+        <service
+            android:name=".Receivers.ConnectivityJob"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
@@ -82,7 +84,7 @@
             android:name=".activity.ActivityEnableDisableVPNService"
             android:label="@string/title_activity_enable_disable_vpnservice"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoDisplay"></activity>
+            android:theme="@android:style/Theme.NoDisplay" />
     </application>
 
 </manifest>

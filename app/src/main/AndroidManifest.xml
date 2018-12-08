@@ -24,7 +24,9 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
+
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -39,7 +41,6 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
-
         <activity
             android:name=".activity.GlobalSettingsActivity"
             android:label="@string/title_activity_global_settings"
@@ -61,7 +62,6 @@
                 <action android:name="android.net.VpnService" />
             </intent-filter>
         </service>
-
         <service
             android:name=".vpnService.service.OpenDnsUpdaterTileService"
             android:icon="@drawable/ic_icon"
@@ -71,7 +71,6 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-
         <service
             android:name=".Receivers.ConnectivityJob"
             android:exported="false">

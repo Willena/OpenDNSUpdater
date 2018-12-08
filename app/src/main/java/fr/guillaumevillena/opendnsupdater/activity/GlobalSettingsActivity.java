@@ -17,6 +17,7 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
 import fr.guillaumevillena.opendnsupdater.R;
+import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -108,6 +109,7 @@ public class GlobalSettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+        setContentView(R.layout.global_preference_activity);
     }
 
     /**
@@ -145,8 +147,8 @@ public class GlobalSettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            //  bindPreferenceSummaryToValue(findPreference("example_text"));
-            //  bindPreferenceSummaryToValue(findPreference("example_list"));
+            bindPreferenceSummaryToValue(findPreference(PreferenceCodes.OPENDNS_NETWORK));
+            bindPreferenceSummaryToValue(findPreference(PreferenceCodes.OPENDNS_USERNAME));
         }
 
         @Override

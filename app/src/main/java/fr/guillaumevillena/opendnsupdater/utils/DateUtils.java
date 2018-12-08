@@ -1,19 +1,21 @@
 package fr.guillaumevillena.opendnsupdater.utils;
 
 import android.content.Context;
-import android.text.format.DateFormat;
+import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class DateUtils {
 
-    public static String getDate(Context ctx, long milliSeconds) {
-        // Create a DateFormatter object for displaying date in specified format.
-        java.text.DateFormat formatter = DateFormat.getDateFormat(ctx);
+    private static final String TAG = DateUtils.class.getSimpleName();
 
-        // Create a calendar object that will convert the date and time value in milliseconds to date.
+    public static String getDate(Context ctx, long milliSeconds) {
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(milliSeconds);
-        return formatter.format(calendar.getTime());
+        Log.d(TAG, "getDate: " + calendar.getTime());
+        return SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(calendar.getTime());
     }
 }

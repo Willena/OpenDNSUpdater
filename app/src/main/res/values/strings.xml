@@ -119,6 +119,7 @@
     <string name="main_activity_last_ip_update">Last online IP udpate : %s</string>
 
     <string name="text_never">never</string>
+    <string name="title_activity_settings">Settings</string>
 
 
 </resources>

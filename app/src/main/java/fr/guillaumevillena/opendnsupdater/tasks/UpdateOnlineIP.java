@@ -3,6 +3,7 @@ package fr.guillaumevillena.opendnsupdater.tasks;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Base64;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -15,6 +16,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
+    private static final String TAG = UpdateOnlineIP.class.getSimpleName();
 
     private TaskFinished asyncEventListener;
 
@@ -25,14 +27,18 @@ public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
 
-        if (!hasRequiredSettings())
+        if (!hasRequiredSettings()) {
+            Log.d(TAG, "doInBackground: Skip because not valid settings ");
             return false;
+        }
+
 
         SharedPreferences prefs = OpenDnsUpdater.getPrefs();
 
-        String username = prefs.getString(PreferenceCodes.OPENDNS_USERNAME, null);
-        String password = prefs.getString(PreferenceCodes.OPENDNS_PASSWORD, null);
-        String network = prefs.getString(PreferenceCodes.OPENDNS_NETWORK, null);
+        String username = prefs.getString(PreferenceCodes.OPENDNS_USERNAME, "");
+        String password = prefs.getString(PreferenceCodes.OPENDNS_PASSWORD, "");
+        String network = prefs.getString(PreferenceCodes.OPENDNS_NETWORK, "");
+
 
         OkHttpClient client = new OkHttpClient();
 
@@ -64,15 +70,16 @@ public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
+        Log.d(TAG, "onPostExecute: UPDATE FINISHED");
         asyncEventListener.onTaskFinished(this, aBoolean);
     }
 
     private boolean hasRequiredSettings() {
         SharedPreferences prefs = OpenDnsUpdater.getPrefs();
 
-        return prefs.getString(PreferenceCodes.OPENDNS_USERNAME, null) != null
-                && prefs.getString(PreferenceCodes.OPENDNS_PASSWORD, null) != null
-                && prefs.getString(PreferenceCodes.OPENDNS_NETWORK, null) != null
+        return !(prefs.getString(PreferenceCodes.OPENDNS_USERNAME, "").equals("")
+                || prefs.getString(PreferenceCodes.OPENDNS_PASSWORD, "").equals("")
+                || prefs.getString(PreferenceCodes.OPENDNS_NETWORK, "").equals(""))
                 && prefs.getBoolean(PreferenceCodes.APP_AUTO_UPDATE, false);
     }
 }

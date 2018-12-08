@@ -79,8 +79,6 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
 
 
         lastUpdateDateTextView = findViewById(R.id.mainactivity_last_update);
-        long lastUpdate = OpenDnsUpdater.getPrefs().getLong(PreferenceCodes.OPENDNS_LAST_UPDATE, -1);
-        lastUpdateDateTextView.setText(getString(R.string.main_activity_last_ip_update, lastUpdate != -1 ? DateUtils.getDate(this, lastUpdate) : getString(R.string.text_never)));
 
         TextView textViewVersion = findViewById(R.id.mainactivity_app_version);
         textViewVersion.setText(getString(R.string.app_version, BuildConfig.VERSION_NAME));
@@ -141,6 +139,10 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         switchEnableNotification.setChecked(prefs.getBoolean(PreferenceCodes.APP_NOTIFY, false));
         switchEnableEnableOpendnsServers.setChecked(prefs.getBoolean(PreferenceCodes.APP_DNS, false));
         switchEnableAutoUpdate.setChecked(prefs.getBoolean(PreferenceCodes.APP_AUTO_UPDATE, false));
+
+        long lastUpdate = OpenDnsUpdater.getPrefs().getLong(PreferenceCodes.OPENDNS_LAST_UPDATE, -1);
+        lastUpdateDateTextView.setText(getString(R.string.main_activity_last_ip_update, lastUpdate != -1 ? DateUtils.getDate(this, lastUpdate) : getString(R.string.text_never)));
+
 
     }
 
@@ -210,7 +212,8 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
 
         switch (requestCode) {
             case RequestCodes.SETTIGNS:
-                Log.d(TAG, "onActivityResult: " + resultCode);
+                restoreSettings();
+                refreshOpenDnsStatus();
                 break;
             case 3:
                 if (resultCode == Activity.RESULT_OK) {

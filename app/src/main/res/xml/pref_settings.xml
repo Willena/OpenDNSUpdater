@@ -7,12 +7,46 @@
 
         <SwitchPreference
             android:defaultValue="false"
-            android:key="settings_boot"
-            android:title="@string/settings_boot" />
+            android:key="app.preferences.forceDns"
+            android:summaryOff="Nothing will be started on boot"
+            android:summaryOn="The service will be started on boot"
+            android:title="Force OpenDNS servers" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="app.preferences.autoupdate"
+            android:summaryOff="When the connectivity change ip wont be updated"
+            android:summaryOn="Each time the connectivity changes, ip will be updated"
+            android:title="Auto update" />
+
         <SwitchPreference
             android:defaultValue="true"
-            android:key="settings_notification"
+            android:key="app.preferences.sendNotifications"
+            android:summaryOff="Nothing will be displayed on update or when the service is activated"
+            android:summaryOn="Notification will be display for each update and when the service is activated"
             android:title="@string/settings_notification" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="OpenDNS">
+
+        <EditTextPreference
+            android:key="service.opendns.username"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="The username used for the opendns account"
+            android:title="Username" />
+        <EditTextPreference
+            android:inputType="textPassword"
+            android:key="service.opendns.password"
+            android:password="true"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="the password associated with the opendns account"
+            android:title="Password" />
+        <EditTextPreference
+            android:key="service.opendns.network"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="Please specify the network name"
+            android:title="Network" />
     </PreferenceCategory>
 
 </PreferenceScreen>

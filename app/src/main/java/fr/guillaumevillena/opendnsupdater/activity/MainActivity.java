@@ -1,8 +1,10 @@
 package fr.guillaumevillena.opendnsupdater.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.VpnService;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,16 +16,24 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import fr.guillaumevillena.opendnsupdater.BuildConfig;
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.R;
 import fr.guillaumevillena.opendnsupdater.Receivers.ConnectivityJob;
+import fr.guillaumevillena.opendnsupdater.event.InterfaceUpdatedEvent;
+import fr.guillaumevillena.opendnsupdater.event.IpUpdatedEvent;
 import fr.guillaumevillena.opendnsupdater.tasks.CheckFakePhishingSite;
 import fr.guillaumevillena.opendnsupdater.tasks.CheckUsingOpenDNS;
+import fr.guillaumevillena.opendnsupdater.tasks.ExternalIpFinder;
 import fr.guillaumevillena.opendnsupdater.tasks.TaskFinished;
 import fr.guillaumevillena.opendnsupdater.tasks.UpdateOnlineIP;
+import fr.guillaumevillena.opendnsupdater.utils.ConnectivityUtil;
 import fr.guillaumevillena.opendnsupdater.utils.DateUtils;
 import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
 import fr.guillaumevillena.opendnsupdater.utils.RequestCodes;
@@ -42,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int REQUEST_COARSE_LOC = 3541;
     private StateSwitcher filterPhishingStateSwitcher;
     private StateSwitcher ipAddressUpdatedStateSwitcher;
     private StateSwitcher useOpendnsStateSwitcher;
@@ -54,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
     private TextView ipValue;
     private TextView interfaceValue;
     private TextView lastUpdateDateTextView;
-
 
 
     @Override
@@ -115,6 +125,27 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         restoreSettings();
         refreshOpenDnsStatus();
 
+        checklocationPermission();
+
+
+    }
+
+    private void checklocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+
+            // No explanation needed; request the permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_COARSE_LOC);
+
+            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+            // app-defined int constant. The callback method gets the
+            // result of the request.
+        }
 
     }
 
@@ -222,6 +253,7 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         this.useOpendnsStateSwitcher.setCurrentState(RUNNING);
         this.openDNSWebsiteStateSwitcher.setCurrentState(RUNNING);
 
+        onInterfaceChanged(new InterfaceUpdatedEvent(ConnectivityUtil.getActiveNetworkName(getApplicationContext())));
 
         new SimplerCountdown(1500) {
             @Override
@@ -233,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         new SimplerCountdown(1000) {
             @Override
             public void onFinish() {
+                new ExternalIpFinder().execute();
                 new CheckUsingOpenDNS(MainActivity.this).execute();
                 new UpdateOnlineIP(MainActivity.this).execute();
                 new CheckFakePhishingSite(MainActivity.this).execute();
@@ -246,7 +279,19 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
     protected void onPause() {
         super.onPause();
 
+        EventBus.getDefault().unregister(this);
     }
+
+    @Subscribe
+    public void onIpUpdated(IpUpdatedEvent event) {
+        runOnUiThread(() -> ipValue.setText(event.getIp()));
+    }
+
+    @Subscribe
+    public void onInterfaceChanged(InterfaceUpdatedEvent event) {
+        runOnUiThread(() -> interfaceValue.setText(event.getIface()));
+    }
+
 
     @Override
     protected void onResume() {
@@ -255,6 +300,8 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         if (!ConnectivityJob.isJobsStarted())
             ConnectivityJob.setScheduler(this);
 
+
+        EventBus.getDefault().register(this);
 
         Log.d(TAG, "onResume: Starting to update the UI with fresh informations ");
         this.refreshOpenDnsStatus();

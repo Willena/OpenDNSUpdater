@@ -25,11 +25,15 @@ import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.Set;
 
 import androidx.core.app.NotificationCompat;
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.R;
+import fr.guillaumevillena.opendnsupdater.event.InterfaceUpdatedEvent;
+import fr.guillaumevillena.opendnsupdater.tasks.ExternalIpFinder;
 import fr.guillaumevillena.opendnsupdater.tasks.TaskFinished;
 import fr.guillaumevillena.opendnsupdater.tasks.UpdateOnlineIP;
 import fr.guillaumevillena.opendnsupdater.utils.ConnectivityUtil;
@@ -120,6 +124,11 @@ public class ConnectivityJob extends JobService implements TaskFinished {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
 
         Log.d(TAG, "handleConnectivityChange: The current network is " + activeNetwork.toString());
+
+        if (EventBus.getDefault().hasSubscriberForEvent(InterfaceUpdatedEvent.class)) {
+            EventBus.getDefault().post(new InterfaceUpdatedEvent(ConnectivityUtil.getActiveNetworkName(getApplicationContext())));
+            new ExternalIpFinder().execute();
+        }
 
         if (prefs.getBoolean(PreferenceCodes.APP_USE_BLACK_LIST, false)) {
 

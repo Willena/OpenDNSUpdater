@@ -152,6 +152,7 @@ public class ConnectivityUtil {
 
 
     public static String getWifiName(Context context) {
+
         WifiManager manager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (manager.isWifiEnabled()) {
             WifiInfo wifiInfo = manager.getConnectionInfo();

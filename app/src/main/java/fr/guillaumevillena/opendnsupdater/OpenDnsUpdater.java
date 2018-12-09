@@ -8,12 +8,16 @@ import android.net.VpnService;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
 import fr.guillaumevillena.opendnsupdater.vpnService.service.OpenDnsVpnService;
 import fr.guillaumevillena.opendnsupdater.vpnService.util.server.DNSServer;
 import fr.guillaumevillena.opendnsupdater.vpnService.util.server.DNSServerHelper;
+import io.fabric.sdk.android.Fabric;
 
 
 public class OpenDnsUpdater extends Application {
@@ -73,10 +77,21 @@ public class OpenDnsUpdater extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(
+                new Fabric.Builder(this)
+                        .kits(new Crashlytics())
+                        .appIdentifier(BuildConfig.APPLICATION_ID)
+                        .build()
+        );
 
         instance = this;
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (prefs.getBoolean(PreferenceCodes.FIRST_TIME, true))
+            prefs.edit().putString(PreferenceCodes.OPENDNS_NETWORK, "")
+                    .putString(PreferenceCodes.OPENDNS_PASSWORD, "")
+                    .putString(PreferenceCodes.OPENDNS_USERNAME, "")
+                    .putBoolean(PreferenceCodes.FIRST_TIME, false).apply();
     }
 
     @Override

@@ -1,5 +1,6 @@
-# OpenDnsUpdater
-
+# OpenDNSUpdater
+<img alt='Banner'
+      src='https://github.com/Willena/OpenDNSUpdater/raw/new_app/app/release/Baniere.png'  height="200">
 
 ### Quick presentation
 OpenDNSUpdater is an extremely easy to use android app to perform dynamic IP updates.
@@ -16,28 +17,32 @@ The service rely on your external IP to perform filter actions.
 
 As I said on the previous line, the service rely on your external IP address, so when you change access point or start using mobile data, you request will not be filtered.
 
-Updater exist for almost Windows, Mac and Linux, but not for Android or IOS.
+Updater exist for almost all other platform such as Windows, Mac and Linux, but not for Android or IOS.
 ( https://support.opendns.com/hc/en-us/articles/227988607-OpenDNS-Compatible-Dynamic-DNS-DDNS-Clients )
 
-### Why this project
+### Requirements
 
-I have litle sisters and brothers. They are still young but they already start to use computer, tablet, mobile phone and other electronic gadgets.
-
-I thought about a way to block any website that could popup and chock them. I find out that OpenDNS way able to filter DNS request and return a fake page in case of a blocked website. It is simple to setup, One ip address and a bunch of selected category to allow and it was done.
-
-But as I sais if you change from the home network to another network the protection does not apply anymore since OpenDNS rely on the public IP. I built this little app to allow me to keep any device "protected" at any moment .
+- Minimum Android API 16 ( Android 4.1 ) 
+- Android phone or tablet
 
 ### Screenshots
 
+<img alt='Main screen'
+      src='https://github.com/Willena/OpenDNSUpdater/raw/new_app/app/release/Screenshot_1544380209.png'
+      height="300">
 
-
+<img alt='Settings'
+      src='https://github.com/Willena/OpenDNSUpdater/raw/new_app/app/release/Screenshot_1544380218.png'
+      height="300">
 
 ### Installation
 #### Quick and Simple :
 You can download and install this app on your device using Google Play  or on F-Droid (link will be available soon)
 
-[![google-play](https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png)][hyperlink]
-
+[<img alt='Get it on Google Play'
+      src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'
+      height="80">](https://play.google.com/store/apps/details?id=fr.guillaumevillena.opendnsupdater)
+      
 #### Other possibility
 Download the attached apk in any release present on Github.
 
@@ -59,9 +64,6 @@ Anybody can contribute to this project !
 - The ipify API (https://github.com/rdegges/ipify-api) : for providing a simple way to check the current user external IP address.
 - The Daedalus project (https://github.com/iTXTech/Daedalus) : has been a huge inspiration for the VPN Service that force DNS query to go to OpenDNS servers
 
+### Contacts
 
-
-
-
-  [hyperlink]: https://play.google.com/store/apps/details?id=fr.guillaumevillena.opendnsupdater
-  [image]: https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png
+Guillaume : me@guillaumevillena.fr

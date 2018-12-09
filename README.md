@@ -1,5 +1,6 @@
 # OpenDnsUpdater
 
+
 ### Quick presentation
 OpenDNSUpdater is an extremely easy to use android app to perform dynamic IP updates.
 
@@ -26,19 +27,16 @@ I thought about a way to block any website that could popup and chock them. I fi
 
 But as I sais if you change from the home network to another network the protection does not apply anymore since OpenDNS rely on the public IP. I built this little app to allow me to keep any device "protected" at any moment .
 
-### Usage and Screenshots
+### Screenshots
 
-#### Usage
 
-(coming soon)
 
-#### Screenshots
-
-(coming soon)
 
 ### Installation
 #### Quick and Simple :
-You can download and install this app on your device using Google Play (Link will be available soon) or on F-Droid (link will be available soon)
+You can download and install this app on your device using Google Play  or on F-Droid (link will be available soon)
+
+[![google-play](https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png)][hyperlink]
 
 #### Other possibility
 Download the attached apk in any release present on Github.
@@ -62,9 +60,8 @@ Anybody can contribute to this project !
 - The Daedalus project (https://github.com/iTXTech/Daedalus) : has been a huge inspiration for the VPN Service that force DNS query to go to OpenDNS servers
 
 
-#### One last thing
 
-If you would like to buy me a coffee or thank me for my work or anything else I have a
-bitcoin address but also a Paypal address :
-- (insert BTC address)
-- (insert paypal address)
+
+
+  [hyperlink]: https://play.google.com/store/apps/details?id=fr.guillaumevillena.opendnsupdater
+  [image]: https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png

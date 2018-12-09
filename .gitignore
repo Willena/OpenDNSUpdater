@@ -6,3 +6,6 @@
 /build
 /captures
 .externalNativeBuild
+*.apk
+*.aab
+*.jks

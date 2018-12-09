@@ -19,3 +19,10 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+-dontwarn  org.slf4j.*
+-dontwarn  okio.*
+-dontwarn  okhttp3.*
+-dontwarn  com.sun.jna.*
+-dontwarn  org.conscrypt.*

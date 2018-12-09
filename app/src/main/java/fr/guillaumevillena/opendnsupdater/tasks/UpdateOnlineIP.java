@@ -54,8 +54,12 @@ public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
 
             Response response = client.newCall(request).execute();
 
-            if (response.isSuccessful())
-                return response.body().string().contains("good");
+            if (response.isSuccessful()) {
+                String data = response.body().string();
+                Log.d(TAG, "doInBackground: " + data);
+                return data.contains("good");
+            }
+
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

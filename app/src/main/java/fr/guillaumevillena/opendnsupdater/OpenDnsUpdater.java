@@ -58,8 +58,11 @@ public class OpenDnsUpdater extends Application {
     }
 
     public static void deactivateService(Context context) {
-        context.startService(getServiceIntent(context).setAction(OpenDnsVpnService.ACTION_DEACTIVATE));
-        context.stopService(getServiceIntent(context));
+        if (OpenDnsVpnService.isActivated()) {
+            context.startService(getServiceIntent(context).setAction(OpenDnsVpnService.ACTION_DEACTIVATE));
+            context.stopService(getServiceIntent(context));
+        }
+
     }
 
 

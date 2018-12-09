@@ -25,11 +25,14 @@ import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 
+import java.util.Set;
+
 import androidx.core.app.NotificationCompat;
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.R;
 import fr.guillaumevillena.opendnsupdater.tasks.TaskFinished;
 import fr.guillaumevillena.opendnsupdater.tasks.UpdateOnlineIP;
+import fr.guillaumevillena.opendnsupdater.utils.ConnectivityUtil;
 import fr.guillaumevillena.opendnsupdater.utils.IntentUtils;
 import fr.guillaumevillena.opendnsupdater.utils.Notifications;
 import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
@@ -65,7 +68,6 @@ public class ConnectivityJob extends JobService implements TaskFinished {
     public boolean onStartJob(JobParameters job) {
 
         prefs = OpenDnsUpdater.getPrefs();
-
 
         Log.d(TAG, "onStartJob: THE JOB STARTED !!!!!!");
         jobsStarted = true;
@@ -114,10 +116,29 @@ public class ConnectivityJob extends JobService implements TaskFinished {
             return;
         }
 
-        // Calls handleConnectivityChange(boolean connected, int type)
 
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+
         Log.d(TAG, "handleConnectivityChange: The current network is " + activeNetwork.toString());
+
+        if (prefs.getBoolean(PreferenceCodes.APP_USE_BLACK_LIST, false)) {
+
+            String netName = ConnectivityUtil.getActiveNetworkName(getApplicationContext());
+            Set<String> blacklisted = prefs.getStringSet(PreferenceCodes.APP_BLACKLIST, null);
+
+
+            if (blacklisted != null && (
+                    blacklisted.contains(netName)
+                            || (blacklisted.contains("WIFI") && activeNetwork.getType() == ConnectivityManager.TYPE_WIFI)
+            )) {
+                Log.d(TAG, "handleConnectivityChange: The netname " + netName + "is blacklisted ! ");
+                Log.d(TAG, "handleConnectivityChange: Stoping service !");
+                OpenDnsUpdater.deactivateService(getApplicationContext());
+                return;
+            }
+
+
+        }
 
 
         IntentUtils.sendActionUpdateNetworkInterface(this.getApplicationContext(), activeNetwork.getTypeName());

@@ -7,16 +7,24 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
+import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import androidx.appcompat.app.ActionBar;
 import fr.guillaumevillena.opendnsupdater.R;
+import fr.guillaumevillena.opendnsupdater.utils.ConnectivityUtil;
 import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
 
 /**
@@ -99,10 +107,12 @@ public class GlobalSettingsActivity extends AppCompatPreferenceActivity {
 
         // Trigger the listener immediately with the preference's
         // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, getPrefValueFromKey(preference));
+    }
+
+    private static Object getPrefValueFromKey(Preference preference) {
+        Map<String, ?> all = PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getAll();
+        return all.get(preference.getKey()).toString();
     }
 
     @Override
@@ -149,12 +159,85 @@ public class GlobalSettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference(PreferenceCodes.OPENDNS_NETWORK));
             bindPreferenceSummaryToValue(findPreference(PreferenceCodes.OPENDNS_USERNAME));
+            bindPreferenceSummaryToValue(findPreference(PreferenceCodes.APP_BLACKLIST));
+            setBlackListToCurrentValue((MultiSelectListPreference) findPreference(PreferenceCodes.APP_BLACKLIST));
+
+        }
+
+        private void setListPreferenceValues(MultiSelectListPreference preference, Set<String> values, String[] entries) {
+
+            preference.setValues(values);
+            preference.setEntries(entries);
+            preference.setEntryValues(entries);
+            preference.getOnPreferenceChangeListener().onPreferenceChange(preference, getPrefValueFromKey(preference));
+
+
+        }
+
+        private String[] getBlackListEntries() {
+            Set<String> entries = PreferenceManager.getDefaultSharedPreferences(getActivity()).getStringSet(PreferenceCodes.APP_BLACKLIST_ENTRIES, null);
+            if (entries == null) {
+                entries = getDefaultBlackListValues();
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putStringSet(PreferenceCodes.APP_BLACKLIST_ENTRIES, entries).apply();
+            }
+
+            String[] strings = new String[entries.size()];
+            entries.toArray(strings);
+            return strings;
+        }
+
+        private void setBlackListToCurrentValue(MultiSelectListPreference preference) {
+            Set<String> values = PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getStringSet(preference.getKey(), null);
+            if (values != null) {
+                setListPreferenceValues(preference, values, getBlackListEntries());
+            }
         }
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             return super.onOptionsItemSelected(item);
         }
+
+        @Override
+        public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+            if (preference.getKey().equals(getString(R.string.preference_filter_add))) {
+                Set<String> entries = PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getStringSet(PreferenceCodes.APP_BLACKLIST_ENTRIES, null);
+                Set<String> values = PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getStringSet(PreferenceCodes.APP_BLACKLIST, null);
+                if (entries != null && values != null) {
+
+                    String toAdd = ConnectivityUtil.getActiveNetworkName(getActivity());
+                    entries.add(toAdd);
+                    values.add(toAdd);
+
+                    PreferenceManager.getDefaultSharedPreferences(preference.getContext()).edit().putStringSet(PreferenceCodes.APP_BLACKLIST_ENTRIES, entries).apply();
+                    PreferenceManager.getDefaultSharedPreferences(preference.getContext()).edit().putStringSet(PreferenceCodes.APP_BLACKLIST, values).apply();
+
+
+                    MultiSelectListPreference blacklist = (MultiSelectListPreference) findPreference(PreferenceCodes.APP_BLACKLIST);
+                    setBlackListToCurrentValue(blacklist);
+
+                }
+
+            } else if (preference.getKey().equals(getString(R.string.preference_filter_clear))) {
+
+                Set<String> array = getDefaultBlackListValues();
+                PreferenceManager.getDefaultSharedPreferences(preference.getContext()).edit().putStringSet(PreferenceCodes.APP_BLACKLIST_ENTRIES, array).apply();
+                PreferenceManager.getDefaultSharedPreferences(preference.getContext()).edit().putStringSet(PreferenceCodes.APP_BLACKLIST, array).apply();
+
+                MultiSelectListPreference blacklist = (MultiSelectListPreference) findPreference(PreferenceCodes.APP_BLACKLIST);
+                setBlackListToCurrentValue(blacklist);
+            }
+
+            return super.onPreferenceTreeClick(preferenceScreen, preference);
+        }
+
+        private Set<String> getDefaultBlackListValues() {
+            String[] array = getResources().getStringArray(R.array.list_preference_networks_blacklist);
+            Set<String> mySet = new HashSet<>(Arrays.asList(array));
+            return mySet;
+        }
+
+
     }
 
 

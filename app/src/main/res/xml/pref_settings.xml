@@ -48,5 +48,33 @@
             android:summary="Please specify the network name"
             android:title="Network" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="Filter networks">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="app.preferences.useblacklist"
+            android:summaryOff="Update and service will be executed for all networks"
+            android:summaryOn="Updates and VPN service will not be executed on filtered networks"
+            android:title="Use black list" />
+        <MultiSelectListPreference
+            android:defaultValue="@array/list_preference_networks_blacklist"
+            android:dependency="app.preferences.useblacklist"
+            android:entries="@array/list_preference_networks_blacklist"
+            android:entryValues="@array/list_preference_networks_blacklist"
+            android:key="app.preferences.blacklist"
+            android:title="Blacklisted networks" />
+        <Preference
+            android:dependency="app.preferences.useblacklist"
+            android:key="@string/preference_filter_add"
+            android:persistent="false"
+            android:summary="Add the current connected network to the black list"
+            android:title="Add current network" />
+        <Preference
+            android:dependency="app.preferences.useblacklist"
+            android:key="@string/preference_filter_clear"
+            android:persistent="false"
+            android:summary="Reset the list to the default one"
+            android:title="Clear the black list" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

@@ -1,8 +1,6 @@
 package fr.guillaumevillena.opendnsupdater.activity;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.VpnService;
@@ -27,7 +25,6 @@ import fr.guillaumevillena.opendnsupdater.tasks.CheckUsingOpenDNS;
 import fr.guillaumevillena.opendnsupdater.tasks.TaskFinished;
 import fr.guillaumevillena.opendnsupdater.tasks.UpdateOnlineIP;
 import fr.guillaumevillena.opendnsupdater.utils.DateUtils;
-import fr.guillaumevillena.opendnsupdater.utils.IntentUtils;
 import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
 import fr.guillaumevillena.opendnsupdater.utils.RequestCodes;
 import fr.guillaumevillena.opendnsupdater.utils.SimplerCountdown;
@@ -39,9 +36,6 @@ import static fr.guillaumevillena.opendnsupdater.TestState.ERROR;
 import static fr.guillaumevillena.opendnsupdater.TestState.RUNNING;
 import static fr.guillaumevillena.opendnsupdater.TestState.SUCCESS;
 import static fr.guillaumevillena.opendnsupdater.TestState.UNKNOWN;
-import static fr.guillaumevillena.opendnsupdater.utils.IntentUtils.ACTION_UPDATE_NETWORK_INTERFACE;
-import static fr.guillaumevillena.opendnsupdater.utils.IntentUtils.ACTION_UPDATE_NETWORK_IP;
-import static fr.guillaumevillena.opendnsupdater.utils.IntentUtils.getIntentFilterFor;
 
 
 public class MainActivity extends AppCompatActivity implements TaskFinished {
@@ -61,16 +55,7 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
     private TextView interfaceValue;
     private TextView lastUpdateDateTextView;
 
-    /*
 
-      if (OpenDnsVpnService.isActivated()) {
-                Daedalus.deactivateService(getActivity().getApplicationContext());
-            } else {
-                startActivity(new Intent(getActivity(), MainActivity.class)
-                        .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_ACTIVATE));
-            }
-
-     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -261,20 +246,11 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
     protected void onPause() {
         super.onPause();
 
-        Log.d(TAG, "onResume: Unsubscribe to broadcast listener updates");
-        IntentUtils.getBroadcastManager(this).unregisterReceiver(networkInterfaceUpdateReceiver);
-        IntentUtils.getBroadcastManager(this).unregisterReceiver(networkIPUpdateReceiver);
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        Log.d(TAG, "onResume: Subscribe to broadcast listener updates");
-        IntentUtils.getBroadcastManager(this).registerReceiver(networkInterfaceUpdateReceiver, getIntentFilterFor(ACTION_UPDATE_NETWORK_INTERFACE));
-        IntentUtils.getBroadcastManager(this).registerReceiver(networkIPUpdateReceiver, getIntentFilterFor(ACTION_UPDATE_NETWORK_IP));
-
 
         if (!ConnectivityJob.isJobsStarted())
             ConnectivityJob.setScheduler(this);
@@ -286,45 +262,6 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
 
     }
 
-
-    /*
-        LIST OF BROADCAST RECEIVER HERE !!
-     */
-
-    BroadcastReceiver networkInterfaceUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getExtras() != null) {
-
-                String _interface = intent.getExtras().getString("interface", "");
-                Log.d(TAG, "onReceive: Interface : " + _interface);
-
-                if (!_interface.equals("")) {
-                    MainActivity.this.interfaceValue.setText(_interface);
-                }
-
-
-            }
-        }
-    };
-
-    BroadcastReceiver networkIPUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            if (intent.getExtras() != null) {
-
-                String _ip = intent.getExtras().getString("ip", "");
-                Log.d(TAG, "onReceive: IP : " + _ip);
-
-                if (!_ip.equals("")) {
-                    MainActivity.this.ipValue.setText(_ip);
-                }
-
-
-            }
-        }
-    };
 
     @Override
     public void onTaskFinished(AsyncTask task, Boolean result) {

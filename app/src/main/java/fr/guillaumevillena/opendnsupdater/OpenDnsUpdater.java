@@ -8,7 +8,7 @@ import android.net.VpnService;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
+import com.bugsnag.android.Bugsnag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +17,6 @@ import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
 import fr.guillaumevillena.opendnsupdater.vpnService.service.OpenDnsVpnService;
 import fr.guillaumevillena.opendnsupdater.vpnService.util.server.DNSServer;
 import fr.guillaumevillena.opendnsupdater.vpnService.util.server.DNSServerHelper;
-import io.fabric.sdk.android.Fabric;
-
 
 public class OpenDnsUpdater extends Application {
 
@@ -77,12 +75,7 @@ public class OpenDnsUpdater extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(
-                new Fabric.Builder(this)
-                        .kits(new Crashlytics())
-                        .appIdentifier(BuildConfig.APPLICATION_ID)
-                        .build()
-        );
+        Bugsnag.init(this);
 
         instance = this;
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);

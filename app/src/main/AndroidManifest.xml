@@ -88,8 +88,8 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoDisplay" />
         <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="823d6f0a6106b47d41813c8ba529ed56bb0f076e" />
+            android:name="com.bugsnag.android.API_KEY"
+            android:value="168f78daa9a7b40306a603382cac77dd" />
     </application>
 
 </manifest>

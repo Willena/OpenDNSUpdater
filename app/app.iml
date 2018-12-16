@@ -168,5 +168,8 @@
     <orderEntry type="library" name="Gradle: androidx.cursoradapter:cursoradapter-1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.print:print-1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.collection:collection:1.0.0@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: net.sf.kxml:kxml2:2.3.0@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: androidx.test:runner-1.1.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: androidx.test:monitor-1.1.0" level="project" />
   </component>
 </module>

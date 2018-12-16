@@ -73,5 +73,13 @@
     <string name="preference_filter_clear">app.preferences.filter.clear</string>
     <string name="preference_filter_add">app.preferences.filter.add</string>
 
-
+    <string name="app_about_licenses_ipify_api" translatable="false">https://github.com/rdegges/ipify-api/blob/master/LICENSE/</string>
+    <string name="app_about_licenses_firebase_jobdispatcher" translatable="false">https://github.com/rdegges/ipify-api/blob/master/LICENSE/</string>
+    <string name="app_about_licenses_pcap4j_core" translatable="false">https://github.com/kaitoy/pcap4j/blob/pcap4j-1.7.3/LICENSE</string>
+    <string name="app_about_licenses_pcap4j_packetfactory" translatable="false">https://github.com/kaitoy/pcap4j/blob/pcap4j-1.7.3/LICENSE</string>
+    <string name="app_about_licenses_minidns_minidns_client" translatable="false">https://github.com/MiniDNS/minidns/blob/0.3.3/LICENCE</string>
+    <string name="app_about_licenses_google_gson" translatable="false">https://github.com/google/gson/blob/gson-parent-2.8.5/LICENSE</string>
+    <string name="app_about_licenses_okhttp_okhttp3" translatable="false">https://github.com/square/okhttp/blob/parent-3.11.0/LICENSE.txt</string>
+    <string name="app_about_licenses_greenrobot_eventbus" translatable="false">https://github.com/greenrobot/EventBus/blob/V3.1.1/LICENSE</string>
+    <string name="app_about_licenses_bugsnag_bugsnag_android" translatable="false">https://github.com/bugsnag/bugsnag-android/blob/v4.9.3/LICENSE.txt</string>
 </resources>

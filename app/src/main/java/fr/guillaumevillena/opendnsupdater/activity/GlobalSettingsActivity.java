@@ -1,6 +1,7 @@
 package fr.guillaumevillena.opendnsupdater.activity;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -26,6 +27,7 @@ import androidx.appcompat.app.ActionBar;
 import fr.guillaumevillena.opendnsupdater.R;
 import fr.guillaumevillena.opendnsupdater.utils.ConnectivityUtil;
 import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
+import fr.guillaumevillena.opendnsupdater.utils.RessourceUtil;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -226,6 +228,9 @@ public class GlobalSettingsActivity extends AppCompatPreferenceActivity {
 
                 MultiSelectListPreference blacklist = (MultiSelectListPreference) findPreference(PreferenceCodes.APP_BLACKLIST);
                 setBlackListToCurrentValue(blacklist);
+            } else if (preference.getKey().startsWith("app_about_licenses")) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(RessourceUtil.getId(preference.getKey(), R.string.class))));
+                startActivity(browserIntent);
             }
 
             return super.onPreferenceTreeClick(preferenceScreen, preference);

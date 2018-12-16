@@ -77,4 +77,73 @@
             android:title="Clear the black list" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Open Source Licenses">
+        <Preference
+            android:defaultValue="https://github.com/rdegges/ipify-api/blob/master/LICENSE/"
+            android:key="app_about_licenses_ipify_api"
+            android:summary="Click to see the corresponding license"
+            android:title="Ipify-api" />
+
+        <!--<Preference-->
+        <!--android:key="app_about_licenses.androidX.appcompat"-->
+        <!--android:summary="Click to see the corresponding license"-->
+        <!--android:title="AndroidX App Compat library (1.0.2)" />-->
+        <!--<Preference-->
+        <!--android:key="app_about_licenses.androidX.constraintlayout"-->
+        <!--android:summary="Click to see the corresponding license"-->
+        <!--android:title="AndroidX Constraint Layout library (2.0.0)" />-->
+        <!--<Preference-->
+        <!--android:key="app_about_licenses.android.material"-->
+        <!--android:summary="Click to see the corresponding license"-->
+        <!--android:title="Google Material library (1.1.0)" />-->
+        <!--<Preference-->
+        <!--android:key="app_about_licenses.androidX.legacy"-->
+        <!--android:summary="Click to see the corresponding license"-->
+        <!--android:title="AndroidX Legacy support V4 library (1.0.0)" />-->
+        <!--<Preference-->
+        <!--android:key="app_about_licenses.androidX.vectordrawable"-->
+        <!--android:summary="Click to see the corresponding license"-->
+        <!--android:title="AndroidX Vector Drawable library (1.0.0)" />-->
+        <Preference
+            android:defaultValue="https://github.com/firebase/firebase-jobdispatcher-android/blob/v0.8.5/LICENSE"
+            android:key="app_about_licenses_firebase_jobdispatcher"
+            android:summary="Click to see the corresponding license"
+            android:title="Firebase Job Dispatcher library (0.8.5)" />
+        <Preference
+            android:defaultValue="https://github.com/kaitoy/pcap4j/blob/pcap4j-1.7.3/LICENSE"
+            android:key="app_about_licenses_pcap4j_core"
+            android:summary="Click to see the corresponding license"
+            android:title="Pcap4J Core library (1.7.3)" />
+        <Preference
+            android:defaultValue="https://github.com/kaitoy/pcap4j/blob/pcap4j-1.7.3/LICENSE"
+            android:key="app_about_licenses_pcap4j_packetfactory"
+            android:summary="Click to see the corresponding license"
+            android:title="Pcap4J Packet Factory library (1.7.3)" />
+        <Preference
+            android:defaultValue="https://github.com/MiniDNS/minidns/blob/0.3.3/LICENCE"
+            android:key="app_about_licenses_minidns_minidns_client"
+            android:summary="Click to see the corresponding license"
+            android:title="MiniDNS library (0.3.3)" />
+        <Preference
+            android:defaultValue="https://github.com/google/gson/blob/gson-parent-2.8.5/LICENSE"
+            android:key="app_about_licenses_google_gson"
+            android:summary="Click to see the corresponding license"
+            android:title="Google Gson library (2.8.5)" />
+        <Preference
+            android:defaultValue="https://github.com/square/okhttp/blob/parent-3.11.0/LICENSE.txt"
+            android:key="app_about_licenses_okhttp_okhttp3"
+            android:summary="Click to see the corresponding license"
+            android:title="OkHttp3 library (3.11.0)" />
+        <Preference
+            android:defaultValue="https://github.com/greenrobot/EventBus/blob/V3.1.1/LICENSE"
+            android:key="app_about_licenses_greenrobot_eventbus"
+            android:summary="Click to see the corresponding license"
+            android:title="EventBus library (3.1.1)" />
+        <Preference
+            android:defaultValue="https://github.com/bugsnag/bugsnag-android/blob/v4.9.3/LICENSE.txt"
+            android:key="app_about_licenses_bugsnag_bugsnag_android"
+            android:summary="Click to see the corresponding license"
+            android:title="BugSnag Android library (4.9.3)" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

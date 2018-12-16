@@ -19,6 +19,11 @@ public class ActivityEnableDisableVPNService extends AppCompatActivity {
 
         Intent i = getIntent();
 
+        if (i.getExtras() == null) {
+            finish();
+            return;
+        }
+
         String action = i.getExtras().getString(LAUNCH_ACTION);
         if (action != null) {
             if (action.equals(LAUNCH_ACTION_ACTIVATE)) {

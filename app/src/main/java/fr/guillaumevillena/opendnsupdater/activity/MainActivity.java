@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -20,6 +19,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import fr.guillaumevillena.opendnsupdater.BuildConfig;
@@ -91,10 +91,10 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         ProgressBar progressBarUsingOpenDns = findViewById(R.id.progressBar_using_opendns);
         ProgressBar progressBarOpenDnsWebsite = findViewById(R.id.progressBar_status_website_check);
 
-        ImageView imgStatusIpAdressUpdate = findViewById(R.id.img_status_ip_updated);
-        ImageView imgStatusFilterPhishing = findViewById(R.id.img_status_filter_phishing);
-        ImageView imgStatusUsingOpendns = findViewById(R.id.img_status_using_opendns);
-        ImageView imgStatusOpenDNSWebiste = findViewById(R.id.img_status_website_check);
+        AppCompatImageView imgStatusIpAdressUpdate = findViewById(R.id.img_status_ip_updated);
+        AppCompatImageView imgStatusFilterPhishing = findViewById(R.id.img_status_filter_phishing);
+        AppCompatImageView imgStatusUsingOpendns = findViewById(R.id.img_status_using_opendns);
+        AppCompatImageView imgStatusOpenDNSWebiste = findViewById(R.id.img_status_website_check);
 
         switchEnableNotification = findViewById(R.id.switch_enable_notifications);
         switchEnableAutoUpdate = findViewById(R.id.switch_auto_update);
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
 
     private void checklocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CONTACTS)
+                Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Permission is not granted
@@ -162,13 +162,15 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
 
     }
 
-    private void initStateSwitcher(StateSwitcher stateSwitcher, ProgressBar progressBar, ImageView imgStatus) {
-        stateSwitcher.setDefaults(imgStatus, ContextCompat.getDrawable(this.getApplicationContext(), R.drawable.ic_block_grey_24dp));
+    private void initStateSwitcher(StateSwitcher stateSwitcher, ProgressBar progressBar, AppCompatImageView imgStatus) {
+
+
+        stateSwitcher.setDefaults(imgStatus, R.drawable.ic_block_grey_24dp);
         stateSwitcher.setCurrentState(UNKNOWN);
 
-        stateSwitcher.putDrawable(ContextCompat.getDrawable(this.getApplicationContext(), R.drawable.ic_close_red_24dp), ERROR);
-        stateSwitcher.putDrawable(ContextCompat.getDrawable(this.getApplicationContext(), R.drawable.ic_check_green_24dp), SUCCESS);
-        stateSwitcher.putDrawable(null, RUNNING);
+        stateSwitcher.putDrawable(R.drawable.ic_close_red_24dp, ERROR);
+        stateSwitcher.putDrawable(R.drawable.ic_check_green_24dp, SUCCESS);
+        stateSwitcher.putDrawable(-1, RUNNING);
 
         stateSwitcher.putView(progressBar, RUNNING);
         stateSwitcher.putView(imgStatus, ERROR);

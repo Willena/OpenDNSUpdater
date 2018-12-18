@@ -13,6 +13,7 @@ import com.bugsnag.android.Bugsnag;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
 import fr.guillaumevillena.opendnsupdater.vpnService.service.OpenDnsVpnService;
 import fr.guillaumevillena.opendnsupdater.vpnService.util.server.DNSServer;
@@ -75,8 +76,8 @@ public class OpenDnsUpdater extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         Bugsnag.init(this);
-
         instance = this;
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);

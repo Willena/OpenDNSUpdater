@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/setting_button"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
             app:srcCompat="@drawable/ic_baseline_settings_20px" />
 
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageView"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -75,7 +75,7 @@
             android:contentDescription="@string/img_desc_logo"
             app:srcCompat="@drawable/icon" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/refresh_button"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="wrap_content"
@@ -250,11 +250,12 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp">
 
         <TextView
             android:id="@+id/textView12"
-            android:layout_width="368dp"
+            android:layout_width="wrap_content"
             android:layout_height="34dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
@@ -262,7 +263,6 @@
             android:layout_marginLeft="24dp"
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
-            android:layout_marginBottom="8dp"
             android:text="@string/text_opendns_website_check"
             android:textColor="@color/colorTextIcon"
             android:textSize="18sp" />
@@ -273,24 +273,28 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true">
 
-            <ImageView
-                android:id="@+id/img_status_website_check"
-                android:layout_width="29dp"
-                android:layout_height="34dp"
-                android:layout_marginEnd="28dp"
-                android:layout_marginRight="28dp"
-                android:layout_marginBottom="8dp"
-                app:srcCompat="@drawable/ic_close_red_24dp" />
-
-
             <ProgressBar
                 android:id="@+id/progressBar_status_website_check"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="29dp"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
                 android:layout_height="34dp"
                 android:layout_marginEnd="28dp"
-                android:layout_marginRight="28dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginRight="28dp" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/img_status_website_check"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_alignStart="@+id/progressBar_status_website_check"
+                android:layout_alignLeft="@+id/progressBar_status_website_check"
+                android:layout_alignEnd="@+id/progressBar_status_website_check"
+                android:layout_alignRight="@+id/progressBar_status_website_check"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="24dp"
+                app:srcCompat="@drawable/ic_close_red_24dp" />
+
 
         </RelativeLayout>
 
@@ -299,11 +303,12 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp">
 
         <TextView
             android:id="@+id/textView4"
-            android:layout_width="338dp"
+            android:layout_width="wrap_content"
             android:layout_height="34dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
@@ -311,7 +316,6 @@
             android:layout_marginLeft="24dp"
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
-            android:layout_marginBottom="8dp"
             android:text="@string/text_using_opendns_servers_dns"
             android:textColor="@color/colorTextIcon"
             android:textSize="18sp" />
@@ -324,21 +328,25 @@
 
             <ProgressBar
                 android:id="@+id/progressBar_using_opendns"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="29dp"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
                 android:layout_height="34dp"
                 android:layout_marginEnd="28dp"
-                android:layout_marginRight="28dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginRight="28dp" />
 
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/img_status_using_opendns"
-                android:layout_width="29dp"
+                android:layout_width="wrap_content"
                 android:layout_height="34dp"
-                android:layout_marginEnd="28dp"
-                android:layout_marginRight="28dp"
-                android:layout_marginBottom="8dp"
+                android:layout_alignStart="@+id/progressBar_using_opendns"
+                android:layout_alignLeft="@+id/progressBar_using_opendns"
+                android:layout_alignEnd="@+id/progressBar_using_opendns"
+                android:layout_alignRight="@+id/progressBar_using_opendns"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
                 android:contentDescription="@string/img_status"
                 app:srcCompat="@drawable/ic_close_red_24dp" />
 
@@ -349,11 +357,12 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp">
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="338dp"
+            android:layout_width="wrap_content"
             android:layout_height="34dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
@@ -361,7 +370,6 @@
             android:layout_marginLeft="24dp"
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
-            android:layout_marginBottom="8dp"
             android:text="@string/text_ip_adress_updated"
             android:textColor="@color/colorTextIcon"
             android:textSize="18sp" />
@@ -374,25 +382,26 @@
 
             <ProgressBar
                 android:id="@+id/progressBar_ip_updated"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="29dp"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
                 android:layout_height="34dp"
                 android:layout_marginEnd="28dp"
-                android:layout_marginRight="28dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginRight="28dp" />
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/img_status_ip_updated"
-                android:layout_width="29dp"
+                android:layout_width="wrap_content"
                 android:layout_height="34dp"
-                android:layout_marginEnd="28dp"
-                android:layout_marginRight="28dp"
-                android:layout_marginBottom="8dp"
+                android:layout_alignStart="@+id/progressBar_ip_updated"
+                android:layout_alignLeft="@+id/progressBar_ip_updated"
+                android:layout_alignEnd="@+id/progressBar_ip_updated"
+                android:layout_alignRight="@+id/progressBar_ip_updated"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
                 android:contentDescription="@string/img_status"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/ic_check_green_24dp"
-                tools:layout_editor_absoluteX="351dp"
-                tools:layout_editor_absoluteY="593dp" />
+                app:srcCompat="@drawable/ic_check_green_24dp" />
 
         </RelativeLayout>
 
@@ -400,11 +409,12 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp">
 
         <TextView
             android:id="@+id/textView5"
-            android:layout_width="338dp"
+            android:layout_width="wrap_content"
             android:layout_height="34dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
@@ -412,7 +422,6 @@
             android:layout_marginLeft="24dp"
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
-            android:layout_marginBottom="32dp"
             android:text="@string/text_filtering_phishing_sites"
             android:textColor="@color/colorTextIcon"
             android:textSize="18sp" />
@@ -425,22 +434,28 @@
 
             <ProgressBar
                 android:id="@+id/progressBar_filter_phising"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="29dp"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
                 android:layout_height="34dp"
                 android:layout_marginEnd="28dp"
-                android:layout_marginRight="28dp"
-                android:layout_marginBottom="32dp" />
+                android:layout_marginRight="28dp" />
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/img_status_filter_phishing"
-                android:layout_width="29dp"
+                android:layout_width="wrap_content"
                 android:layout_height="34dp"
-                android:layout_marginEnd="28dp"
-                android:layout_marginRight="28dp"
-                android:layout_marginBottom="32dp"
+                android:layout_alignStart="@+id/progressBar_filter_phising"
+                android:layout_alignLeft="@+id/progressBar_filter_phising"
+                android:layout_alignEnd="@+id/progressBar_filter_phising"
+                android:layout_alignRight="@+id/progressBar_filter_phising"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
                 android:contentDescription="@string/img_status"
                 app:srcCompat="@drawable/ic_check_green_24dp" />
+
         </RelativeLayout>
 
     </RelativeLayout>

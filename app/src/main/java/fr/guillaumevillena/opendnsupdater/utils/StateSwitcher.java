@@ -2,10 +2,10 @@ package fr.guillaumevillena.opendnsupdater.utils;
 
 import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.widget.ImageView;
 
 import java.util.HashMap;
 
+import androidx.appcompat.widget.AppCompatImageView;
 import fr.guillaumevillena.opendnsupdater.TestState;
 
 /**
@@ -20,7 +20,7 @@ public class StateSwitcher {
     private Drawable defaultDrawable;
 
 
-    private HashMap<TestState, Drawable> drawableMap;
+    private HashMap<TestState, Integer> drawableMap;
     private HashMap<TestState, View> viewMap;
 
     public StateSwitcher() {
@@ -30,7 +30,7 @@ public class StateSwitcher {
 
     }
 
-    public void setDefaults(View defaultView, Drawable defaultDrawable) {
+    public void setDefaults(View defaultView, int defaultDrawable) {
         this.drawableMap.put(TestState.UNKNOWN, defaultDrawable);
         this.viewMap.put(TestState.UNKNOWN, defaultView);
     }
@@ -60,12 +60,12 @@ public class StateSwitcher {
             currentState = this.currentState;
 
         View currentView = this.viewMap.get(this.currentState);
-        Drawable drawable = this.drawableMap.get(this.currentState);
+        int drawable = this.drawableMap.get(this.currentState);
 
 
-        if ( currentView instanceof ImageView){
-            ImageView imageView = (ImageView)currentView;
-            imageView.setImageDrawable(drawable);
+        if (currentView instanceof AppCompatImageView) {
+            AppCompatImageView imageView = (AppCompatImageView) currentView;
+            imageView.setImageResource(drawable);
         }
 
         currentView.setVisibility(View.VISIBLE);
@@ -74,13 +74,13 @@ public class StateSwitcher {
     }
 
     private void hideAll() {
-        for (TestState s : this.viewMap.keySet()){
+        for (TestState s : this.viewMap.keySet()) {
             this.viewMap.get(s).setVisibility(View.INVISIBLE);
         }
     }
 
 
-    public void putDrawable(Drawable drawable, TestState state) {
+    public void putDrawable(int drawable, TestState state) {
         this.drawableMap.put(state, drawable);
     }
 
@@ -88,11 +88,11 @@ public class StateSwitcher {
         this.viewMap.put(state, view);
     }
 
-    public Drawable getDrawable(){
+    public int getDrawable() {
         return this.drawableMap.get(this.currentState);
     }
 
-    public View getView(){
+    public View getView() {
         return this.viewMap.get(currentState);
     }
 

@@ -68,13 +68,15 @@ public class OpenDnsVpnService extends VpnService implements Runnable {
                         NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
                         NotificationCompat.Builder builder;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            NotificationChannel channel = new NotificationChannel(Notifications.CHANNEL_ID, Notifications.CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+                        NotificationChannel channel = null;
+
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            channel = new NotificationChannel(Notifications.CHANNEL_ID, Notifications.CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
                             manager.createNotificationChannel(channel);
-                            builder = new NotificationCompat.Builder(this, Notifications.CHANNEL_ID);
-                        } else {
-                            builder = new NotificationCompat.Builder(this);
                         }
+
+                        builder = new NotificationCompat.Builder(this, Notifications.CHANNEL_ID);
+
 
                         Intent deactivateIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION);
                         deactivateIntent.setClass(this, StatusBarBroadcastReceiver.class);
@@ -82,24 +84,25 @@ public class OpenDnsVpnService extends VpnService implements Runnable {
                         settingsIntent.setClass(this, StatusBarBroadcastReceiver.class);
                         PendingIntent pIntent = PendingIntent.getActivity(this, 0,
                                 new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
                         builder.setWhen(0)
                                 .setContentTitle(getResources().getString(R.string.notice_activated))
                                 .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
-                                .setSmallIcon(R.drawable.ic_icon)
+                                .setSmallIcon(R.drawable.ic_notification_main)
                                 .setColor(getResources().getColor(R.color.colorPrimary)) //backward compatibility
                                 .setAutoCancel(false)
                                 .setOngoing(true)
                                 .setTicker(getResources().getString(R.string.notice_activated))
                                 .setContentIntent(pIntent)
-                                .addAction(R.drawable.ic_clear, getResources().getString(R.string.button_text_deactivate),
+                                .addAction(R.drawable.ic_notification_clear, getResources().getString(R.string.button_text_deactivate),
                                         PendingIntent.getBroadcast(this, 0,
                                                 deactivateIntent, PendingIntent.FLAG_UPDATE_CURRENT))
-                                .addAction(R.drawable.ic_settings, getResources().getString(R.string.action_settings),
+                                .addAction(R.drawable.ic_notification_settings, getResources().getString(R.string.action_settings),
                                         PendingIntent.getBroadcast(this, 0,
                                                 settingsIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
-                        Notification notification = builder.build();
 
+                        Notification notification = builder.build();
                         manager.notify(Notifications.NOTIFICATION_ACTIVATED, notification);
 
                         this.notification = builder;

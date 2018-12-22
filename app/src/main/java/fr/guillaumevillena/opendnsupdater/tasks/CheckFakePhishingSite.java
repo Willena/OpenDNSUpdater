@@ -2,6 +2,9 @@ package fr.guillaumevillena.opendnsupdater.tasks;
 
 import android.os.AsyncTask;
 
+import com.bugsnag.android.Bugsnag;
+import com.bugsnag.android.Severity;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -38,8 +41,11 @@ public class CheckFakePhishingSite extends AsyncTask<Void, Void, Boolean> {
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+            Bugsnag.notify(e, Severity.WARNING);
+
         } catch (IOException e) {
             e.printStackTrace();
+            Bugsnag.notify(e, Severity.WARNING);
         }
 
         return false;

@@ -3,6 +3,9 @@ package fr.guillaumevillena.opendnsupdater.tasks;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.bugsnag.android.Bugsnag;
+import com.bugsnag.android.Severity;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
@@ -40,6 +43,8 @@ public class ExternalIpFinder extends AsyncTask<Void, Void, Void> {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            Bugsnag.notify(e, Severity.WARNING);
+
         }
         return null;
     }

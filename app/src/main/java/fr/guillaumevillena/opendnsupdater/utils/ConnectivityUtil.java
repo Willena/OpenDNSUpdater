@@ -169,6 +169,8 @@ public class ConnectivityUtil {
     public static String getActiveNetworkName(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+        if (info == null)
+            return "";
 
         switch (info.getType()) {
             case ConnectivityManager.TYPE_WIFI:

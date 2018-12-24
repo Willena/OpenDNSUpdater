@@ -26,7 +26,8 @@
             android:targetPackage="fr.guillaumevillena.opendnsupdater">
             <extra
                 android:name="fr.guillaumevillena.opendnsupdater.activity.ActivityEnableDisableVPNService.LAUNCH_ACTION"
-                android:value="" />
+                android:value="fr.guillaumevillena.opendnsupdater.activity.ActivityEnableDisableVPNService.launch.action.toggle" />
+
         </intent>
     </shortcut>
 </shortcuts>

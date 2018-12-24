@@ -85,7 +85,6 @@
         <activity
             android:name="fr.guillaumevillena.opendnsupdater.activity.ActivityEnableDisableVPNService"
             android:label="@string/title_activity_enable_disable_vpnservice"
-            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoDisplay" />
         <meta-data
             android:name="com.bugsnag.android.API_KEY"

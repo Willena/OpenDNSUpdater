@@ -22,11 +22,11 @@ public class ActivityEnableDisableVPNService extends AppCompatActivity {
 
         this.incoming = getIntent();
 
-        String toto = this.incoming.getStringExtra(LAUNCH_ACTION);
+        String stringAction = this.incoming.getStringExtra(LAUNCH_ACTION);
 
-        Log.d(TAG, "onCreate: Receievd ! " + toto + " ");
+        Log.d(TAG, "onCreate: Receievd ! " + stringAction + " ");
 
-        if (toto == null) {
+        if (stringAction == null) {
             finish();
             return;
         }

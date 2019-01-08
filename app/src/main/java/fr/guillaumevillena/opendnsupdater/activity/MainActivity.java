@@ -70,6 +70,10 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!OpenDnsUpdater.getPrefs().getBoolean(PreferenceCodes.FIRST_TIME_CONFIG_FINISHED, false))
+            startActivity(new Intent(this, ApplicationWizard.class));
+
         setContentView(R.layout.activity_main);
 
 

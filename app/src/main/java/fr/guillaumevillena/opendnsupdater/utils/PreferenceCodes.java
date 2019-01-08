@@ -43,4 +43,5 @@ public class PreferenceCodes {
     public static final String APP_SECURITY_USE_PASSWORD = "app.security.use.password";
 
     public static final String FIRST_TIME = "app.firsttime";
+    public static final String FIRST_TIME_CONFIG_FINISHED = "app.firsttimeconfigfinished";
 }

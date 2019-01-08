@@ -82,4 +82,5 @@
     <string name="app_about_licenses_okhttp_okhttp3" translatable="false">https://github.com/square/okhttp/blob/parent-3.11.0/LICENSE.txt</string>
     <string name="app_about_licenses_greenrobot_eventbus" translatable="false">https://github.com/greenrobot/EventBus/blob/V3.1.1/LICENSE</string>
     <string name="app_about_licenses_bugsnag_bugsnag_android" translatable="false">https://github.com/bugsnag/bugsnag-android/blob/v4.9.3/LICENSE.txt</string>
+    <string name="app_intro_welcom_title">Welcome</string>
 </resources>

@@ -63,6 +63,12 @@ public class IntroMainActionAcccount extends Fragment implements TaskFinished {
 
         AppCompatButton testbtn = root.findViewById(R.id.testCredentials);
         testbtn.setOnClickListener(view -> testConfiguration());
+
+        openDnsNetwork.setText(OpenDnsUpdater.getPrefs().getString(PreferenceCodes.OPENDNS_NETWORK, ""));
+        openDnsPassword.setText(OpenDnsUpdater.getPrefs().getString(PreferenceCodes.OPENDNS_PASSWORD, ""));
+        openDnsUsername.setText(OpenDnsUpdater.getPrefs().getString(PreferenceCodes.OPENDNS_USERNAME, ""));
+        testConfiguration();
+
         return root;
     }
 

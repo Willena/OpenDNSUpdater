@@ -6,32 +6,39 @@ import android.os.Bundle;
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.github.paolorotolo.appintro.model.SliderPage;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.R;
 import fr.guillaumevillena.opendnsupdater.activity.introSlide.IntroAccountFragment;
+import fr.guillaumevillena.opendnsupdater.activity.introSlide.IntroHowItWorks;
 import fr.guillaumevillena.opendnsupdater.activity.introSlide.IntroMainActionAcccount;
+import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
 
 public class ApplicationWizard extends AppIntro {
+
+    private Boolean hasAccount = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
-        SliderPage sliderPage = new SliderPage();
-        sliderPage.setTitle(getString(R.string.app_intro_welcom_title));
-        sliderPage.setDescription("Welcome to OpenDNS Updater\nThe following steps will help you to configure the application");
-        sliderPage.setImageDrawable(R.drawable.cellphone_settings_variant);
-        sliderPage.setBgColor(getResources().getColor(R.color.colorPrimary));
-        addSlide(AppIntroFragment.newInstance(sliderPage));
-        addSlide(IntroAccountFragment.newInstance());
-        addSlide(IntroMainActionAcccount.newInstance());
+        //Welcom slide
+        SliderPage welcomeSlide = new SliderPage();
+        welcomeSlide.setTitle(getString(R.string.app_intro_welcom_title));
+        welcomeSlide.setDescription("Welcome to OpenDNS Updater\nThe following steps will help you to configure the application");
+        welcomeSlide.setImageDrawable(R.drawable.cellphone_settings_variant);
+        welcomeSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
+        addSlide(AppIntroFragment.newInstance(welcomeSlide));
 
-//        addSlide(firstFragment);
-//        addSlide(secondFragment);
-//        addSlide(thirdFragment);
-//        addSlide(fourthFragment);
+        addSlide(IntroHowItWorks.newInstance());
+
+        addSlide(IntroAccountFragment.newInstance());
+
+        addSlide(IntroMainActionAcccount.newInstance());
 
 
         // OPTIONAL METHODS
@@ -52,20 +59,31 @@ public class ApplicationWizard extends AppIntro {
 
     @Override
     public void onDonePressed(Fragment currentFragment) {
+
         super.onDonePressed(currentFragment);
+        if (currentFragment instanceof IntroMainActionAcccount) {
+            if (((IntroMainActionAcccount) currentFragment).isConnectionOk()) {
+                OpenDnsUpdater.getPrefs().edit().putBoolean(PreferenceCodes.FIRST_TIME_CONFIG_FINISHED, true).apply();
+                finish();
+            } else
+                Snackbar.make(findViewById(R.id.bottom), "Impossible to connect with the filled account", Snackbar.LENGTH_SHORT).show();
+        }
         // Do something when users tap on Done button.
     }
 
     @Override
     public void onSlideChanged(@Nullable Fragment oldFragment, @Nullable Fragment newFragment) {
-        super.onSlideChanged(oldFragment, newFragment);
-        // Do something when the slide changes.
 
         if (oldFragment instanceof IntroAccountFragment && newFragment instanceof IntroMainActionAcccount) {
             IntroAccountFragment hasAccountFragment = (IntroAccountFragment) oldFragment;
             IntroMainActionAcccount accountActionFragment = (IntroMainActionAcccount) newFragment;
-            accountActionFragment.visible(hasAccountFragment.hasAccount());
-
+            hasAccount = hasAccountFragment.hasAccount();
+            accountActionFragment.visible(hasAccount);
         }
+
+        super.onSlideChanged(oldFragment, newFragment);
+        // Do something when the slide changes.
+
+
     }
 }

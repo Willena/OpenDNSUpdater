@@ -83,4 +83,10 @@
     <string name="app_about_licenses_greenrobot_eventbus" translatable="false">https://github.com/greenrobot/EventBus/blob/V3.1.1/LICENSE</string>
     <string name="app_about_licenses_bugsnag_bugsnag_android" translatable="false">https://github.com/bugsnag/bugsnag-android/blob/v4.9.3/LICENSE.txt</string>
     <string name="app_intro_welcom_title">Welcome</string>
+    <string name="text_how_it_works">This application is a utility tool that update your IP address on opendns service. \n\n
+        OpenDNS offers a configurable filtering solution for categories of website only using DNS.\n The content is filtered based on DNS request.
+        It means that you must have OpenDNS DNS servers configured inside your router, your DHCP server or in the device IP configuration or using the built-in VPN server (It will redirect all DNS trafic to OpenDNS server and and forward everything else). \n\n
+        The service rely on the external IP address. That means that if you move or change wifi network, filters wont be applied anymore.
+        You must change your IP inside the OpenDNS dashboard.\n\n This application simplifies that process and does that for you.
+        A local VPN server is built in if you can\'t easely change the IP configuration.</string>
 </resources>

@@ -20,11 +20,32 @@ import okhttp3.Response;
 
 public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
     private static final String TAG = UpdateOnlineIP.class.getSimpleName();
+    private Configurator configurator;
+
+    public UpdateOnlineIP(TaskFinished asyncEventListener) {
+        this(asyncEventListener, null);
+    }
 
     private TaskFinished asyncEventListener;
 
-    public UpdateOnlineIP(TaskFinished asyncEventListener) {
+    public UpdateOnlineIP(TaskFinished asyncEventListener, Configurator configurator) {
         this.asyncEventListener = asyncEventListener;
+        this.configurator = configurator;
+        if (configurator == null) {
+            SharedPreferences prefs = OpenDnsUpdater.getPrefs();
+
+            String username = prefs.getString(PreferenceCodes.OPENDNS_USERNAME, "");
+            String password = prefs.getString(PreferenceCodes.OPENDNS_PASSWORD, "");
+            String network = prefs.getString(PreferenceCodes.OPENDNS_NETWORK, "");
+            Boolean makeUpdate = prefs.getBoolean(PreferenceCodes.APP_AUTO_UPDATE, false);
+
+            this.configurator = new Configurator();
+            this.configurator.setNetwork(network);
+            this.configurator.setPassword(password);
+            this.configurator.setUsername(username);
+            this.configurator.makeUpdate(makeUpdate);
+
+        }
     }
 
     @Override
@@ -36,22 +57,15 @@ public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
         }
 
 
-        SharedPreferences prefs = OpenDnsUpdater.getPrefs();
-
-        String username = prefs.getString(PreferenceCodes.OPENDNS_USERNAME, "");
-        String password = prefs.getString(PreferenceCodes.OPENDNS_PASSWORD, "");
-        String network = prefs.getString(PreferenceCodes.OPENDNS_NETWORK, "");
-
-
         OkHttpClient client = new OkHttpClient();
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse("https://updates.opendns.com/nic/update").newBuilder();
-        urlBuilder.addQueryParameter("hostname", network);
+        urlBuilder.addQueryParameter("hostname", this.configurator.getNetwork());
         String url = urlBuilder.build().toString();
 
         try {
             Request request = new Request.Builder()
-                    .header("Authorization", "Basic " + Base64.encodeToString((username + ":" + password).getBytes("UTF-8"), Base64.NO_WRAP))
+                    .header("Authorization", "Basic " + Base64.encodeToString((this.configurator.getUsername() + ":" + this.configurator.getPassword()).getBytes("UTF-8"), Base64.NO_WRAP))
                     .url(url)
                     .build();
 
@@ -60,7 +74,7 @@ public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
             if (response.isSuccessful()) {
                 String data = response.body().string();
                 Log.d(TAG, "doInBackground: " + data);
-                return data.contains("good");
+                return data.contains("good") || data.contains("abuse");
             }
 
 
@@ -77,6 +91,13 @@ public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
 
     }
 
+    private boolean hasRequiredSettings() {
+        return !(this.configurator.getUsername().equals("")
+                || this.configurator.getPassword().equals("")
+                || this.configurator.getNetwork().equals(""))
+                && this.configurator.getMakeUpdate();
+    }
+
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
@@ -84,12 +105,40 @@ public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
         asyncEventListener.onTaskFinished(this, aBoolean);
     }
 
-    private boolean hasRequiredSettings() {
-        SharedPreferences prefs = OpenDnsUpdater.getPrefs();
+    public static class Configurator {
+        private String username = "", password = "", network = "";
+        private Boolean makeUpdate = false;
 
-        return !(prefs.getString(PreferenceCodes.OPENDNS_USERNAME, "").equals("")
-                || prefs.getString(PreferenceCodes.OPENDNS_PASSWORD, "").equals("")
-                || prefs.getString(PreferenceCodes.OPENDNS_NETWORK, "").equals(""))
-                && prefs.getBoolean(PreferenceCodes.APP_AUTO_UPDATE, false);
+        public String getNetwork() {
+            return network;
+        }
+
+        public void setNetwork(String network) {
+            this.network = network;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public void makeUpdate(Boolean makeUpdate) {
+            this.makeUpdate = makeUpdate;
+        }
+
+        public Boolean getMakeUpdate() {
+            return makeUpdate;
+        }
     }
 }

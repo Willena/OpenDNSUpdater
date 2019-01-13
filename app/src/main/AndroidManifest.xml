@@ -91,7 +91,15 @@
             android:name="com.bugsnag.android.API_KEY"
             android:value="168f78daa9a7b40306a603382cac77dd" />
 
-        <activity android:name=".activity.ApplicationWizard"></activity>
+        <activity android:name=".activity.ApplicationWizard" />
+        <activity android:name=".activity.CreateAccountWizard" />
+
+        <activity
+            android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensor"
+            android:theme="@style/FinestWebViewTheme.Light" />
+
     </application>
 
 </manifest>

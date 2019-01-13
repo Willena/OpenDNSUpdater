@@ -6,7 +6,6 @@ import android.os.Bundle;
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.github.paolorotolo.appintro.model.SliderPage;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -65,8 +64,7 @@ public class ApplicationWizard extends AppIntro {
             if (((IntroMainActionAcccount) currentFragment).isConnectionOk()) {
                 OpenDnsUpdater.getPrefs().edit().putBoolean(PreferenceCodes.FIRST_TIME_CONFIG_FINISHED, true).apply();
                 finish();
-            } else
-                Snackbar.make(findViewById(R.id.bottom), "Impossible to connect with the filled account", Snackbar.LENGTH_SHORT).show();
+            }
         }
         // Do something when users tap on Done button.
     }

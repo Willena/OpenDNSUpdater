@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.github.paolorotolo.appintro.ISlidePolicy;
+import com.google.android.material.snackbar.Snackbar;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -26,7 +29,7 @@ import static fr.guillaumevillena.opendnsupdater.TestState.RUNNING;
 import static fr.guillaumevillena.opendnsupdater.TestState.SUCCESS;
 import static fr.guillaumevillena.opendnsupdater.TestState.UNKNOWN;
 
-public class IntroMainActionAcccount extends Fragment implements TaskFinished {
+public class IntroMainActionAcccount extends Fragment implements TaskFinished, ISlidePolicy {
 
     private static final String TAG = IntroMainActionAcccount.class.getSimpleName();
     private View root;
@@ -128,5 +131,15 @@ public class IntroMainActionAcccount extends Fragment implements TaskFinished {
             showCreateAccountWebview();
         }
 
+    }
+
+    @Override
+    public boolean isPolicyRespected() {
+        return isConnectionOk();
+    }
+
+    @Override
+    public void onUserIllegallyRequestedNextPage() {
+        Snackbar.make(openDnsPassword, "Impossible to connect with the filled account", Snackbar.LENGTH_LONG).show();
     }
 }

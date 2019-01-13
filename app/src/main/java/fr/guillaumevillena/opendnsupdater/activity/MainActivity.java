@@ -1,10 +1,8 @@
 package fr.guillaumevillena.opendnsupdater.activity;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.VpnService;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,8 +18,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import fr.guillaumevillena.opendnsupdater.BuildConfig;
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.R;
@@ -52,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final int REQUEST_COARSE_LOC = 3541;
+    private static final int ACTIVATE_VPN_SERVICE = 3;
     private StateSwitcher filterPhishingStateSwitcher;
     private StateSwitcher ipAddressUpdatedStateSwitcher;
     private StateSwitcher useOpendnsStateSwitcher;
@@ -129,27 +125,6 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         restoreSettings();
         refreshOpenDnsStatus();
 
-        checklocationPermission();
-
-
-    }
-
-    private void checklocationPermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-
-            // No explanation needed; request the permission
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    REQUEST_COARSE_LOC);
-
-            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-            // app-defined int constant. The callback method gets the
-            // result of the request.
-        }
 
     }
 
@@ -221,9 +196,9 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
     public void activateService() {
         Intent intent = VpnService.prepare(OpenDnsUpdater.getInstance());
         if (intent != null) {
-            startActivityForResult(intent, 3);
+            startActivityForResult(intent, ACTIVATE_VPN_SERVICE);
         } else {
-            onActivityResult(3, Activity.RESULT_OK, null);
+            onActivityResult(ACTIVATE_VPN_SERVICE, Activity.RESULT_OK, null);
         }
 
     }
@@ -237,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
                 restoreSettings();
                 refreshOpenDnsStatus();
                 break;
-            case 3:
+            case ACTIVATE_VPN_SERVICE:
                 if (resultCode == Activity.RESULT_OK) {
                     OpenDnsVpnService.primaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getPrimary());
                     OpenDnsVpnService.secondaryServer = DNSServerHelper.getAddressById(DNSServerHelper.getSecondary());

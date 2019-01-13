@@ -1,5 +1,6 @@
 package fr.guillaumevillena.opendnsupdater.activity;
 
+import android.Manifest;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -35,8 +36,16 @@ public class ApplicationWizard extends AppIntro {
 
         addSlide(IntroHowItWorks.newInstance());
 
-        addSlide(IntroAccountFragment.newInstance());
+        SliderPage localtionPermSlide = new SliderPage();
+        localtionPermSlide.setTitle("Permissions");
+        localtionPermSlide.setDescription("You can optionally give to app the coarse location permission." +
+                " It will only be used to access the wifi network name");
+        localtionPermSlide.setImageDrawable(R.drawable.cellphone_settings_variant);
+        localtionPermSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
+        addSlide(AppIntroFragment.newInstance(localtionPermSlide));
 
+
+        addSlide(IntroAccountFragment.newInstance());
         addSlide(IntroMainActionAcccount.newInstance());
 
 
@@ -48,6 +57,8 @@ public class ApplicationWizard extends AppIntro {
         // Hide Skip/Done button.
         showSkipButton(false);
         setProgressButtonEnabled(true);
+
+        askForPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 3);
     }
 
     @Override

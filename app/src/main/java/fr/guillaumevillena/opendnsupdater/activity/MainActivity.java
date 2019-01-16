@@ -3,6 +3,7 @@ package fr.guillaumevillena.opendnsupdater.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.VpnService;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +13,9 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import com.wooplr.spotlight.SpotlightConfig;
+import com.wooplr.spotlight.utils.SpotlightSequence;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -61,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
     private TextView ipValue;
     private TextView interfaceValue;
     private TextView lastUpdateDateTextView;
+    private ImageButton refreshButton;
+    private ImageButton settingButton;
 
 
     @Override
@@ -83,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         ipValue = findViewById(R.id.ip_text_value);
         interfaceValue = findViewById(R.id.interface_text_value);
 
-        ImageButton settingButton = findViewById(R.id.setting_button);
-        ImageButton refreshButton = findViewById(R.id.refresh_button);
+        settingButton = findViewById(R.id.setting_button);
+        refreshButton = findViewById(R.id.refresh_button);
 
         ProgressBar progressBarIpAddressUpdate = findViewById(R.id.progressBar_ip_updated);
         ProgressBar progressBarFilterPhising = findViewById(R.id.progressBar_filter_phising);
@@ -124,6 +130,51 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         refreshButton.setOnClickListener(view -> refreshOpenDnsStatus());
         restoreSettings();
         refreshOpenDnsStatus();
+
+        showSpotlight();
+
+    }
+
+    private void showSpotlight() {
+
+        //The spotlight library manage the fact that they are displayed only once.
+        // But for performance and to avoid creating useless objects, let's use a shared preference key.
+
+        if (!OpenDnsUpdater.getPrefs().getBoolean(PreferenceCodes.SPOTLIGHT_SHOWN, false)) {
+            SpotlightConfig config = new SpotlightConfig();
+            config.setIntroAnimationDuration(300);
+            config.setRevealAnimationEnabled(true);
+            config.setPerformClick(false);
+            config.setFadingTextDuration(300);
+            config.setHeadingTvColor(Color.parseColor("#eb273f"));
+            config.setHeadingTvSize(16);
+            config.setHeadingTvText("This is a good text");
+            config.setMaskColor(Color.parseColor("#dc000000"));
+            config.setLineAnimationDuration(100);
+            config.setLineAndArcColor(Color.parseColor("#eb273f"));
+            config.setDismissOnTouch(true);
+            config.setDismissOnBackpress(true);
+
+            SpotlightSequence seq = SpotlightSequence.getInstance(this, config);
+
+            //Switches
+            seq.addSpotlight(this.switchEnableAutoUpdate, "Update title", "Enable or disable the update action of the app", "usage1");
+            seq.addSpotlight(this.switchEnableEnableOpendnsServers, "OpenDNS title", "If you want to force the usage of OpenDNS servers", "usage2");
+            seq.addSpotlight(this.switchEnableNotification, "Notification title", "If dont want to receive notification each time an update is made", "usage3");
+
+            //StateSwitchers
+
+            seq.addSpotlight(this.ipAddressUpdatedStateSwitcher.getView(), "Ip address status", "If your IP has been updated, you will see a green check", "spotlight_ip_update_status");
+            seq.addSpotlight(this.openDNSWebsiteStateSwitcher.getView(), "OpenDNS server status", "If your are using OpenDNS as DNS servers", "spotlight_opendns_usage_status");
+            seq.addSpotlight(this.filterPhishingStateSwitcher.getView(), "Quick filtering test", "If your current opendns config is filtering phishing website", "spotlight_phishing_status");
+            seq.addSpotlight(this.useOpendnsStateSwitcher.getView(), "Quick local VPN status", "If you are using the local VPN to force the use of OpenDNS servers", "spotlight_VPN_status");
+
+
+            seq.addSpotlight(this.refreshButton, "Force a manual refresg", "To force a manual refresh, click here", "spotlight_force_refresh");
+            seq.addSpotlight(this.settingButton, "Settings", "Here are the settings, check them to see what they can offer", "spotlight_settings");
+
+            seq.startSequence();
+        }
 
 
     }

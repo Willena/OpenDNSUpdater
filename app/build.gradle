@@ -47,6 +47,7 @@ dependencies {
     implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     implementation 'com.github.paolorotolo:appintro:v5.1.0'
+    implementation 'com.github.wooplr:Spotlight:1.2.3'
 
     //DNS
     implementation 'org.pcap4j:pcap4j-core:1.7.3'
@@ -57,7 +58,7 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.bugsnag:bugsnag-android:4.9.3'
 
-    implementation 'com.github.Willena:FinestWebView-Android:access-activity-SNAPSHOT'
+//    implementation 'com.github.Willena:FinestWebView-Android:access-activity-SNAPSHOT'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'

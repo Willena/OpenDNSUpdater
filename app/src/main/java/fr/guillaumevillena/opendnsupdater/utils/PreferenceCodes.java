@@ -44,4 +44,5 @@ public class PreferenceCodes {
 
     public static final String FIRST_TIME = "app.firsttime";
     public static final String FIRST_TIME_CONFIG_FINISHED = "app.firsttimeconfigfinished";
+    public static final String SPOTLIGHT_SHOWN = "app.spotlight.shown";
 }

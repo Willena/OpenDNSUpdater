@@ -44,5 +44,18 @@ public class PreferenceCodes {
 
     public static final String FIRST_TIME = "app.firsttime";
     public static final String FIRST_TIME_CONFIG_FINISHED = "app.firsttimeconfigfinished";
+
+    //Spotlight related
     public static final String SPOTLIGHT_SHOWN = "app.spotlight.shown";
+    public static final String SPOTLIGHT_ID_SWITCH_AUTO_UPDATED = "app.spotlight.switch.auto_update";
+    public static final String SPOTLIGHT_ID_SWITCH_VPN_SERVER = "app.spotlight.switch.vpn_server";
+    public static final String SPOTLIGHT_ID_SWITCH_NOTIFICATION = "app.spotlight.switch.notification";
+    public static final String SPOTLIGHT_ID_STATUS_IP_UPDATED = "app.spotlight.status.ip_updated";
+    public static final String SPOTLIGHT_ID_STATUS_USING_OPENDNS = "app.spotlight.status.using_opendns";
+    public static final String SPOTLIGHT_ID_STATUS_USING_VPN = "app.spotlight.status.using_vpn";
+    public static final String SPOTLIGHT_ID_STATUS_FILTERING_WEBSITES = "app.spotlight.status.filtering_websites";
+    public static final String SPOTLIGHT_ID_TOP_BUTTON_REFRESH = "app.spotlight.status.refresh";
+    public static final String SPOTLIGHT_ID_TOP_BUTTON_SETTINGS = "app.spotlight.status.settings";
+
+
 }

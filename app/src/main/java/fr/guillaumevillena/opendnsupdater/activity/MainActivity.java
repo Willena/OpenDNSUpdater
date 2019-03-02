@@ -3,7 +3,6 @@ package fr.guillaumevillena.opendnsupdater.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.VpnService;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -141,41 +140,71 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         // But for performance and to avoid creating useless objects, let's use a shared preference key.
 
         if (!OpenDnsUpdater.getPrefs().getBoolean(PreferenceCodes.SPOTLIGHT_SHOWN, false)) {
+
             SpotlightConfig config = new SpotlightConfig();
-            config.setIntroAnimationDuration(300);
+            config.setIntroAnimationDuration(getResources().getInteger(R.integer.intro_annimation_duration));
             config.setRevealAnimationEnabled(true);
             config.setPerformClick(false);
-            config.setFadingTextDuration(300);
-            config.setHeadingTvColor(Color.parseColor("#eb273f"));
+            config.setFadingTextDuration(getResources().getInteger(R.integer.fading_text_duration));
+            config.setHeadingTvColor(getResources().getColor(R.color.spotlight_heading_textview));
             config.setHeadingTvSize(16);
-            config.setHeadingTvText("This is a good text");
-            config.setMaskColor(Color.parseColor("#dc000000"));
-            config.setLineAnimationDuration(100);
-            config.setLineAndArcColor(Color.parseColor("#eb273f"));
+            config.setShowTargetArc(true);
+            config.setSubHeadingTvColor(getResources().getColor(R.color.colorTextIcon));
+            config.setSubHeadingTvSize(16);
+            config.setMaskColor(getResources().getColor(R.color.spotlight_backplane));
+            config.setLineAnimationDuration(getResources().getInteger(R.integer.line_annimation_duration));
+            config.setLineAndArcColor(getResources().getColor(R.color.spotlight_line_color));
             config.setDismissOnTouch(true);
             config.setDismissOnBackpress(true);
 
             SpotlightSequence seq = SpotlightSequence.getInstance(this, config);
 
             //Switches
-            seq.addSpotlight(this.switchEnableAutoUpdate, "Update title", "Enable or disable the update action of the app", "usage1");
-            seq.addSpotlight(this.switchEnableEnableOpendnsServers, "OpenDNS title", "If you want to force the usage of OpenDNS servers", "usage2");
-            seq.addSpotlight(this.switchEnableNotification, "Notification title", "If dont want to receive notification each time an update is made", "usage3");
+            seq.addSpotlight(this.switchEnableAutoUpdate, getString(R.string.spotlight_title_auto_update_switch),
+                    getString(R.string.spotlight_content_auto_update_switch),
+                    PreferenceCodes.SPOTLIGHT_ID_SWITCH_AUTO_UPDATED);
+            seq.addSpotlight(this.switchEnableEnableOpendnsServers,
+                    getString(R.string.spotlight_title_start_vpn_server),
+                    getString(R.string.spotlight_content_start_vpn_server),
+                    PreferenceCodes.SPOTLIGHT_ID_SWITCH_VPN_SERVER);
+            seq.addSpotlight(this.switchEnableNotification,
+                    getString(R.string.spotlight_title_show_notifications),
+                    getString(R.string.spotlight_content_show_notifications),
+                    PreferenceCodes.SPOTLIGHT_ID_SWITCH_NOTIFICATION);
 
             //StateSwitchers
 
-            seq.addSpotlight(this.ipAddressUpdatedStateSwitcher.getView(), "Ip address status", "If your IP has been updated, you will see a green check", "spotlight_ip_update_status");
-            seq.addSpotlight(this.openDNSWebsiteStateSwitcher.getView(), "OpenDNS server status", "If your are using OpenDNS as DNS servers", "spotlight_opendns_usage_status");
-            seq.addSpotlight(this.filterPhishingStateSwitcher.getView(), "Quick filtering test", "If your current opendns config is filtering phishing website", "spotlight_phishing_status");
-            seq.addSpotlight(this.useOpendnsStateSwitcher.getView(), "Quick local VPN status", "If you are using the local VPN to force the use of OpenDNS servers", "spotlight_VPN_status");
+            seq.addSpotlight(this.ipAddressUpdatedStateSwitcher.getView(),
+                    getString(R.string.spotlight_title_state_switcher_ip_updated),
+                    getString(R.string.spotlight_content_state_switcher_ip_updated),
+                    PreferenceCodes.SPOTLIGHT_ID_STATUS_IP_UPDATED);
+            seq.addSpotlight(this.openDNSWebsiteStateSwitcher.getView(),
+                    getString(R.string.spotlight_title_state_switcher_using_opendns_server),
+                    getString(R.string.spotlight_content_state_switcher_using_opendns_server),
+                    PreferenceCodes.SPOTLIGHT_ID_STATUS_USING_OPENDNS);
+            seq.addSpotlight(this.filterPhishingStateSwitcher.getView(),
+                    getString(R.string.spotlight_title_state_switcher_is_filtering),
+                    getString(R.string.spotlight_content_state_switcher_is_filtering),
+                    PreferenceCodes.SPOTLIGHT_ID_STATUS_FILTERING_WEBSITES);
+            seq.addSpotlight(this.useOpendnsStateSwitcher.getView(),
+                    getString(R.string.spotlight_title_state_switcher_using_vpn_service),
+                    getString(R.string.spotlight_content_state_switcher_using_vpn_service),
+                    PreferenceCodes.SPOTLIGHT_ID_STATUS_USING_VPN);
 
+            // General buttons
 
-            seq.addSpotlight(this.refreshButton, "Force a manual refresg", "To force a manual refresh, click here", "spotlight_force_refresh");
-            seq.addSpotlight(this.settingButton, "Settings", "Here are the settings, check them to see what they can offer", "spotlight_settings");
+            seq.addSpotlight(this.refreshButton,
+                    getString(R.string.spotlight_title_top_button_refresh_all),
+                    getString(R.string.spotlight_content_top_button_refresh),
+                    PreferenceCodes.SPOTLIGHT_ID_TOP_BUTTON_REFRESH);
+            seq.addSpotlight(this.settingButton,
+                    getString(R.string.spotlight_title_top_button_settings),
+                    getString(R.string.spotlight_content_top_button_settings),
+                    PreferenceCodes.SPOTLIGHT_ID_TOP_BUTTON_SETTINGS);
 
             seq.startSequence();
+            OpenDnsUpdater.getPrefs().edit().putBoolean(PreferenceCodes.SPOTLIGHT_SHOWN, true).apply();
         }
-
 
     }
 

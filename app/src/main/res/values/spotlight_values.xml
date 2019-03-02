@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="intro_annimation_duration">100</integer>
+    <integer name="fading_text_duration">100</integer>
+    <integer name="line_annimation_duration">100</integer>
+
+    <color name="spotlight_heading_textview">#e53935</color>
+    <color name="spotlight_line_color">#e53935</color>
+    <color name="spotlight_backplane">#dc000000</color>
+</resources>

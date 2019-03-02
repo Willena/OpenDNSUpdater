@@ -144,6 +144,21 @@
             android:key="app_about_licenses_bugsnag_bugsnag_android"
             android:summary="Click to see the corresponding license"
             android:title="BugSnag Android library (4.9.3)" />
+        <Preference
+            android:defaultValue="https://github.com/bugsnag/bugsnag-android/blob/v4.9.3/LICENSE.txt"
+            android:key="app_about_licenses_bugsnag_bugsnag_android"
+            android:summary="Click to see the corresponding license"
+            android:title="BugSnag Android library (4.9.3)" />
+        <Preference
+            android:defaultValue="https://github.com/wooplr/Spotlight/blob/master/LICENSE"
+            android:key="app_about_licenses_spotlight"
+            android:summary="Click to see the corresponding license"
+            android:title="Spotlight library (1.3)" />
+        <Preference
+            android:defaultValue="https://github.com/AppIntro/AppIntro/blob/master/LICENSE"
+            android:key="app_about_licenses_app_intro"
+            android:summary="Click to see the corresponding license"
+            android:title="AppIntro library (5.1)" />
     </PreferenceCategory>
 
 </PreferenceScreen>

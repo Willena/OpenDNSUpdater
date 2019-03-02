@@ -8,7 +8,12 @@ import com.bugsnag.android.Severity;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+
+import javax.net.ssl.SSLException;
 
 import fr.guillaumevillena.opendnsupdater.event.IpUpdatedEvent;
 import okhttp3.HttpUrl;
@@ -17,6 +22,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class ExternalIpFinder extends AsyncTask<Void, Void, Void> {
+
+    private static final String TAG = ExternalIpFinder.class.getSimpleName();
+
     @Override
     protected Void doInBackground(Void... voids) {
 
@@ -41,7 +49,8 @@ public class ExternalIpFinder extends AsyncTask<Void, Void, Void> {
                     EventBus.getDefault().post(new IpUpdatedEvent(data));
                 }
             }
-        } catch (IOException e) {
+        } catch (UnsupportedEncodingException | ConnectException | UnknownHostException | SSLException | SocketTimeoutException ignored) {
+        } catch (Exception e) {
             e.printStackTrace();
             Bugsnag.notify(e, Severity.WARNING);
 

@@ -7,6 +7,11 @@ import com.bugsnag.android.Severity;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+
+import javax.net.ssl.SSLException;
 
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -29,7 +34,7 @@ public class CheckFakePhishingSite extends AsyncTask<Void, Void, Boolean> {
         OkHttpClient client = new OkHttpClient();
 
 
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://www.internetbadguys.com/").newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://www.internetbadguys.com/").newBuilder();
         HttpUrl url = urlBuilder.build();
 
         try {
@@ -39,10 +44,7 @@ public class CheckFakePhishingSite extends AsyncTask<Void, Void, Boolean> {
             if (response.isSuccessful())
                 return !response.request().url().equals(url);
 
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            Bugsnag.notify(e, Severity.WARNING);
-
+        } catch (UnsupportedEncodingException | ConnectException | UnknownHostException | SSLException | SocketTimeoutException ignored) {
         } catch (IOException e) {
             e.printStackTrace();
             Bugsnag.notify(e, Severity.WARNING);

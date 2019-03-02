@@ -8,8 +8,12 @@ import android.util.Log;
 import com.bugsnag.android.Bugsnag;
 import com.bugsnag.android.Severity;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+
+import javax.net.ssl.SSLException;
 
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
@@ -78,11 +82,8 @@ public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
             }
 
 
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            Bugsnag.notify(e, Severity.WARNING);
-
-        } catch (IOException e) {
+        } catch (UnsupportedEncodingException | ConnectException | UnknownHostException | SSLException | SocketTimeoutException ignored) {
+        } catch (Exception e) {
             e.printStackTrace();
             Bugsnag.notify(e, Severity.WARNING);
         }

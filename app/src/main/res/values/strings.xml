@@ -41,9 +41,9 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="ip_address_updated">Your IP has successfully been updated</string>
-    <string name="title_ip_adress_updated">Ip adress Updated</string>
-    <string name="ip_address_updated_error">An error occured while updating your IP. \nYou may not be using OpenDNS service right now.</string>
-    <string name="title_ip_update_error">An error occured while updating your IP</string>
+    <string name="title_ip_adress_updated">Ip address Updated</string>
+    <string name="ip_address_updated_error">An error occurred while updating your IP. \nYou may not be using OpenDNS service right now.</string>
+    <string name="title_ip_update_error">An error occurred while updating your IP</string>
     <string name="dns1_opendns_ip" translatable="false">208.67.222.222</string>
     <string name="dns2_opendns_ip" translatable="false">208.67.220.220</string>
     <string name="text_opendns_website_check">OpenDNS website check</string>
@@ -87,12 +87,12 @@
 
 
     <string name="app_intro_welcom_title">Welcome</string>
-    <string name="text_how_it_works">This application is a utility tool that update your IP address on opendns service. \n\n
+    <string name="text_how_it_works">This application is a utility tool that update your IP address on OpenDNS service. \n\n
         OpenDNS offers a configurable filtering solution for categories of website only using DNS.\n The content is filtered based on DNS request.
         It means that you must have OpenDNS DNS servers configured inside your router, your DHCP server or in the device IP configuration or using the built-in VPN server (It will redirect all DNS trafic to OpenDNS server and and forward everything else). \n\n
         The service rely on the external IP address. That means that if you move or change wifi network, filters wont be applied anymore.
         You must change your IP inside the OpenDNS dashboard.\n\n This application simplifies that process and does that for you.
-        A local VPN server is built in if you can\'t easely change the IP configuration.</string>
+        A local VPN server is built in if you can\'t change the IP configuration.</string>
     <string name="spotlight_title_auto_update_switch">Control updates</string>
     <string name="spotlight_title_start_vpn_server">Built-in VPN Server/Client</string>
     <string name="spotlight_title_show_notifications">Control your notifications</string>

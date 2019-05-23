@@ -18,12 +18,14 @@ import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import androidx.appcompat.app.ActionBar;
 import fr.guillaumevillena.opendnsupdater.R;
 import fr.guillaumevillena.opendnsupdater.utils.ConnectivityUtil;
 import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
@@ -163,6 +165,14 @@ public class GlobalSettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSummaryToValue(findPreference(PreferenceCodes.OPENDNS_USERNAME));
             bindPreferenceSummaryToValue(findPreference(PreferenceCodes.APP_BLACKLIST));
             setBlackListToCurrentValue((MultiSelectListPreference) findPreference(PreferenceCodes.APP_BLACKLIST));
+            findPreference(PreferenceCodes.OPENDNS_PASSWORD).setOnPreferenceClickListener(preference -> {
+                new AlertDialog.Builder(preference.getContext())
+                        .setTitle(getResources().getString(R.string.alert_password_title))
+                        .setMessage(getResources().getString(R.string.alert_password_message))
+                        .setPositiveButton(getResources().getString(R.string.text_Ok), (dialogInterface, i) -> {
+                        }).create().show();
+                return false;
+            });
 
         }
 

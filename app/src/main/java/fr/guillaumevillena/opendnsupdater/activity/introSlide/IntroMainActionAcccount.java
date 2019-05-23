@@ -9,13 +9,15 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import com.github.paolorotolo.appintro.ISlidePolicy;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
+
+import com.github.paolorotolo.appintro.ISlidePolicy;
+import com.google.android.material.snackbar.Snackbar;
+
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.R;
 import fr.guillaumevillena.opendnsupdater.activity.CreateAccountWizard;
@@ -67,9 +69,17 @@ public class IntroMainActionAcccount extends Fragment implements TaskFinished, I
         AppCompatButton testbtn = root.findViewById(R.id.testCredentials);
         testbtn.setOnClickListener(view -> testConfiguration());
 
+        new AlertDialog.Builder(getContext())
+                .setTitle(getResources().getString(R.string.alert_password_title))
+                .setMessage(getResources().getString(R.string.alert_password_message))
+                .setPositiveButton(getResources().getString(R.string.text_Ok), (dialogInterface, i) -> {
+                }).create().show();
+
+
         openDnsNetwork.setText(OpenDnsUpdater.getPrefs().getString(PreferenceCodes.OPENDNS_NETWORK, ""));
         openDnsPassword.setText(OpenDnsUpdater.getPrefs().getString(PreferenceCodes.OPENDNS_PASSWORD, ""));
         openDnsUsername.setText(OpenDnsUpdater.getPrefs().getString(PreferenceCodes.OPENDNS_USERNAME, ""));
+
         testConfiguration();
 
         return root;
@@ -96,6 +106,7 @@ public class IntroMainActionAcccount extends Fragment implements TaskFinished, I
     }
 
     private void testConfiguration() {
+
         ipAddressUpdatedStateSwitcher.setCurrentState(RUNNING);
         UpdateOnlineIP.Configurator config = new UpdateOnlineIP.Configurator();
         config.setUsername(this.openDnsUsername.getText().toString());
@@ -103,6 +114,7 @@ public class IntroMainActionAcccount extends Fragment implements TaskFinished, I
         config.setNetwork(this.openDnsNetwork.getText().toString());
         config.makeUpdate(true);
         new UpdateOnlineIP(this, config).execute();
+
     }
 
     @Override

@@ -112,5 +112,15 @@
     <string name="spotlight_content_state_switcher_using_vpn_service">You will see a green check if the internal VPN is started and used.</string>
     <string name="spotlight_content_top_button_refresh">You need manual things ? To force a manual refresh, click here !</string>
     <string name="spotlight_content_top_button_settings">Here are the settings. Check them to see what they contains</string>
+    <string name="text_Ok">Ok</string>
+    <string name="alert_password_title">Special character warning</string>
+    <string name="alert_password_message">
+<![CDATA[
+Some special characters ( for the moment, only \'&\' is concerned ) are known to not be supported by OpenDNS public API.
+
+Please make sure your password does not contain one of them.
+
+This information has been confirmed by a member of OpenDNS staff.
+]]></string>
 
 </resources>

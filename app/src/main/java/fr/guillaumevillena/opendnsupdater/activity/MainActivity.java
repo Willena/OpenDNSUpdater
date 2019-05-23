@@ -13,14 +13,15 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
+
 import com.wooplr.spotlight.SpotlightConfig;
 import com.wooplr.spotlight.utils.SpotlightSequence;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageView;
 import fr.guillaumevillena.opendnsupdater.BuildConfig;
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.R;
@@ -215,10 +216,14 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         switchEnableEnableOpendnsServers.setChecked(prefs.getBoolean(PreferenceCodes.APP_DNS, false));
         switchEnableAutoUpdate.setChecked(prefs.getBoolean(PreferenceCodes.APP_AUTO_UPDATE, false));
 
+        printDateLastUpdate();
+
+    }
+
+    private void printDateLastUpdate() {
         long lastUpdate = OpenDnsUpdater.getPrefs().getLong(PreferenceCodes.OPENDNS_LAST_UPDATE, -1);
+        Log.d(TAG, "restoreSettings: " + lastUpdate);
         lastUpdateDateTextView.setText(getString(R.string.main_activity_last_ip_update, lastUpdate != -1 ? DateUtils.getDate(this, lastUpdate) : getString(R.string.text_never)));
-
-
     }
 
     private void initStateSwitcher(StateSwitcher stateSwitcher, ProgressBar progressBar, AppCompatImageView imgStatus) {
@@ -381,5 +386,8 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         } else if (task instanceof CheckFakePhishingSite) {
             filterPhishingStateSwitcher.setCurrentState(result ? SUCCESS : ERROR);
         }
+
+        printDateLastUpdate();
+
     }
 }

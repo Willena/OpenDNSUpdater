@@ -2,7 +2,6 @@ package fr.guillaumevillena.opendnsupdater.tasks;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.util.Base64;
 import android.util.Log;
 
 import com.bugsnag.android.Bugsnag;
@@ -16,6 +15,7 @@ import java.net.UnknownHostException;
 import javax.net.ssl.SSLException;
 
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
+import fr.guillaumevillena.opendnsupdater.utils.BasicAuthInterceptor;
 import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -43,11 +43,13 @@ public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
             String network = prefs.getString(PreferenceCodes.OPENDNS_NETWORK, "");
             Boolean makeUpdate = prefs.getBoolean(PreferenceCodes.APP_AUTO_UPDATE, false);
 
+
             this.configurator = new Configurator();
             this.configurator.setNetwork(network);
             this.configurator.setPassword(password);
             this.configurator.setUsername(username);
             this.configurator.makeUpdate(makeUpdate);
+
 
         }
     }
@@ -61,7 +63,11 @@ public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
         }
 
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient()
+                .newBuilder()
+                .addInterceptor(new BasicAuthInterceptor(this.configurator.username, this.configurator.password))
+                .build();
+//        Log.d(TAG, "doInBackground: passwd " + this.configurator.password);
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse("https://updates.opendns.com/nic/update").newBuilder();
         urlBuilder.addQueryParameter("hostname", this.configurator.getNetwork());
@@ -69,7 +75,6 @@ public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
 
         try {
             Request request = new Request.Builder()
-                    .header("Authorization", "Basic " + Base64.encodeToString((this.configurator.getUsername() + ":" + this.configurator.getPassword()).getBytes("UTF-8"), Base64.NO_WRAP))
                     .url(url)
                     .build();
 
@@ -77,9 +82,14 @@ public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
 
             if (response.isSuccessful()) {
                 String data = response.body().string();
+
                 Log.d(TAG, "doInBackground: " + data);
+                OpenDnsUpdater.getPrefs().edit().putLong(PreferenceCodes.OPENDNS_LAST_UPDATE, System.currentTimeMillis()).apply();
                 return data.contains("good") || data.contains("abuse");
             }
+
+            Log.d(TAG, "doInBackground: respons");
+            Log.d(TAG, "doInBackground: " + response.toString());
 
 
         } catch (UnsupportedEncodingException | ConnectException | UnknownHostException | SSLException | SocketTimeoutException ignored) {

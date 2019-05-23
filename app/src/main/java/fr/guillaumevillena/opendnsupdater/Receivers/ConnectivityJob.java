@@ -16,6 +16,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
+
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
@@ -29,7 +31,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.Set;
 
-import androidx.core.app.NotificationCompat;
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.R;
 import fr.guillaumevillena.opendnsupdater.event.InterfaceUpdatedEvent;
@@ -192,11 +193,8 @@ public class ConnectivityJob extends JobService implements TaskFinished {
 
     @Override
     public void onTaskFinished(AsyncTask task, Boolean result) {
-        final Boolean shouldCreateNotification = prefs.getBoolean(PreferenceCodes.APP_NOTIFY, false);
+        final boolean shouldCreateNotification = prefs.getBoolean(PreferenceCodes.APP_NOTIFY, false);
         if (shouldCreateNotification)
             createTimedNotification(result);
-
-        if (result)
-            prefs.edit().putLong(PreferenceCodes.OPENDNS_LAST_UPDATE, System.currentTimeMillis()).apply();
     }
 }

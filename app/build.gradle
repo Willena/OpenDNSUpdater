@@ -1,6 +1,16 @@
 buildscript {
 }
 
+plugins {
+    id 'com.android.application'
+    id 'com.github.triplet.play' version '2.2.1'
+}
+play {
+    serviceAccountCredentials = file("serviceAccountKey.json")
+    track = "production"
+    userFraction = 1
+    releaseStatus = "completed"
+}
 apply plugin: 'com.android.application'
 apply plugin: 'com.bugsnag.android.gradle'
 
@@ -57,8 +67,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.bugsnag:bugsnag-android:4.14.1'
-
-//    implementation 'com.github.Willena:FinestWebView-Android:access-activity-SNAPSHOT'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'

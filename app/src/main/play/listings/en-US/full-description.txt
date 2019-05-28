@@ -1,0 +1,21 @@
+* Quick presentation
+
+OpenDNS Updater is an extremely easy to use android app to perform dynamic IP updates on OpenDNS services.
+
+* Presentation
+
+OpenDns is a very famous DNS service used by a lot of people, but not everybody knows that they also provide some filtering product for individuals.
+
+This type of service is free and can be very useful to filter websites such as porn, phishing, malware, and many other category.
+
+The service rely on your external IP to perform filter actions.
+Why an android application for a DNS service ?
+
+As I said on the previous line, the service rely on your external IP address, so when you change access point or start using mobile data, you request will not be filtered.
+
+Updater exist for almost Windows, Mac and Linux, but not for Android or IOS. ( https://support.opendns.com/hc/en-us/articles/227988607-OpenDNS-Compatible-Dynamic-DNS-DDNS-Clients )
+
+
+* Other informations
+
+This is an open source project; For more information on the app and the source code, please go to android.guillaumevillena.fr.

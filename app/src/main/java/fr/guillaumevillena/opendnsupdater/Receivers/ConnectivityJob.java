@@ -16,20 +16,23 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.concurrent.futures.ResolvableFuture;
 import androidx.core.app.NotificationCompat;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ListenableWorker;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkerParameters;
 
-import com.firebase.jobdispatcher.FirebaseJobDispatcher;
-import com.firebase.jobdispatcher.GooglePlayDriver;
-import com.firebase.jobdispatcher.Job;
-import com.firebase.jobdispatcher.JobParameters;
-import com.firebase.jobdispatcher.JobService;
-import com.firebase.jobdispatcher.Lifetime;
-import com.firebase.jobdispatcher.RetryStrategy;
-import com.firebase.jobdispatcher.Trigger;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.R;
@@ -42,12 +45,14 @@ import fr.guillaumevillena.opendnsupdater.utils.IntentUtils;
 import fr.guillaumevillena.opendnsupdater.utils.Notifications;
 import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
 
+import static android.content.Context.CONNECTIVITY_SERVICE;
+
 /**
  * Created by guill on 26/06/2018.
  * With the help of stack overflow : https://stackoverflow.com/questions/46163131/android-o-detect-connectivity-change-in-background
  */
 
-public class ConnectivityJob extends JobService implements TaskFinished {
+public class ConnectivityJob extends ListenableWorker implements TaskFinished {
 
     private static final String TAG = ConnectivityJob.class.getSimpleName();
     private ConnectivityManager.NetworkCallback networkCallback;
@@ -56,63 +61,29 @@ public class ConnectivityJob extends JobService implements TaskFinished {
     private static boolean jobsStarted;
     private SharedPreferences prefs;
 
-    public static void setScheduler(Context context) {
-        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
-        Job job = dispatcher.newJobBuilder().setService(ConnectivityJob.class)
-                .setTag("connectivity-job").setLifetime(Lifetime.FOREVER).setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
-                .setRecurring(true).setReplaceCurrent(true).setTrigger(Trigger.executionWindow(0, 0)).build();
+    /**
+     * @param appContext   The application {@link Context}
+     * @param workerParams Parameters to setup the internal state of this worker
+     */
+    public ConnectivityJob(@NonNull Context appContext, @NonNull WorkerParameters workerParams) {
+        super(appContext, workerParams);
+    }
 
-        dispatcher.schedule(job);
+    public static void setScheduler(Context context) {
+
+
+        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(ConnectivityJob.class, 3, TimeUnit.MINUTES)
+                .setConstraints(new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
+                .build();
+
+        WorkManager.getInstance().enqueueUniquePeriodicWork("connectivity-job", ExistingPeriodicWorkPolicy.REPLACE, request);
+
     }
 
     public static boolean isJobsStarted() {
         return jobsStarted;
     }
 
-    @Override
-    public boolean onStartJob(JobParameters job) {
-
-        prefs = OpenDnsUpdater.getPrefs();
-
-        Log.d(TAG, "onStartJob: THE JOB STARTED !!!!!!");
-        jobsStarted = true;
-
-        connectivityManager = (ConnectivityManager) this.getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            connectivityManager.registerNetworkCallback(new NetworkRequest.Builder().build(), networkCallback = new ConnectivityManager.NetworkCallback() {
-                @Override
-                public void onAvailable(Network network) {
-
-                    Log.d(TAG, "onAvailable: The network is " + network.toString());
-                    handleConnectivityChange();
-
-                }
-            });
-        } else {
-            registerReceiver(connectivityChange = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    handleConnectivityChange();
-                }
-            }, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-        }
-
-        Log.d(TAG, "onStartJob: Done ! ");
-        return true;
-    }
-
-
-    @Override
-    public boolean onStopJob(JobParameters job) {
-
-        jobsStarted = false;
-
-        if (networkCallback != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            connectivityManager.unregisterNetworkCallback(networkCallback);
-        else if (connectivityChange != null) unregisterReceiver(connectivityChange);
-        return true;
-    }
 
     private void handleConnectivityChange() {
 
@@ -147,7 +118,6 @@ public class ConnectivityJob extends JobService implements TaskFinished {
                 return;
             }
 
-
         }
 
 
@@ -162,28 +132,25 @@ public class ConnectivityJob extends JobService implements TaskFinished {
 
         Log.d(TAG, "createTimedNotification: Creating notification ");
 
-
-        Context context = this.getApplicationContext();
-
-        NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager manager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationCompat.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(Notifications.CHANNEL_ID, Notifications.CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
             manager.createNotificationChannel(channel);
-            builder = new NotificationCompat.Builder(this, Notifications.CHANNEL_ID);
+            builder = new NotificationCompat.Builder(getApplicationContext(), Notifications.CHANNEL_ID);
         } else {
-            builder = new NotificationCompat.Builder(this);
+            builder = new NotificationCompat.Builder(getApplicationContext());
         }
 
         builder.setWhen(0)
-                .setContentTitle(getResources().getString(state ? R.string.title_ip_adress_updated : R.string.title_ip_update_error))
+                .setContentTitle(getApplicationContext().getResources().getString(state ? R.string.title_ip_adress_updated : R.string.title_ip_update_error))
                 .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
                 .setSmallIcon(R.drawable.ic_icon)
-                .setColor(getResources().getColor(R.color.colorPrimary)) //backward compatibility
+                .setColor(getApplicationContext().getResources().getColor(R.color.colorPrimary)) //backward compatibility
                 .setOngoing(false)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(getResources().getString(state ? R.string.ip_address_updated : R.string.ip_address_updated_error)))
-                .setTicker(getResources().getString(state ? R.string.ip_address_updated : R.string.ip_address_updated_error));
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(getApplicationContext().getResources().getString(state ? R.string.ip_address_updated : R.string.ip_address_updated_error)))
+                .setTicker(getApplicationContext().getResources().getString(state ? R.string.ip_address_updated : R.string.ip_address_updated_error));
 
         Notification notification = builder.build();
 
@@ -196,5 +163,52 @@ public class ConnectivityJob extends JobService implements TaskFinished {
         final boolean shouldCreateNotification = prefs.getBoolean(PreferenceCodes.APP_NOTIFY, false);
         if (shouldCreateNotification)
             createTimedNotification(result);
+    }
+
+    @Override
+    public void onStopped() {
+
+        super.onStopped();
+        jobsStarted = false;
+
+        if (networkCallback != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            connectivityManager.unregisterNetworkCallback(networkCallback);
+        else if (connectivityChange != null)
+            getApplicationContext().unregisterReceiver(connectivityChange);
+    }
+
+    @NonNull
+    @Override
+    public ListenableFuture<Result> startWork() {
+        prefs = OpenDnsUpdater.getPrefs();
+
+        Log.d(TAG, "onStartJob: THE JOB STARTED !!!!!!");
+        jobsStarted = true;
+
+        connectivityManager = (ConnectivityManager) this.getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            connectivityManager.registerNetworkCallback(new NetworkRequest.Builder().build(), networkCallback = new ConnectivityManager.NetworkCallback() {
+                @Override
+                public void onAvailable(Network network) {
+
+                    Log.d(TAG, "onAvailable: The network is " + network.toString());
+                    handleConnectivityChange();
+
+                }
+            });
+        } else {
+            getApplicationContext().registerReceiver(connectivityChange = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    handleConnectivityChange();
+                }
+            }, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+
+        Log.d(TAG, "onStartJob: Done ! ");
+        ResolvableFuture<Result> future = ResolvableFuture.create();
+        future.set(Result.success());
+        return future;
     }
 }

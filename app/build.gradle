@@ -18,8 +18,8 @@ android {
         applicationId "fr.guillaumevillena.opendnsupdater"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 8
-        versionName "2.1.1"
+        versionCode 9
+        versionName "2.1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         signingConfig signingConfigs.config
@@ -45,7 +45,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha06'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
-    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
+    implementation "androidx.work:work-runtime:2.0.1"
     implementation 'com.github.paolorotolo:appintro:v5.1.0'
     implementation 'com.github.wooplr:Spotlight:1.2.3'
 

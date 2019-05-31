@@ -166,7 +166,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:orientation="vertical">
 
 
@@ -177,7 +179,7 @@
             android:layout_marginBottom="8dp"
             android:orientation="horizontal">
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_auto_update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -197,7 +199,7 @@
             android:layout_marginBottom="8dp"
             android:orientation="horizontal">
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_enable_opendns_server"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -216,7 +218,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_enable_notifications"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -326,7 +328,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true">
 
-            <ProgressBar
+            <androidx.core.widget.ContentLoadingProgressBar
                 android:id="@+id/progressBar_using_opendns"
                 style="@style/Widget.AppCompat.ProgressBar"
                 android:layout_width="wrap_content"
@@ -380,7 +382,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true">
 
-            <ProgressBar
+            <androidx.core.widget.ContentLoadingProgressBar
                 android:id="@+id/progressBar_ip_updated"
                 style="@style/Widget.AppCompat.ProgressBar"
                 android:layout_width="wrap_content"
@@ -432,7 +434,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true">
 
-            <ProgressBar
+            <androidx.core.widget.ContentLoadingProgressBar
                 android:id="@+id/progressBar_filter_phising"
                 style="@style/Widget.AppCompat.ProgressBar"
                 android:layout_width="wrap_content"

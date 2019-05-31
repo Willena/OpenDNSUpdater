@@ -10,11 +10,11 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.wooplr.spotlight.SpotlightConfig;
 import com.wooplr.spotlight.utils.SpotlightSequence;
@@ -58,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
     private StateSwitcher useOpendnsStateSwitcher;
     private StateSwitcher openDNSWebsiteStateSwitcher;
 
-    private Switch switchEnableNotification;
-    private Switch switchEnableAutoUpdate;
-    private Switch switchEnableEnableOpendnsServers;
+    private SwitchCompat switchEnableNotification;
+    private SwitchCompat switchEnableAutoUpdate;
+    private SwitchCompat switchEnableEnableOpendnsServers;
 
     private TextView ipValue;
     private TextView interfaceValue;

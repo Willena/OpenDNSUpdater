@@ -4,15 +4,17 @@ import android.Manifest;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.github.paolorotolo.appintro.model.SliderPage;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.R;
 import fr.guillaumevillena.opendnsupdater.activity.introSlide.IntroAccountFragment;
+import fr.guillaumevillena.opendnsupdater.activity.introSlide.IntroBugsnagConsent;
 import fr.guillaumevillena.opendnsupdater.activity.introSlide.IntroHowItWorks;
 import fr.guillaumevillena.opendnsupdater.activity.introSlide.IntroMainActionAcccount;
 import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
@@ -44,6 +46,7 @@ public class ApplicationWizard extends AppIntro {
         localtionPermSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
         addSlide(AppIntroFragment.newInstance(localtionPermSlide));
 
+        addSlide(IntroBugsnagConsent.newInstance());
 
         addSlide(IntroAccountFragment.newInstance());
         addSlide(IntroMainActionAcccount.newInstance());
@@ -74,6 +77,7 @@ public class ApplicationWizard extends AppIntro {
         if (currentFragment instanceof IntroMainActionAcccount) {
             if (((IntroMainActionAcccount) currentFragment).isConnectionOk()) {
                 OpenDnsUpdater.getPrefs().edit().putBoolean(PreferenceCodes.FIRST_TIME_CONFIG_FINISHED, true).apply();
+                OpenDnsUpdater.getInstance().initalizeCrashCollection();
                 finish();
             }
         }

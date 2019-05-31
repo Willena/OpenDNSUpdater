@@ -145,11 +145,6 @@
             android:summary="Click to see the corresponding license"
             android:title="BugSnag Android library (4.9.3)" />
         <Preference
-            android:defaultValue="https://github.com/bugsnag/bugsnag-android/blob/v4.9.3/LICENSE.txt"
-            android:key="app_about_licenses_bugsnag_bugsnag_android"
-            android:summary="Click to see the corresponding license"
-            android:title="BugSnag Android library (4.9.3)" />
-        <Preference
             android:defaultValue="https://github.com/wooplr/Spotlight/blob/master/LICENSE"
             android:key="app_about_licenses_spotlight"
             android:summary="Click to see the corresponding license"
@@ -159,6 +154,17 @@
             android:key="app_about_licenses_app_intro"
             android:summary="Click to see the corresponding license"
             android:title="AppIntro library (5.1)" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Privacy and data collection">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="app.crashreport.consent.bugsnag"
+            android:summaryOff="Crash reporting is disabled"
+            android:summaryOn="Crash reporting is enable"
+            android:title="Detect and send crash reports" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

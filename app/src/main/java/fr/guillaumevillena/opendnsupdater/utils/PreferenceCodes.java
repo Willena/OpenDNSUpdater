@@ -58,4 +58,5 @@ public class PreferenceCodes {
     public static final String SPOTLIGHT_ID_TOP_BUTTON_SETTINGS = "app.spotlight.status.settings";
 
 
+    public static final String BUGSNAG_ACTIVATED = "app.crashreport.consent.bugsnag";
 }

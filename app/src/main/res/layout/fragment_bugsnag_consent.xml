@@ -16,7 +16,7 @@
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="Bugsnag Crash collection"
+        android:text="@string/intro_title_bugsnag_crash_collection"
         android:textColor="@android:color/white"
         android:textSize="28sp"
         android:textStyle="bold" />
@@ -27,6 +27,7 @@
         android:layout_weight="8"
         android:gravity="center_horizontal"
         android:orientation="vertical"
+        android:padding="16dp"
         android:weightSum="1">
 
         <TextView
@@ -36,9 +37,7 @@
             android:layout_gravity="center"
             android:layout_weight="0.9"
             android:gravity="center"
-            android:text="In order to help me (the developper) improve this application when it crashes, I've setup bugsnag collection system.
-\n\n When a crash occur, it collect and send a bunch of information about your device (OS, CPU, time, brand and model, orientation, network type, memory usage and  battery level) and the application state (last actions, app version, app name, durations)
-\n\n If you dont want to share these information, it is your choice and I'll respect it."
+            android:text="@string/intro_main_text_bugsnag_crash_collection"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
@@ -49,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Enable BugSnag data collection on crash"
+        android:text="@string/intro_text_switch_bugnsag_crash_collection"
         android:textColor="@android:color/white" />
 
     <androidx.appcompat.widget.SwitchCompat

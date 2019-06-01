@@ -17,7 +17,7 @@
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="OpenDNS account"
+        android:text="@string/intro_opendns_account_credentials"
         android:textColor="@android:color/white"
         android:textSize="28sp"
         android:textStyle="bold" />
@@ -37,7 +37,7 @@
             android:layout_gravity="center"
             android:layout_weight="0.9"
             android:gravity="center"
-            android:text="Please fill in your OpenDNS credentials."
+            android:text="@string/intro_main_text_credentials"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
@@ -59,7 +59,7 @@
                 android:id="@+id/editOpenDnsUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username"
+                android:hint="@string/intro_hint_username_credentials_edit_text"
                 android:inputType="textEmailAddress"
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />
@@ -75,7 +75,7 @@
                 android:id="@+id/editOpenDnsPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
+                android:hint="@string/intro_hint_password_credentials_edit_text"
                 android:inputType="textPassword"
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />
@@ -91,7 +91,7 @@
                 android:id="@+id/editOpenDnsNetwork"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Network"
+                android:hint="@string/intro_hint_network_credentials_edit_text"
                 android:inputType="textNoSuggestions"
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />
@@ -139,7 +139,7 @@
             android:id="@+id/testCredentials"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Test connection"
+            android:text="@string/intro_button_test_credentials"
             android:textColor="@android:color/white"
             app:backgroundTint="@color/colorPrimaryDark" />
 

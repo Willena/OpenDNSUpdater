@@ -152,6 +152,6 @@ public class IntroMainActionAcccount extends Fragment implements TaskFinished, I
 
     @Override
     public void onUserIllegallyRequestedNextPage() {
-        Snackbar.make(openDnsPassword, "Impossible to connect with the filled account", Snackbar.LENGTH_LONG).show();
+        Snackbar.make(openDnsPassword, getResources().getString(R.string.intro_snackbar_invalid_credentials), Snackbar.LENGTH_LONG).show();
     }
 }

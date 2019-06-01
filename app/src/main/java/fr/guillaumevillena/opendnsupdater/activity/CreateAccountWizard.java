@@ -3,12 +3,13 @@ package fr.guillaumevillena.opendnsupdater.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.github.paolorotolo.appintro.model.SliderPage;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import fr.guillaumevillena.opendnsupdater.R;
 
 public class CreateAccountWizard extends AppIntro {
@@ -19,50 +20,50 @@ public class CreateAccountWizard extends AppIntro {
 
 
         SliderPage createAccountSlide = new SliderPage();
-        createAccountSlide.setTitle("1. Create your account");
-        createAccountSlide.setDescription("First go to signup.opendns.com/homefree and  fill in the form");
+        createAccountSlide.setTitle(getResources().getString(R.string.intro_account_creation_1_title));
+        createAccountSlide.setDescription(getResources().getString(R.string.intro_account_creation_1_main_text));
         createAccountSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
         createAccountSlide.setImageDrawable(R.drawable.opendns_1_singup);
         addSlide(AppIntroFragment.newInstance(createAccountSlide));
 
         SliderPage loginSlide = new SliderPage();
-        loginSlide.setTitle("2. Log into your account");
-        loginSlide.setDescription("Then login to dashboard.opendns.com");
+        loginSlide.setTitle(getResources().getString(R.string.intro_account_creation_2_title));
+        loginSlide.setDescription(getResources().getString(R.string.intro_account_creation_2_main_text));
         loginSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
         loginSlide.setImageDrawable(R.drawable.opendns_2_login);
         addSlide(AppIntroFragment.newInstance(loginSlide));
 
         SliderPage dashboardSlide = new SliderPage();
-        dashboardSlide.setTitle("3. Add a network");
-        dashboardSlide.setDescription("Then click on add a network");
+        dashboardSlide.setTitle(getResources().getString(R.string.intro_account_creation_3_title));
+        dashboardSlide.setDescription(getResources().getString(R.string.intro_account_creation_3_main_text));
         dashboardSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
         dashboardSlide.setImageDrawable(R.drawable.opendns_3_dashboard);
         addSlide(AppIntroFragment.newInstance(dashboardSlide));
 
         SliderPage networkSlide = new SliderPage();
-        networkSlide.setTitle("4. Validate the network creation");
-        networkSlide.setDescription("Click on Add this network. The ip address should already be filled");
+        networkSlide.setTitle(getResources().getString(R.string.intro_account_creation_4_title));
+        networkSlide.setDescription(getResources().getString(R.string.intro_account_creation_4_main_text));
         networkSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
         networkSlide.setImageDrawable(R.drawable.opendns_4_addnet);
         addSlide(AppIntroFragment.newInstance(networkSlide));
 
         SliderPage nameNetSlide = new SliderPage();
-        nameNetSlide.setTitle("5. Name the network");
-        nameNetSlide.setDescription("Add a name to your network");
+        nameNetSlide.setTitle(getResources().getString(R.string.intro_account_creation_5_title));
+        nameNetSlide.setDescription(getResources().getString(R.string.intro_account_creation_5_main_text));
         nameNetSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
         nameNetSlide.setImageDrawable(R.drawable.opendns_5_namenet);
         addSlide(AppIntroFragment.newInstance(nameNetSlide));
 
         SliderPage dashboradListNetSlide = new SliderPage();
-        dashboradListNetSlide.setTitle("6. The network is ready to use");
-        dashboradListNetSlide.setDescription("Your network is listed in the list on the dashboard");
+        dashboradListNetSlide.setTitle(getResources().getString(R.string.intro_account_creation_6_title));
+        dashboradListNetSlide.setDescription(getResources().getString(R.string.intro_account_creation_6_main_text));
         dashboradListNetSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
         dashboradListNetSlide.setImageDrawable(R.drawable.opendns_6_network_ok);
         addSlide(AppIntroFragment.newInstance(dashboradListNetSlide));
 
         SliderPage configureFilterSlide = new SliderPage();
-        configureFilterSlide.setTitle("7. Configure your filters");
-        configureFilterSlide.setDescription("Click on your ip to configure how website are filtered");
+        configureFilterSlide.setTitle(getResources().getString(R.string.intro_account_creation_7_title));
+        configureFilterSlide.setDescription(getResources().getString(R.string.intro_account_creation_7_main_text));
         configureFilterSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
         configureFilterSlide.setImageDrawable(R.drawable.opendns_7_configurefilter);
         addSlide(AppIntroFragment.newInstance(configureFilterSlide));

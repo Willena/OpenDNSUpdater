@@ -8,6 +8,7 @@ import android.widget.RadioGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import fr.guillaumevillena.opendnsupdater.R;
 
 public class IntroAccountFragment extends Fragment {
@@ -33,12 +34,9 @@ public class IntroAccountFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.intro_account, container, false);
 
-        ((RadioGroup) root.findViewById(R.id.hasAccountToogle)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int id) {
-                //True if the selected button is hasAccount
-                hasAccount = id == R.id.hasAccount;
-            }
+        ((RadioGroup) root.findViewById(R.id.hasAccountToogle)).setOnCheckedChangeListener((radioGroup, id) -> {
+            //True if the selected button is hasAccount
+            hasAccount = id == R.id.hasAccount;
         });
 
         return root;

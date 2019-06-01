@@ -122,5 +122,37 @@ Please make sure your password does not contain one of them.
 
 This information has been confirmed by a member of OpenDNS staff.
 ]]></string>
+    <string name="intro_title_opendns_account">OpenDNS account</string>
+    <string name="intro_account_main_text">This application is using OpenDNS services whitch require you to have an account on their servers. Please choose your situation.</string>
+    <string name="intro_account_chooser_have_account">I have an Account</string>
+    <string name="intro_account_chooser_dont_have_account">I don\'t have an account</string>
+    <string name="intro_title_bugsnag_crash_collection">Bugsnag Crash collection</string>
+    <string name="intro_main_text_bugsnag_crash_collection">In order to help me (the developper) improve this application when it crashes, I\'ve setup bugsnag collection system.    When a crash occur, it collect and send a bunch of information about your device (OS, CPU, time, brand and model, orientation, network type, memory usage and battery level) and the application state (last actions, app version, app name, durations)    If you dont want to share these information, it is your choice and I\'ll respect it.</string>
+    <string name="intro_text_switch_bugnsag_crash_collection">Enable BugSnag data collection on crash</string>
+    <string name="intro_title_how_it_works">How it works ?</string>
+    <string name="intro_button_test_credentials">Test connection</string>
+    <string name="intro_hint_network_credentials_edit_text">Network</string>
+    <string name="intro_hint_password_credentials_edit_text">Password</string>
+    <string name="intro_hint_username_credentials_edit_text">Username</string>
+    <string name="intro_main_text_credentials">Please fill in your OpenDNS credentials.</string>
+    <string name="intro_opendns_account_credentials">OpenDNS account</string>
+    <string name="intro_snackbar_invalid_credentials">Impossible to connect with the filled account</string>
+    <string name="intro_welcome_main_text">Welcome to OpenDNS Updater The following steps will help you to configure the application</string>
+    <string name="intro_permissions_title">Permissions</string>
+    <string name="intro_permissions_main_text">You can optionally give to app the coarse location permission. It will only be used to access the wifi network name</string>
+    <string name="intro_account_creation_1_title">1. Create your account</string>
+    <string name="intro_account_creation_1_main_text">First go to signup.opendns.com/homefree and  fill in the form</string>
+    <string name="intro_account_creation_2_title">2. Log into your account</string>
+    <string name="intro_account_creation_2_main_text">Then login to dashboard.opendns.com</string>
+    <string name="intro_account_creation_3_title">3. Add a network</string>
+    <string name="intro_account_creation_3_main_text">Then click on add a network</string>
+    <string name="intro_account_creation_4_title">4. Validate the network creation</string>
+    <string name="intro_account_creation_4_main_text">Click on Add this network. The ip address should already be filled</string>
+    <string name="intro_account_creation_5_title">5. Name the network</string>
+    <string name="intro_account_creation_6_title">6. The network is ready to use</string>
+    <string name="intro_account_creation_7_title">7. Configure your filters</string>
+    <string name="intro_account_creation_7_main_text">Click on your ip to configure how website are filtered</string>
+    <string name="intro_account_creation_6_main_text">Your network is listed in the list on the dashboard</string>
+    <string name="intro_account_creation_5_main_text">Add a name to your network</string>
 
 </resources>

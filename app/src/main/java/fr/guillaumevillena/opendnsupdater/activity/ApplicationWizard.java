@@ -31,7 +31,7 @@ public class ApplicationWizard extends AppIntro {
         //Welcom slide
         SliderPage welcomeSlide = new SliderPage();
         welcomeSlide.setTitle(getString(R.string.app_intro_welcom_title));
-        welcomeSlide.setDescription("Welcome to OpenDNS Updater\nThe following steps will help you to configure the application");
+        welcomeSlide.setDescription(getResources().getString(R.string.intro_welcome_main_text));
         welcomeSlide.setImageDrawable(R.drawable.cellphone_settings_variant);
         welcomeSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
         addSlide(AppIntroFragment.newInstance(welcomeSlide));
@@ -39,9 +39,8 @@ public class ApplicationWizard extends AppIntro {
         addSlide(IntroHowItWorks.newInstance());
 
         SliderPage localtionPermSlide = new SliderPage();
-        localtionPermSlide.setTitle("Permissions");
-        localtionPermSlide.setDescription("You can optionally give to app the coarse location permission." +
-                " It will only be used to access the wifi network name");
+        localtionPermSlide.setTitle(getResources().getString(R.string.intro_permissions_title));
+        localtionPermSlide.setDescription(getResources().getString(R.string.intro_permissions_main_text));
         localtionPermSlide.setImageDrawable(R.drawable.cellphone_settings_variant);
         localtionPermSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
         addSlide(AppIntroFragment.newInstance(localtionPermSlide));

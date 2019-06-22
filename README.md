@@ -37,8 +37,11 @@ Updater exist for almost all other platform such as Windows, Mac and Linux, but 
 
 ### Installation
 #### Quick and Simple :
-You can download and install this app on your device using Google Play  or on F-Droid (link will be available soon)
+You can download and install this app on your device using Google Play  or F-Droid
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/fr.guillaumevillena.opendnsupdater/)
 [<img alt='Get it on Google Play'
       src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'
       height="80">](https://play.google.com/store/apps/details?id=fr.guillaumevillena.opendnsupdater)

@@ -1,5 +1,1 @@
-- Migrate from firebase-jobdispatcher to androidx Workmanager
-- Added Google play descriptions and data to be used in correlation with gradle-play-publisher
-- Added a slide to explicitly ask for data collection consent
-- Migrated some low level widget to androidx widgets (Progress bar and Switches)
-- Removed hardcoded strings from layout files
+- Update libraries versions

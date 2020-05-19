@@ -163,8 +163,9 @@ public class GlobalSettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference(PreferenceCodes.OPENDNS_NETWORK));
             bindPreferenceSummaryToValue(findPreference(PreferenceCodes.OPENDNS_USERNAME));
-            bindPreferenceSummaryToValue(findPreference(PreferenceCodes.APP_BLACKLIST));
-            setBlackListToCurrentValue((MultiSelectListPreference) findPreference(PreferenceCodes.APP_BLACKLIST));
+            bindPreferenceSummaryToValue(findPreference(PreferenceCodes.APP_FILTER));
+            setBlackListToCurrentValue((MultiSelectListPreference) findPreference(PreferenceCodes.APP_FILTER));
+
             findPreference(PreferenceCodes.OPENDNS_PASSWORD).setOnPreferenceClickListener(preference -> {
                 new AlertDialog.Builder(preference.getContext())
                         .setTitle(getResources().getString(R.string.alert_password_title))
@@ -187,10 +188,10 @@ public class GlobalSettingsActivity extends AppCompatPreferenceActivity {
         }
 
         private String[] getBlackListEntries() {
-            Set<String> entries = PreferenceManager.getDefaultSharedPreferences(getActivity()).getStringSet(PreferenceCodes.APP_BLACKLIST_ENTRIES, null);
+            Set<String> entries = PreferenceManager.getDefaultSharedPreferences(getActivity()).getStringSet(PreferenceCodes.APP_FILTER_ENTRIES, null);
             if (entries == null) {
                 entries = getDefaultBlackListValues();
-                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putStringSet(PreferenceCodes.APP_BLACKLIST_ENTRIES, entries).apply();
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putStringSet(PreferenceCodes.APP_FILTER_ENTRIES, entries).apply();
             }
 
             String[] strings = new String[entries.size()];
@@ -213,19 +214,19 @@ public class GlobalSettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
             if (preference.getKey().equals(getString(R.string.preference_filter_add))) {
-                Set<String> entries = PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getStringSet(PreferenceCodes.APP_BLACKLIST_ENTRIES, null);
-                Set<String> values = PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getStringSet(PreferenceCodes.APP_BLACKLIST, null);
+                Set<String> entries = PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getStringSet(PreferenceCodes.APP_FILTER_ENTRIES, null);
+                Set<String> values = PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getStringSet(PreferenceCodes.APP_FILTER, null);
                 if (entries != null && values != null) {
 
                     String toAdd = ConnectivityUtil.getActiveNetworkName(getActivity());
                     entries.add(toAdd);
                     values.add(toAdd);
 
-                    PreferenceManager.getDefaultSharedPreferences(preference.getContext()).edit().putStringSet(PreferenceCodes.APP_BLACKLIST_ENTRIES, entries).apply();
-                    PreferenceManager.getDefaultSharedPreferences(preference.getContext()).edit().putStringSet(PreferenceCodes.APP_BLACKLIST, values).apply();
+                    PreferenceManager.getDefaultSharedPreferences(preference.getContext()).edit().putStringSet(PreferenceCodes.APP_FILTER_ENTRIES, entries).apply();
+                    PreferenceManager.getDefaultSharedPreferences(preference.getContext()).edit().putStringSet(PreferenceCodes.APP_FILTER, values).apply();
 
 
-                    MultiSelectListPreference blacklist = (MultiSelectListPreference) findPreference(PreferenceCodes.APP_BLACKLIST);
+                    MultiSelectListPreference blacklist = (MultiSelectListPreference) findPreference(PreferenceCodes.APP_FILTER);
                     setBlackListToCurrentValue(blacklist);
 
                 }
@@ -233,10 +234,10 @@ public class GlobalSettingsActivity extends AppCompatPreferenceActivity {
             } else if (preference.getKey().equals(getString(R.string.preference_filter_clear))) {
 
                 Set<String> array = getDefaultBlackListValues();
-                PreferenceManager.getDefaultSharedPreferences(preference.getContext()).edit().putStringSet(PreferenceCodes.APP_BLACKLIST_ENTRIES, array).apply();
-                PreferenceManager.getDefaultSharedPreferences(preference.getContext()).edit().putStringSet(PreferenceCodes.APP_BLACKLIST, array).apply();
+                PreferenceManager.getDefaultSharedPreferences(preference.getContext()).edit().putStringSet(PreferenceCodes.APP_FILTER_ENTRIES, array).apply();
+                PreferenceManager.getDefaultSharedPreferences(preference.getContext()).edit().putStringSet(PreferenceCodes.APP_FILTER, array).apply();
 
-                MultiSelectListPreference blacklist = (MultiSelectListPreference) findPreference(PreferenceCodes.APP_BLACKLIST);
+                MultiSelectListPreference blacklist = (MultiSelectListPreference) findPreference(PreferenceCodes.APP_FILTER);
                 setBlackListToCurrentValue(blacklist);
             } else if (preference.getKey().startsWith("app_about_licenses")) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(RessourceUtil.getId(preference.getKey(), R.string.class))));

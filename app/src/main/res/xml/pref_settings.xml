@@ -55,14 +55,24 @@
             android:key="app.preferences.useblacklist"
             android:summaryOff="Update and service will be executed for all networks"
             android:summaryOn="Updates and VPN service will not be executed on filtered networks"
-            android:title="Use black list" />
+            android:title="Use filter list" />
+
+        <ListPreference
+            android:defaultValue="WHITELIST"
+            android:dependency="app.preferences.useblacklist"
+            android:entries="@array/list_preference_types"
+            android:entryValues="@array/list_preference_types_values"
+            android:key="app.preferences.filterType"
+            android:summary="Type of filtering applied (either black list or white list)"
+            android:title="Filter type" />
+
         <MultiSelectListPreference
             android:defaultValue="@array/list_preference_networks_blacklist"
             android:dependency="app.preferences.useblacklist"
             android:entries="@array/list_preference_networks_blacklist"
             android:entryValues="@array/list_preference_networks_blacklist"
             android:key="app.preferences.blacklist"
-            android:title="Blacklisted networks" />
+            android:title="Filtered networks" />
         <Preference
             android:dependency="app.preferences.useblacklist"
             android:key="@string/preference_filter_add"
@@ -74,7 +84,7 @@
             android:key="@string/preference_filter_clear"
             android:persistent="false"
             android:summary="Reset the list to the default one"
-            android:title="Clear the black list" />
+            android:title="Clear the filter list" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Open Source Licenses">

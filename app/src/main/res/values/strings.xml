@@ -28,6 +28,15 @@
         <item>ETHERNET</item>
     </string-array>
 
+    <string-array name="list_preference_types">
+        <item>Black list</item>
+        <item>White list</item>
+    </string-array>
+
+    <string-array name="list_preference_types_values">
+        <item>BLACKLIST</item>
+        <item>WHITELIST</item>
+    </string-array>
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 

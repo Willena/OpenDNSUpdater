@@ -94,6 +94,10 @@ public class ConnectivityJob extends ListenableWorker implements TaskFinished {
 
 
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        if (activeNetwork == null) {
+            Log.d(TAG, "handleConnectivityChange: Network down, no informations");
+            return;
+        }
 
         Log.d(TAG, "handleConnectivityChange: The current network is " + activeNetwork.toString());
 
@@ -102,17 +106,31 @@ public class ConnectivityJob extends ListenableWorker implements TaskFinished {
             new ExternalIpFinder().execute();
         }
 
-        if (prefs.getBoolean(PreferenceCodes.APP_USE_BLACK_LIST, false)) {
+        if (prefs.getBoolean(PreferenceCodes.APP_USE_FILTER, false)) {
 
             String netName = ConnectivityUtil.getActiveNetworkName(getApplicationContext());
-            Set<String> blacklisted = prefs.getStringSet(PreferenceCodes.APP_BLACKLIST, null);
+            Set<String> filtered = prefs.getStringSet(PreferenceCodes.APP_FILTER, null);
 
+            String type = prefs.getString(PreferenceCodes.APP_FILTER_TYPE, "NONE");
+            assert type != null;
 
-            if (blacklisted != null && (
-                    blacklisted.contains(netName)
-                            || (blacklisted.contains("WIFI") && activeNetwork.getType() == ConnectivityManager.TYPE_WIFI)
+            if (type.equals("BLACKLIST") &&
+                    filtered != null && (
+                    filtered.contains(netName)
+                            || (filtered.contains("WIFI") && activeNetwork.getType() == ConnectivityManager.TYPE_WIFI)
             )) {
-                Log.d(TAG, "handleConnectivityChange: The netname " + netName + "is blacklisted ! ");
+
+                Log.d(TAG, "handleConnectivityChange: The netname " + netName + "is filtered (black list enforced) ! ");
+                Log.d(TAG, "handleConnectivityChange: Stoping service !");
+                OpenDnsUpdater.deactivateService(getApplicationContext());
+                return;
+            } else if (type.equals("WHITELIST") &&
+                    filtered != null && (
+                    !filtered.contains(netName)
+                            || (!filtered.contains("WIFI") && activeNetwork.getType() == ConnectivityManager.TYPE_WIFI)
+            )) {
+
+                Log.d(TAG, "handleConnectivityChange: The netname " + netName + "is filtered (white list enforced)! ");
                 Log.d(TAG, "handleConnectivityChange: Stoping service !");
                 OpenDnsUpdater.deactivateService(getApplicationContext());
                 return;

@@ -19,9 +19,9 @@ public class PreferenceCodes {
         App_AutoUpdate          Boolean             Listen to connectivity changes and update automaticaly
         App_Notify              Boolean             Display a notification when updated
         App_ForceDns            Boolean             Force usage of openDns when the connectivity change
-        APP_USE_BLACK_LIST      Boolean             Filter update and service execution on specifed networks
-        APP_BLACKLIST           StringList          LIst of filtered networks
-        APP_BLACKLIST_ENTRIES   StringList          LIst of available nets for filter
+        APP_USE_FILTER      Boolean             Filter update and service execution on specifed networks
+        APP_FILTER           StringList          LIst of filtered networks
+        APP_FILTER_ENTRIES   StringList          LIst of available nets for filter
 
 
 
@@ -35,9 +35,10 @@ public class PreferenceCodes {
     public static final String APP_AUTO_UPDATE = "app.preferences.autoupdate";
     public static final String APP_NOTIFY = "app.preferences.sendNotifications";
     public static final String APP_DNS = "app.preferences.forceDns";
-    public static final String APP_USE_BLACK_LIST = "app.preferences.useblacklist";
-    public static final String APP_BLACKLIST = "app.preferences.blacklist";
-    public static final String APP_BLACKLIST_ENTRIES = "app.preferences.blacklist_entries";
+    public static final String APP_USE_FILTER = "app.preferences.useblacklist";
+    public static final String APP_FILTER = "app.preferences.blacklist";
+    public static final String APP_FILTER_ENTRIES = "app.preferences.blacklist_entries";
+    public static final String APP_FILTER_TYPE = "app.preferences.filterType";
 
     public static final String APP_SECURITY_PASSWORD = "app.security.password";
     public static final String APP_SECURITY_USE_PASSWORD = "app.security.use.password";

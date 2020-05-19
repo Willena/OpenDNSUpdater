@@ -67,7 +67,7 @@ public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
                 .newBuilder()
                 .addInterceptor(new BasicAuthInterceptor(this.configurator.username, this.configurator.password))
                 .build();
-//        Log.d(TAG, "doInBackground: passwd " + this.configurator.password);
+        Log.d(TAG, "doInBackground: passwd " + this.configurator.password);
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse("https://updates.opendns.com/nic/update").newBuilder();
         urlBuilder.addQueryParameter("hostname", this.configurator.getNetwork());

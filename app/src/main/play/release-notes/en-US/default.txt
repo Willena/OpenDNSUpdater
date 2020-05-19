@@ -1,1 +1,2 @@
 - Update libraries versions
+- Added whitelist support to automatically update the ip only on some networks

@@ -16,6 +16,7 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
@@ -43,6 +44,8 @@ import fr.guillaumevillena.opendnsupdater.utils.RessourceUtil;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class GlobalSettingsActivity extends AppCompatPreferenceActivity {
+
+    private static final String TAG = AppCompatPreferenceActivity.class.getSimpleName();
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -133,6 +136,7 @@ public class GlobalSettingsActivity extends AppCompatPreferenceActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             // Show the Up button in the action bar.
+            actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
@@ -143,6 +147,20 @@ public class GlobalSettingsActivity extends AppCompatPreferenceActivity {
      */
     protected boolean isValidFragment(String fragmentName) {
         return GeneralPreferenceFragment.class.getName().equals(fragmentName);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Log.d(TAG, "onOptionsItemSelected: " + item.toString() + " " + item.getItemId());
+
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -204,11 +222,6 @@ public class GlobalSettingsActivity extends AppCompatPreferenceActivity {
             if (values != null) {
                 setListPreferenceValues(preference, values, getBlackListEntries());
             }
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            return super.onOptionsItemSelected(item);
         }
 
         @Override

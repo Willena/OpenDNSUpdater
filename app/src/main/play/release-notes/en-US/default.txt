@@ -1,2 +1,3 @@
-- Update libraries versions
-- Added whitelist support to automatically update the ip only on some networks
+- Fixed bug with back button in the preference screen
+- Fixed bug with Phishing site indicator
+- Updated version of libraries

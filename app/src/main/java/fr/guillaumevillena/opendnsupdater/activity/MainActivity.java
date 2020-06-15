@@ -366,12 +366,10 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         if (!ConnectivityJob.isJobsStarted())
             ConnectivityJob.setScheduler(this);
 
-
         EventBus.getDefault().register(this);
 
         Log.d(TAG, "onResume: Starting to update the UI with fresh informations ");
         this.refreshOpenDnsStatus();
-
 
     }
 
@@ -379,7 +377,6 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
     @Override
     public void onTaskFinished(AsyncTask task, Boolean result) {
         if (task instanceof CheckUsingOpenDNS) {
-            Log.d(TAG, "onTaskFinished: CheckUsinOpenDNS ");
             openDNSWebsiteStateSwitcher.setCurrentState(result ? SUCCESS : ERROR);
         } else if (task instanceof UpdateOnlineIP) {
             ipAddressUpdatedStateSwitcher.setCurrentState(result ? SUCCESS : ERROR);

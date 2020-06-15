@@ -46,6 +46,7 @@
         <activity
             android:name=".activity.GlobalSettingsActivity"
             android:label="@string/title_activity_global_settings"
+            android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait" />
 
         <receiver

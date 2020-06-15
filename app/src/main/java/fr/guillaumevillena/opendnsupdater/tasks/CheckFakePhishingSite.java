@@ -1,17 +1,12 @@
 package fr.guillaumevillena.opendnsupdater.tasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.bugsnag.android.Bugsnag;
 import com.bugsnag.android.Severity;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-
-import javax.net.ssl.SSLException;
 
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -21,9 +16,9 @@ import okhttp3.Response;
 public class CheckFakePhishingSite extends AsyncTask<Void, Void, Boolean> {
 
     private TaskFinished taskFinishedListenner;
+    private static final String TAG = CheckFakePhishingSite.class.getSimpleName();
 
     public CheckFakePhishingSite(TaskFinished taskFinishedListenner) {
-
         this.taskFinishedListenner = taskFinishedListenner;
     }
 
@@ -31,20 +26,19 @@ public class CheckFakePhishingSite extends AsyncTask<Void, Void, Boolean> {
     protected Boolean doInBackground(Void... voids) {
         // http://www.internetbadguys.com/
         // This domain is blocked
+
         OkHttpClient client = new OkHttpClient();
 
-
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://www.internetbadguys.com/").newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://www.internetbadguys.com/").newBuilder();
         HttpUrl url = urlBuilder.build();
 
         try {
+
             Request request = new Request.Builder().url(url).build();
             Response response = client.newCall(request).execute();
+            Log.d(TAG, "doInBackground: " + response.toString());
+            return response.isRedirect() || !response.isSuccessful();
 
-            if (response.isSuccessful())
-                return !response.request().url().equals(url);
-
-        } catch (UnsupportedEncodingException | ConnectException | UnknownHostException | SSLException | SocketTimeoutException ignored) {
         } catch (IOException e) {
             e.printStackTrace();
             Bugsnag.notify(e, Severity.WARNING);

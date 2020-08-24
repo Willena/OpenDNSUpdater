@@ -1,3 +1,2 @@
-- Fixed bug with back button in the preference screen
-- Fixed bug with Phishing site indicator
+- Updated targetSdk to 29
 - Updated version of libraries

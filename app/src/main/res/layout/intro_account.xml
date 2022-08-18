@@ -17,7 +17,7 @@
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
         android:text="@string/intro_title_opendns_account"
-        android:textColor="@android:color/white"
+        android:textColor="#282828"
         android:textSize="28sp"
         android:textStyle="bold" />
 
@@ -37,7 +37,7 @@
             android:layout_weight="0.9"
             android:gravity="center"
             android:text="@string/intro_account_main_text"
-            android:textColor="@android:color/white"
+            android:textColor="#282828"
             android:textSize="16sp" />
 
     </LinearLayout>

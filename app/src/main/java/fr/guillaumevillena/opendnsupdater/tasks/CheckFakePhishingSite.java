@@ -3,9 +3,6 @@ package fr.guillaumevillena.opendnsupdater.tasks;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.bugsnag.android.Bugsnag;
-import com.bugsnag.android.Severity;
-
 import java.io.IOException;
 
 import okhttp3.HttpUrl;
@@ -15,11 +12,11 @@ import okhttp3.Response;
 
 public class CheckFakePhishingSite extends AsyncTask<Void, Void, Boolean> {
 
-    private TaskFinished taskFinishedListenner;
+    private final TaskFinished taskFinishedListener;
     private static final String TAG = CheckFakePhishingSite.class.getSimpleName();
 
-    public CheckFakePhishingSite(TaskFinished taskFinishedListenner) {
-        this.taskFinishedListenner = taskFinishedListenner;
+    public CheckFakePhishingSite(TaskFinished taskFinishedListener) {
+        this.taskFinishedListener = taskFinishedListener;
     }
 
     @Override
@@ -40,8 +37,7 @@ public class CheckFakePhishingSite extends AsyncTask<Void, Void, Boolean> {
             return response.isRedirect() || !response.isSuccessful();
 
         } catch (IOException e) {
-            e.printStackTrace();
-            Bugsnag.notify(e, Severity.WARNING);
+            Log.e(TAG, "doInBackground: {}",e );
         }
 
         return false;
@@ -51,6 +47,6 @@ public class CheckFakePhishingSite extends AsyncTask<Void, Void, Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
 
-        taskFinishedListenner.onTaskFinished(this, aBoolean);
+        taskFinishedListener.onTaskFinished(this, aBoolean);
     }
 }

@@ -1,9 +1,8 @@
 package fr.guillaumevillena.opendnsupdater.tasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
-import com.bugsnag.android.Bugsnag;
-import com.bugsnag.android.Severity;
 
 import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
@@ -19,7 +18,8 @@ import okhttp3.Response;
 
 public class CheckUsingOpenDNS extends AsyncTask<Void, Void, Boolean> {
 
-    private TaskFinished asyncTaskFinishedListener;
+    private static final String TAG = CheckUsingOpenDNS.class.getSimpleName();
+    private final TaskFinished asyncTaskFinishedListener;
 
     public CheckUsingOpenDNS(TaskFinished asyncTaskFinishedListener) {
         this.asyncTaskFinishedListener = asyncTaskFinishedListener;
@@ -41,10 +41,10 @@ public class CheckUsingOpenDNS extends AsyncTask<Void, Void, Boolean> {
             if (response.isSuccessful())
                 return response.request().url().equals(url);
 
-        } catch (UnsupportedEncodingException | ConnectException | UnknownHostException | SSLException | SocketTimeoutException ignored) {
+        } catch (UnsupportedEncodingException | ConnectException | UnknownHostException |
+                 SSLException | SocketTimeoutException ignored) {
         } catch (Exception e) {
-            e.printStackTrace();
-            Bugsnag.notify(e, Severity.WARNING);
+            Log.e(TAG, "doInBackground: {}", e);
         }
 
         return false;

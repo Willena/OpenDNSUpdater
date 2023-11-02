@@ -2,7 +2,7 @@ package fr.guillaumevillena.opendnsupdater.utils;
 
 import java.lang.reflect.Field;
 
-public class RessourceUtil {
+public class ResourceUtil {
     public static int getId(String resourceName, Class<?> c) {
         try {
             Field idField = c.getDeclaredField(resourceName);

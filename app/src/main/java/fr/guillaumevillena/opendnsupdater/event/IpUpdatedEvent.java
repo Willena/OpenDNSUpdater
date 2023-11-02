@@ -1,7 +1,7 @@
 package fr.guillaumevillena.opendnsupdater.event;
 
 public class IpUpdatedEvent {
-    private String ip;
+    private final String ip;
 
     public IpUpdatedEvent(String ip) {
 

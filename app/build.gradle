@@ -1,80 +1,103 @@
-buildscript {
-}
-
 plugins {
     id 'com.android.application'
-    id 'com.github.triplet.play' version '2.2.1'
+    id("com.github.triplet.play") version "3.8.4"
 }
+
 play {
-    serviceAccountCredentials = file("serviceAccountKey.json")
-    track = "production"
-    userFraction = 1
-    releaseStatus = "completed"
+    serviceAccountCredentials.set(file("serviceAccountKey.json"))
+    track.set("production")
+    userFraction.set(1.0D)
 }
-apply plugin: 'com.android.application'
-apply plugin: 'com.bugsnag.android.gradle'
+
 
 android {
     signingConfigs {
         config {
             keyAlias 'release'
-            storeFile file('C:/Users/guill/Documents/GitHub/OpenDNSUpdater2/Keystore.jks')
+            storeFile file('./Keystore.jks')
             keyPassword 'password'
             storePassword 'password'
         }
     }
-    compileSdkVersion 29
+
+    namespace 'fr.guillaumevillena.opendnsupdater'
+    compileSdk 34
+
     defaultConfig {
         applicationId "fr.guillaumevillena.opendnsupdater"
-        minSdkVersion 16
-        targetSdkVersion 29
-        versionCode 222
-        versionName "2.2.2"
+        minSdkVersion 21
+        targetSdkVersion 34
+        versionCode 223
+        versionName "2.2.3"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         signingConfig signingConfigs.config
+
+        multiDexEnabled true
+        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
+
+
     buildTypes {
+        debug {
+        }
         release {
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
             signingConfig signingConfigs.config
         }
     }
+
     compileOptions {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildToolsVersion '29.0.2'
-    productFlavors {
+
+    buildFeatures {
+        buildConfig true
+        viewBinding true
     }
 }
+
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    implementation "androidx.work:work-runtime:2.8.1"
+    implementation "androidx.concurrent:concurrent-futures:1.1.0"
+    implementation "androidx.preference:preference:1.2.1"
 
     //UI
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0'
-    implementation 'com.google.android.material:material:1.3.0-alpha02'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat-resources:1.6.1'
+    implementation 'androidx.navigation:navigation-fragment:2.7.5'
+    implementation 'androidx.navigation:navigation-ui:2.7.5'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
-    implementation "androidx.work:work-runtime:2.4.0"
-    implementation "androidx.concurrent:concurrent-futures:1.1.0"
-    implementation "androidx.concurrent:concurrent-listenablefuture:1.0.0-beta01"
-    implementation "androidx.concurrent:concurrent-listenablefuture-callback:1.0.0-beta01"
-    implementation 'com.github.paolorotolo:appintro:v5.1.0'
-    implementation 'com.github.wooplr:Spotlight:1.2.3'
+
+    implementation 'com.google.android.material:material:1.10.0'
+
+    implementation 'com.github.AppIntro:AppIntro:6.3.1'
 
     //DNS
-    implementation 'org.pcap4j:pcap4j-core:1.7.3'
-    implementation 'org.pcap4j:pcap4j-packetfactory-static:1.7.3'
-    implementation 'org.minidns:minidns-client:0.3.3'
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'org.pcap4j:pcap4j-core:2.0.0-alpha.6'
+    implementation 'org.pcap4j:pcap4j-packetfactory-static:2.0.0-alpha.6'
+    implementation 'org.minidns:minidns-client:1.0.4'
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
 
     //Other
-    implementation 'org.greenrobot:eventbus:3.1.1'
-    implementation 'com.bugsnag:bugsnag-android:4.17.2'
+    implementation 'org.greenrobot:eventbus:3.3.1'
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // Quick tips if support for android < 21 is required
+    // https://developer.android.com/build/multidex
+    // Enable multidex loading and use 3.x version ok okhttp !
+    //    implementation "androidx.multidex:multidex:2.0.1"
+    //    implementation 'com.squareup.okhttp3:okhttp:3.14.0'
+    //  fr.guillaumevillena.opendnsupdater.OpenDnsUpdater MUST extend MultiDexApplication instead of Application
+    //
+
 }

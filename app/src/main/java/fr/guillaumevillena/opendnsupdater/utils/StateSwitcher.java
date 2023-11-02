@@ -1,6 +1,5 @@
 package fr.guillaumevillena.opendnsupdater.utils;
 
-import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import java.util.HashMap;
@@ -16,12 +15,8 @@ public class StateSwitcher {
 
     private TestState currentState;
 
-    private View defaultView;
-    private Drawable defaultDrawable;
-
-
-    private HashMap<TestState, Integer> drawableMap;
-    private HashMap<TestState, View> viewMap;
+    private final HashMap<TestState, Integer> drawableMap;
+    private final HashMap<TestState, View> viewMap;
 
     public StateSwitcher() {
         this.currentState = TestState.UNKNOWN;

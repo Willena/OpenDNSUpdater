@@ -5,5 +5,5 @@ package fr.guillaumevillena.opendnsupdater.utils;
  */
 
 public class RequestCodes {
-    public static final int SETTIGNS = 235;
+    public static final int SETTINGS = 235;
 }

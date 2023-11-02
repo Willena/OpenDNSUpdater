@@ -14,18 +14,19 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp">
+        android:backgroundTint="@color/colorPrimary"
+        android:background="@color/colorPrimary"
+        >
 
         <TextView
             android:id="@+id/mainactivity_app_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_version"
-            android:textColor="@color/colorPrimaryText"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/white"
             android:textSize="12sp" />
 
         <TextView
@@ -33,16 +34,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:textColor="@android:color/white"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
             android:layout_alignParentRight="true"
-            android:layout_marginEnd="0dp"
-            android:layout_marginRight="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:text="@string/main_activity_last_ip_update" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:background="@color/colorPrimary"
+        >
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/setting_button"
@@ -57,7 +64,9 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:contentDescription="@string/btn_settings"
-            app:srcCompat="@drawable/ic_baseline_settings_20px" />
+            app:srcCompat="@drawable/ic_baseline_settings_20px"
+            android:tint="@android:color/white"
+            />
 
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -82,6 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:tint="@android:color/white"
             android:layout_centerVertical="true"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
@@ -106,6 +116,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
+            android:textColor="@color/colorPrimaryText"
             android:text="@string/current_interface"
             android:textSize="18sp" />
 
@@ -113,6 +124,7 @@
             android:id="@+id/interface_text_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
             android:layout_toEndOf="@+id/textView"
             android:layout_toRightOf="@+id/textView"
             android:text="@string/text_not_known"
@@ -136,6 +148,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="4dp"
             android:text="@string/current_ipv4"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="18sp" />
 
         <TextView
@@ -143,6 +156,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:textColor="@color/colorPrimaryText"
             android:layout_toEndOf="@+id/textView2"
             android:layout_toRightOf="@+id/textView2"
             android:text="@string/text_not_known"
@@ -157,7 +171,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:text="@string/text_quick_options"
-        android:textColor="@color/colorTextIcon"
+        android:textColor="@color/colorPrimaryText"
         android:textSize="24sp" />
 
     <!--Quick option choices-->
@@ -188,6 +202,7 @@
                 android:id="@+id/textView11"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryText"
                 android:text="@string/text_auto_update" />
 
         </LinearLayout>
@@ -206,6 +221,7 @@
 
             <TextView
                 android:id="@+id/textView7"
+                android:textColor="@color/colorPrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/text_enable_opendns_server" />
@@ -225,6 +241,7 @@
 
             <TextView
                 android:id="@+id/textView10"
+                android:textColor="@color/colorPrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/text_enable_notifications" />
@@ -247,7 +264,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:text="@string/text_tests"
-        android:textColor="@color/colorTextIcon"
+        android:textColor="@color/colorPrimaryText"
         android:textSize="24sp" />
 
     <RelativeLayout
@@ -266,7 +283,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:text="@string/text_opendns_website_check"
-            android:textColor="@color/colorTextIcon"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="18sp" />
 
         <RelativeLayout
@@ -319,7 +336,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:text="@string/text_using_opendns_servers_dns"
-            android:textColor="@color/colorTextIcon"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="18sp" />
 
         <RelativeLayout
@@ -373,7 +390,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:text="@string/text_ip_adress_updated"
-            android:textColor="@color/colorTextIcon"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="18sp" />
 
         <RelativeLayout
@@ -425,7 +442,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:text="@string/text_filtering_phishing_sites"
-            android:textColor="@color/colorTextIcon"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="18sp" />
 
         <RelativeLayout
@@ -461,6 +478,5 @@
         </RelativeLayout>
 
     </RelativeLayout>
-
 
 </LinearLayout>

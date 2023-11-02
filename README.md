@@ -2,7 +2,13 @@
 <img alt='Banner'
       src='https://github.com/Willena/OpenDNSUpdater/raw/new_app/app/release/Baniere.png'  height="200">
 
+### Important Note: The application is now in "maintenance mode". Only basic support for new Android APIs will be provided from time to time.
+
+I personally don't have the time to do much more on this project. PR are always welcomed, I will always review them.
+Errors and crash reporting is not present anymore
+
 ### Quick presentation
+
 OpenDNSUpdater is an extremely easy to use android app to perform dynamic IP updates.
 
 ### Presentation
@@ -22,7 +28,7 @@ Updater exist for almost all other platform such as Windows, Mac and Linux, but 
 
 ### Requirements
 
-- Minimum Android API 16 ( Android 4.1 ) 
+- Minimum Android API 21 ( Android 5.0 ) 
 - Android phone or tablet
 
 ### Screenshots

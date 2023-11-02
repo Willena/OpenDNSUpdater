@@ -5,6 +5,7 @@ import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
 import androidx.annotation.RequiresApi;
+
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.R;
 

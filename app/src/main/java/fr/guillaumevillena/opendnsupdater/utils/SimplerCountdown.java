@@ -9,13 +9,11 @@ public abstract class SimplerCountdown extends CountDownTimer {
 
     public SimplerCountdown() {
         super(1500, 500);
-        this.finishedListener = finishedListener;
         super.start();
     }
 
     public SimplerCountdown(long durration) {
         super(durration, 500);
-        this.finishedListener = finishedListener;
 
         super.start();
     }

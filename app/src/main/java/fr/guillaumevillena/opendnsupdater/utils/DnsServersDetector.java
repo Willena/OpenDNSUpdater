@@ -25,22 +25,22 @@ import static android.content.Context.CONNECTIVITY_SERVICE;
 
 /**
  * DNS servers detector
- *
+ * <p>
  * IMPORTANT: don't cache the result.
- *
+ * <p>
  * Or if you want to cache the result make sure you invalidate the cache
  * on any network change.
- *
+ * <p>
  * It is always better to use a new instance of the detector when you need
  * current DNS servers otherwise you may get into troubles because of invalid/changed
  * DNS servers.
- *
+ * <p>
  * This class combines various methods and solutions from:
- * Dnsjava http://www.xbill.org/dnsjava/
- * Minidns https://github.com/MiniDNS/minidns
- *
+ * Dnsjava:  <a href="http://www.xbill.org/dnsjava/">dnsJava</a>
+ * Minidns: <a href="https://github.com/MiniDNS/minidns">miniDns</a>
+ * <p>
  * Unfortunately both libraries are not aware of Orero changes so new method was added to fix this.
- *
+ * <p>
  * Created by Madalin Grigore-Enescu on 2/24/18.
  */
 
@@ -81,9 +81,10 @@ public class DnsServersDetector {
 
     /**
      * Returns android DNS servers used for current connected network
+     *
      * @return Dns servers array
      */
-    public String [] getServers() {
+    public String[] getServers() {
 
         // Will hold the consecutive result
         String[] result;
@@ -126,20 +127,20 @@ public class DnsServersDetector {
 
     /**
      * Detect android DNS servers by using connectivity manager
-     *
+     * <p>
      * This method is working in android LOLLIPOP or later
      *
      * @return Dns servers array
      */
-    private String [] getServersMethodConnectivityManager() {
+    private String[] getServersMethodConnectivityManager() {
 
         // This code only works on LOLLIPOP and higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             try {
 
-                ArrayList<String> priorityServersArrayList  = new ArrayList<>();
-                ArrayList<String> serversArrayList          = new ArrayList<>();
+                ArrayList<String> priorityServersArrayList = new ArrayList<>();
+                ArrayList<String> serversArrayList = new ArrayList<>();
 
                 ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
                 if (connectivityManager != null) {
@@ -151,13 +152,13 @@ public class DnsServersDetector {
                         NetworkInfo networkInfo = connectivityManager.getNetworkInfo(network);
                         if (networkInfo.isConnected()) {
 
-                            LinkProperties linkProperties    = connectivityManager.getLinkProperties(network);
+                            LinkProperties linkProperties = connectivityManager.getLinkProperties(network);
                             List<InetAddress> dnsServersList = linkProperties.getDnsServers();
 
                             // Prioritize the DNS servers for link which have a default route
                             if (linkPropertiesHasDefaultRoute(linkProperties)) {
 
-                                for (InetAddress element: dnsServersList) {
+                                for (InetAddress element : dnsServersList) {
 
                                     String dnsHost = element.getHostAddress();
                                     priorityServersArrayList.add(dnsHost);
@@ -166,7 +167,7 @@ public class DnsServersDetector {
 
                             } else {
 
-                                for (InetAddress element: dnsServersList) {
+                                for (InetAddress element : dnsServersList) {
 
                                     String dnsHost = element.getHostAddress();
                                     serversArrayList.add(dnsHost);
@@ -210,16 +211,15 @@ public class DnsServersDetector {
 
     /**
      * Detect android DNS servers by using old deprecated system properties
-     *
      * This method is NOT working anymore in Android 8.0
      * Official Android documentation state this in the article Android 8.0 Behavior Changes.
      * The system properties net.dns1, net.dns2, net.dns3, and net.dns4 are no longer available,
      * a change that improves privacy on the platform.
+     * <a href="https://developer.android.com/about/versions/oreo/android-8.0-changes.html#o-pri">...</a>
      *
-     * https://developer.android.com/about/versions/oreo/android-8.0-changes.html#o-pri
      * @return Dns servers array
      */
-    private String [] getServersMethodSystemProperties() {
+    private String[] getServersMethodSystemProperties() {
 
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
@@ -268,38 +268,32 @@ public class DnsServersDetector {
 
     /**
      * Detect android DNS servers by executing getprop string command in a separate process
-     *
      * Notice there is an android bug when Runtime.exec() hangs without providing a Process object.
      * This problem is fixed in Jelly Bean (Android 4.1) but not in ICS (4.0.4) and probably it will never be fixed in ICS.
-     * https://stackoverflow.com/questions/8688382/runtime-exec-bug-hangs-without-providing-a-process-object/11362081
+     * <a href="https://stackoverflow.com/questions/8688382/runtime-exec-bug-hangs-without-providing-a-process-object/11362081">...</a>
      *
      * @return Dns servers array
      */
-    private String [] getServersMethodExec() {
+    private String[] getServersMethodExec() {
 
         // We are on the safe side and avoid any bug
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        try {
 
-            try {
+            Process process = Runtime.getRuntime().exec("getprop");
+            InputStream inputStream = process.getInputStream();
+            LineNumberReader lineNumberReader = new LineNumberReader(new InputStreamReader(inputStream));
+            Set<String> serversSet = methodExecParseProps(lineNumberReader);
+            if (serversSet.size() > 0) {
 
-                Process process = Runtime.getRuntime().exec("getprop");
-                InputStream inputStream = process.getInputStream();
-                LineNumberReader lineNumberReader = new LineNumberReader(new InputStreamReader(inputStream));
-                Set<String> serversSet = methodExecParseProps(lineNumberReader);
-                if (serversSet != null && serversSet.size() > 0) {
-
-                    return serversSet.toArray(new String[0]);
-
-                }
-
-            } catch (Exception ex) {
-
-                Log.d(TAG, "Exception in getServersMethodExec", ex);
+                return serversSet.toArray(new String[0]);
 
             }
 
-        }
+        } catch (Exception ex) {
 
+            Log.d(TAG, "Exception in getServersMethodExec", ex);
+
+        }
         // Failed
         return null;
 
@@ -307,9 +301,10 @@ public class DnsServersDetector {
 
     /**
      * Parse properties produced by executing getprop command
-     * @param lineNumberReader
+     *
+     * @param lineNumberReader reader
      * @return Set of parsed properties
-     * @throws Exception
+     * @throws Exception on error
      */
     private Set<String> methodExecParseProps(BufferedReader lineNumberReader) throws Exception {
 
@@ -323,8 +318,8 @@ public class DnsServersDetector {
             }
             String property = line.substring(1, split);
 
-            int valueStart  = split + METHOD_EXEC_PROP_DELIM.length();
-            int valueEnd    = line.length() - 1;
+            int valueStart = split + METHOD_EXEC_PROP_DELIM.length();
+            int valueEnd = line.length() - 1;
             if (valueEnd < valueStart) {
 
                 // This can happen if a newline sneaks in as the first character of the property value. For example
@@ -348,7 +343,6 @@ public class DnsServersDetector {
 
                 // normalize the address
                 InetAddress ip = InetAddress.getByName(value);
-                if (ip == null) continue;
                 value = ip.getHostAddress();
 
                 if (value == null) continue;
@@ -366,7 +360,8 @@ public class DnsServersDetector {
 
     /**
      * Returns true if the specified link properties have any default route
-     * @param linkProperties
+     *
+     * @param linkProperties props
      * @return true if the specified link properties have default route or false otherwise
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

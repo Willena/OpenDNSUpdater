@@ -26,7 +26,7 @@ public class StatusBarBroadcastReceiver extends BroadcastReceiver {
             settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(settingsIntent);
             try {
-                Object statusBarManager = context.getSystemService("statusbar");
+                Object statusBarManager = context.getSystemService(Context.STATUS_BAR_SERVICE);
                 Method collapse = statusBarManager.getClass().getMethod("collapsePanels");
                 collapse.invoke(statusBarManager);
             } catch (Exception e) {

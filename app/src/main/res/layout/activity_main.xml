@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@android:color/white"
     tools:context="fr.guillaumevillena.opendnsupdater.activity.MainActivity">
 
     <include layout="@layout/content_main" />

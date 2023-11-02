@@ -15,13 +15,9 @@ import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
 
 public class IntroBugsnagConsent extends Fragment {
 
-    private static final String TAG = IntroBugsnagConsent.class.getSimpleName();
-    private View root;
-
     public static IntroBugsnagConsent newInstance() {
         return new IntroBugsnagConsent();
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,7 +29,7 @@ public class IntroBugsnagConsent extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.fragment_bugsnag_consent, container, false);
+        View root = inflater.inflate(R.layout.fragment_bugsnag_consent, container, false);
 
         SwitchCompat switchCompat = root.findViewById(R.id.fragment_intro_bugsnag_consent_switch);
         switchCompat.setOnCheckedChangeListener((compoundButton, b) -> OpenDnsUpdater.getPrefs().edit().putBoolean(PreferenceCodes.BUGSNAG_ACTIVATED, b).apply());

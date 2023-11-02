@@ -4,9 +4,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.bugsnag.android.Bugsnag;
-import com.bugsnag.android.Severity;
-
 import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -92,10 +89,10 @@ public class UpdateOnlineIP extends AsyncTask<Void, Void, Boolean> {
             Log.d(TAG, "doInBackground: " + response.toString());
 
 
-        } catch (UnsupportedEncodingException | ConnectException | UnknownHostException | SSLException | SocketTimeoutException ignored) {
+        } catch (UnsupportedEncodingException | ConnectException | UnknownHostException |
+                 SSLException | SocketTimeoutException ignored) {
         } catch (Exception e) {
-            e.printStackTrace();
-            Bugsnag.notify(e, Severity.WARNING);
+            Log.e(TAG, "doInBackground: {}", e);
         }
 
         return false;

@@ -3,9 +3,6 @@ package fr.guillaumevillena.opendnsupdater.tasks;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.bugsnag.android.Bugsnag;
-import com.bugsnag.android.Severity;
-
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.UnsupportedEncodingException;
@@ -49,11 +46,10 @@ public class ExternalIpFinder extends AsyncTask<Void, Void, Void> {
                     EventBus.getDefault().post(new IpUpdatedEvent(data));
                 }
             }
-        } catch (UnsupportedEncodingException | ConnectException | UnknownHostException | SSLException | SocketTimeoutException ignored) {
+        } catch (UnsupportedEncodingException | ConnectException | UnknownHostException |
+                 SSLException | SocketTimeoutException ignored) {
         } catch (Exception e) {
-            e.printStackTrace();
-            Bugsnag.notify(e, Severity.WARNING);
-
+            Log.e(TAG, "doInBackground: {}", e);
         }
         return null;
     }

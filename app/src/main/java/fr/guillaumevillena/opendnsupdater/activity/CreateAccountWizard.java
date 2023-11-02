@@ -6,9 +6,10 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.github.paolorotolo.appintro.AppIntro;
-import com.github.paolorotolo.appintro.AppIntroFragment;
-import com.github.paolorotolo.appintro.model.SliderPage;
+
+import com.github.appintro.AppIntro;
+import com.github.appintro.AppIntroFragment;
+import com.github.appintro.model.SliderPage;
 
 import fr.guillaumevillena.opendnsupdater.R;
 
@@ -22,49 +23,49 @@ public class CreateAccountWizard extends AppIntro {
         SliderPage createAccountSlide = new SliderPage();
         createAccountSlide.setTitle(getResources().getString(R.string.intro_account_creation_1_title));
         createAccountSlide.setDescription(getResources().getString(R.string.intro_account_creation_1_main_text));
-        createAccountSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
+        createAccountSlide.setBackgroundColorRes(R.color.colorPrimary);
         createAccountSlide.setImageDrawable(R.drawable.opendns_1_singup);
         addSlide(AppIntroFragment.newInstance(createAccountSlide));
 
         SliderPage loginSlide = new SliderPage();
         loginSlide.setTitle(getResources().getString(R.string.intro_account_creation_2_title));
         loginSlide.setDescription(getResources().getString(R.string.intro_account_creation_2_main_text));
-        loginSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
+        loginSlide.setBackgroundColorRes(R.color.colorPrimary);
         loginSlide.setImageDrawable(R.drawable.opendns_2_login);
         addSlide(AppIntroFragment.newInstance(loginSlide));
 
         SliderPage dashboardSlide = new SliderPage();
         dashboardSlide.setTitle(getResources().getString(R.string.intro_account_creation_3_title));
         dashboardSlide.setDescription(getResources().getString(R.string.intro_account_creation_3_main_text));
-        dashboardSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
+        dashboardSlide.setBackgroundColorRes(R.color.colorPrimary);
         dashboardSlide.setImageDrawable(R.drawable.opendns_3_dashboard);
         addSlide(AppIntroFragment.newInstance(dashboardSlide));
 
         SliderPage networkSlide = new SliderPage();
         networkSlide.setTitle(getResources().getString(R.string.intro_account_creation_4_title));
         networkSlide.setDescription(getResources().getString(R.string.intro_account_creation_4_main_text));
-        networkSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
+        networkSlide.setBackgroundColorRes(R.color.colorPrimary);
         networkSlide.setImageDrawable(R.drawable.opendns_4_addnet);
         addSlide(AppIntroFragment.newInstance(networkSlide));
 
         SliderPage nameNetSlide = new SliderPage();
         nameNetSlide.setTitle(getResources().getString(R.string.intro_account_creation_5_title));
         nameNetSlide.setDescription(getResources().getString(R.string.intro_account_creation_5_main_text));
-        nameNetSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
+        nameNetSlide.setBackgroundColorRes(R.color.colorPrimary);
         nameNetSlide.setImageDrawable(R.drawable.opendns_5_namenet);
         addSlide(AppIntroFragment.newInstance(nameNetSlide));
 
         SliderPage dashboradListNetSlide = new SliderPage();
         dashboradListNetSlide.setTitle(getResources().getString(R.string.intro_account_creation_6_title));
         dashboradListNetSlide.setDescription(getResources().getString(R.string.intro_account_creation_6_main_text));
-        dashboradListNetSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
+        dashboradListNetSlide.setBackgroundColorRes(R.color.colorPrimary);
         dashboradListNetSlide.setImageDrawable(R.drawable.opendns_6_network_ok);
         addSlide(AppIntroFragment.newInstance(dashboradListNetSlide));
 
         SliderPage configureFilterSlide = new SliderPage();
         configureFilterSlide.setTitle(getResources().getString(R.string.intro_account_creation_7_title));
         configureFilterSlide.setDescription(getResources().getString(R.string.intro_account_creation_7_main_text));
-        configureFilterSlide.setBgColor(getResources().getColor(R.color.colorPrimary));
+        configureFilterSlide.setBackgroundColorRes(R.color.colorPrimary);
         configureFilterSlide.setImageDrawable(R.drawable.opendns_7_configurefilter);
         addSlide(AppIntroFragment.newInstance(configureFilterSlide));
 
@@ -80,8 +81,8 @@ public class CreateAccountWizard extends AppIntro {
         setSeparatorColor(Color.parseColor("#2196F3"));
 
         // Hide Skip/Done button.
-        showSkipButton(false);
-        setProgressButtonEnabled(true);
+        setSkipButtonEnabled(false);
+        setButtonsEnabled(true);
     }
 
     @Override

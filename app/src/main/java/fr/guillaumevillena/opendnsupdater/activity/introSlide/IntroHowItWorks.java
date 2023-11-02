@@ -7,17 +7,14 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import fr.guillaumevillena.opendnsupdater.R;
 
 public class IntroHowItWorks extends Fragment {
 
-    private static final String TAG = IntroHowItWorks.class.getSimpleName();
-    private View root;
-
     public static IntroHowItWorks newInstance() {
         return new IntroHowItWorks();
     }
-
 
 
     @Override
@@ -30,9 +27,8 @@ public class IntroHowItWorks extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.fragment_how_it_works, container, false);
 
-        return root;
+        return inflater.inflate(R.layout.fragment_how_it_works, container, false);
     }
 
 

@@ -19,6 +19,7 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 
 import androidx.core.app.NotificationCompat;
+
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.R;
 import fr.guillaumevillena.opendnsupdater.activity.GlobalSettingsActivity;
@@ -208,7 +209,7 @@ public class OpenDnsVpnService extends VpnService implements Runnable {
                     .setSession("OpenDnsUpdater")
                     .setConfigureIntent(PendingIntent.getActivity(this, 0,
                             new Intent(this, GlobalSettingsActivity.class),
-                            PendingIntent.FLAG_ONE_SHOT));
+                            PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE));
             String format = null;
             for (String prefix : new String[]{"10.0.0", "192.0.2", "198.51.100", "203.0.113", "192.168.50"}) {
                 try {

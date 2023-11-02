@@ -13,11 +13,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.SwitchCompat;
-
-import com.wooplr.spotlight.SpotlightConfig;
-import com.wooplr.spotlight.utils.SpotlightSequence;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,26 +45,25 @@ import static fr.guillaumevillena.opendnsupdater.TestState.RUNNING;
 import static fr.guillaumevillena.opendnsupdater.TestState.SUCCESS;
 import static fr.guillaumevillena.opendnsupdater.TestState.UNKNOWN;
 
+import java.util.concurrent.CompletableFuture;
+
 
 public class MainActivity extends AppCompatActivity implements TaskFinished {
-
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int ACTIVATE_VPN_SERVICE = 3;
     private StateSwitcher filterPhishingStateSwitcher;
     private StateSwitcher ipAddressUpdatedStateSwitcher;
-    private StateSwitcher useOpendnsStateSwitcher;
+    private StateSwitcher useOpenDNSStateSwitcher;
     private StateSwitcher openDNSWebsiteStateSwitcher;
 
     private SwitchCompat switchEnableNotification;
     private SwitchCompat switchEnableAutoUpdate;
-    private SwitchCompat switchEnableEnableOpendnsServers;
+    private SwitchCompat switchEnableEnableOpenDNSServers;
 
     private TextView ipValue;
     private TextView interfaceValue;
     private TextView lastUpdateDateTextView;
-    private ImageButton refreshButton;
-    private ImageButton settingButton;
 
 
     @Override
@@ -75,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
 
         if (!OpenDnsUpdater.getPrefs().getBoolean(PreferenceCodes.FIRST_TIME_CONFIG_FINISHED, false))
             startActivity(new Intent(this, ApplicationWizard.class));
+
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         setContentView(R.layout.activity_main);
 
@@ -89,8 +88,8 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         ipValue = findViewById(R.id.ip_text_value);
         interfaceValue = findViewById(R.id.interface_text_value);
 
-        settingButton = findViewById(R.id.setting_button);
-        refreshButton = findViewById(R.id.refresh_button);
+        ImageButton settingButton = findViewById(R.id.setting_button);
+        ImageButton refreshButton = findViewById(R.id.refresh_button);
 
         ProgressBar progressBarIpAddressUpdate = findViewById(R.id.progressBar_ip_updated);
         ProgressBar progressBarFilterPhising = findViewById(R.id.progressBar_filter_phising);
@@ -104,108 +103,33 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
 
         switchEnableNotification = findViewById(R.id.switch_enable_notifications);
         switchEnableAutoUpdate = findViewById(R.id.switch_auto_update);
-        switchEnableEnableOpendnsServers = findViewById(R.id.switch_enable_opendns_server);
+        switchEnableEnableOpenDNSServers = findViewById(R.id.switch_enable_opendns_server);
 
         this.filterPhishingStateSwitcher = new StateSwitcher();
         this.ipAddressUpdatedStateSwitcher = new StateSwitcher();
-        this.useOpendnsStateSwitcher = new StateSwitcher();
+        this.useOpenDNSStateSwitcher = new StateSwitcher();
         this.openDNSWebsiteStateSwitcher = new StateSwitcher();
 
         initStateSwitcher(this.filterPhishingStateSwitcher, progressBarFilterPhising, imgStatusFilterPhishing);
         initStateSwitcher(this.ipAddressUpdatedStateSwitcher, progressBarIpAddressUpdate, imgStatusIpAdressUpdate);
-        initStateSwitcher(this.useOpendnsStateSwitcher, progressBarUsingOpenDns, imgStatusUsingOpendns);
+        initStateSwitcher(this.useOpenDNSStateSwitcher, progressBarUsingOpenDns, imgStatusUsingOpendns);
         initStateSwitcher(this.openDNSWebsiteStateSwitcher, progressBarOpenDnsWebsite, imgStatusOpenDNSWebiste);
 
         this.ipAddressUpdatedStateSwitcher.setCurrentState(RUNNING);
         this.filterPhishingStateSwitcher.setCurrentState(RUNNING);
-        this.useOpendnsStateSwitcher.setCurrentState(RUNNING);
+        this.useOpenDNSStateSwitcher.setCurrentState(RUNNING);
         this.openDNSWebsiteStateSwitcher.setCurrentState(RUNNING);
 
         // Connect events to switches and buttons
         switchEnableAutoUpdate.setOnCheckedChangeListener((compoundButton, state) -> setAutoUpdater(state));
         switchEnableNotification.setOnCheckedChangeListener((compoundButton, state) -> setNotifications(state));
-        switchEnableEnableOpendnsServers.setOnCheckedChangeListener((compoundButton, state) -> setOpenDnsServers(state));
+        switchEnableEnableOpenDNSServers.setOnCheckedChangeListener((compoundButton, state) -> setOpenDnsServers(state));
 
         settingButton.setOnClickListener(view -> openSettings());
         refreshButton.setOnClickListener(view -> refreshOpenDnsStatus());
         restoreSettings();
         refreshOpenDnsStatus();
 
-        showSpotlight();
-
-    }
-
-    private void showSpotlight() {
-
-        //The spotlight library manage the fact that they are displayed only once.
-        // But for performance and to avoid creating useless objects, let's use a shared preference key.
-
-        if (!OpenDnsUpdater.getPrefs().getBoolean(PreferenceCodes.SPOTLIGHT_SHOWN, false)) {
-
-            SpotlightConfig config = new SpotlightConfig();
-            config.setIntroAnimationDuration(getResources().getInteger(R.integer.intro_annimation_duration));
-            config.setRevealAnimationEnabled(true);
-            config.setPerformClick(false);
-            config.setFadingTextDuration(getResources().getInteger(R.integer.fading_text_duration));
-            config.setHeadingTvColor(getResources().getColor(R.color.spotlight_heading_textview));
-            config.setHeadingTvSize(16);
-            config.setShowTargetArc(true);
-            config.setSubHeadingTvColor(getResources().getColor(R.color.colorTextIcon));
-            config.setSubHeadingTvSize(16);
-            config.setMaskColor(getResources().getColor(R.color.spotlight_backplane));
-            config.setLineAnimationDuration(getResources().getInteger(R.integer.line_annimation_duration));
-            config.setLineAndArcColor(getResources().getColor(R.color.spotlight_line_color));
-            config.setDismissOnTouch(true);
-            config.setDismissOnBackpress(true);
-
-            SpotlightSequence seq = SpotlightSequence.getInstance(this, config);
-
-            //Switches
-            seq.addSpotlight(this.switchEnableAutoUpdate, getString(R.string.spotlight_title_auto_update_switch),
-                    getString(R.string.spotlight_content_auto_update_switch),
-                    PreferenceCodes.SPOTLIGHT_ID_SWITCH_AUTO_UPDATED);
-            seq.addSpotlight(this.switchEnableEnableOpendnsServers,
-                    getString(R.string.spotlight_title_start_vpn_server),
-                    getString(R.string.spotlight_content_start_vpn_server),
-                    PreferenceCodes.SPOTLIGHT_ID_SWITCH_VPN_SERVER);
-            seq.addSpotlight(this.switchEnableNotification,
-                    getString(R.string.spotlight_title_show_notifications),
-                    getString(R.string.spotlight_content_show_notifications),
-                    PreferenceCodes.SPOTLIGHT_ID_SWITCH_NOTIFICATION);
-
-            //StateSwitchers
-
-            seq.addSpotlight(this.ipAddressUpdatedStateSwitcher.getView(),
-                    getString(R.string.spotlight_title_state_switcher_ip_updated),
-                    getString(R.string.spotlight_content_state_switcher_ip_updated),
-                    PreferenceCodes.SPOTLIGHT_ID_STATUS_IP_UPDATED);
-            seq.addSpotlight(this.openDNSWebsiteStateSwitcher.getView(),
-                    getString(R.string.spotlight_title_state_switcher_using_opendns_server),
-                    getString(R.string.spotlight_content_state_switcher_using_opendns_server),
-                    PreferenceCodes.SPOTLIGHT_ID_STATUS_USING_OPENDNS);
-            seq.addSpotlight(this.filterPhishingStateSwitcher.getView(),
-                    getString(R.string.spotlight_title_state_switcher_is_filtering),
-                    getString(R.string.spotlight_content_state_switcher_is_filtering),
-                    PreferenceCodes.SPOTLIGHT_ID_STATUS_FILTERING_WEBSITES);
-            seq.addSpotlight(this.useOpendnsStateSwitcher.getView(),
-                    getString(R.string.spotlight_title_state_switcher_using_vpn_service),
-                    getString(R.string.spotlight_content_state_switcher_using_vpn_service),
-                    PreferenceCodes.SPOTLIGHT_ID_STATUS_USING_VPN);
-
-            // General buttons
-
-            seq.addSpotlight(this.refreshButton,
-                    getString(R.string.spotlight_title_top_button_refresh_all),
-                    getString(R.string.spotlight_content_top_button_refresh),
-                    PreferenceCodes.SPOTLIGHT_ID_TOP_BUTTON_REFRESH);
-            seq.addSpotlight(this.settingButton,
-                    getString(R.string.spotlight_title_top_button_settings),
-                    getString(R.string.spotlight_content_top_button_settings),
-                    PreferenceCodes.SPOTLIGHT_ID_TOP_BUTTON_SETTINGS);
-
-            seq.startSequence();
-            OpenDnsUpdater.getPrefs().edit().putBoolean(PreferenceCodes.SPOTLIGHT_SHOWN, true).apply();
-        }
 
     }
 
@@ -213,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
 
         switchEnableNotification.setChecked(prefs.getBoolean(PreferenceCodes.APP_NOTIFY, false));
-        switchEnableEnableOpendnsServers.setChecked(prefs.getBoolean(PreferenceCodes.APP_DNS, false));
+        switchEnableEnableOpenDNSServers.setChecked(prefs.getBoolean(PreferenceCodes.APP_DNS, false));
         switchEnableAutoUpdate.setChecked(prefs.getBoolean(PreferenceCodes.APP_AUTO_UPDATE, false));
 
         printDateLastUpdate();
@@ -293,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case RequestCodes.SETTIGNS:
+            case RequestCodes.SETTINGS:
                 restoreSettings();
                 refreshOpenDnsStatus();
                 break;
@@ -309,14 +233,14 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
 
     private void openSettings() {
         Intent intent = new Intent(this, GlobalSettingsActivity.class);
-        this.startActivityForResult(intent, RequestCodes.SETTIGNS);
+        this.startActivityForResult(intent, RequestCodes.SETTINGS);
     }
 
     private void refreshOpenDnsStatus() {
 
         this.ipAddressUpdatedStateSwitcher.setCurrentState(RUNNING);
         this.filterPhishingStateSwitcher.setCurrentState(RUNNING);
-        this.useOpendnsStateSwitcher.setCurrentState(RUNNING);
+        this.useOpenDNSStateSwitcher.setCurrentState(RUNNING);
         this.openDNSWebsiteStateSwitcher.setCurrentState(RUNNING);
 
         onInterfaceChanged(new InterfaceUpdatedEvent(ConnectivityUtil.getActiveNetworkName(getApplicationContext())));
@@ -324,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         new SimplerCountdown(1500) {
             @Override
             public void onFinish() {
-                useOpendnsStateSwitcher.setCurrentState(OpenDnsVpnService.isActivated() ? SUCCESS : ERROR);
+                useOpenDNSStateSwitcher.setCurrentState(OpenDnsVpnService.isActivated() ? SUCCESS : ERROR);
             }
         };
 
@@ -368,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
 
         EventBus.getDefault().register(this);
 
-        Log.d(TAG, "onResume: Starting to update the UI with fresh informations ");
+        Log.d(TAG, "onResume: Starting to update the UI with fresh information ");
         this.refreshOpenDnsStatus();
 
     }
@@ -385,6 +309,5 @@ public class MainActivity extends AppCompatActivity implements TaskFinished {
         }
 
         printDateLastUpdate();
-
     }
 }

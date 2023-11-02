@@ -35,15 +35,15 @@ import static android.content.Context.CONNECTIVITY_SERVICE;
 /**
  * Check device's network connectivity and speed
  *
- * @author emil http://stackoverflow.com/users/220710/emil
+ * @author emil <a href="http://stackoverflow.com/users/220710/emil">...</a>
  */
 public class ConnectivityUtil {
 
     /**
      * Get the network info
      *
-     * @param context
-     * @return
+     * @param context the context
+     * @return network infos
      */
     public static NetworkInfo getNetworkInfo(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
@@ -53,8 +53,8 @@ public class ConnectivityUtil {
     /**
      * Check if there is any connectivity
      *
-     * @param context
-     * @return
+     * @param context the context
+     * @return true if connected
      */
     public static boolean isConnected(Context context) {
         NetworkInfo info = ConnectivityUtil.getNetworkInfo(context);
@@ -64,8 +64,8 @@ public class ConnectivityUtil {
     /**
      * Check if there is any connectivity to a Wifi network
      *
-     * @param context
-     * @return
+     * @param context the context
+     * @return true if on wifi
      */
     public static boolean isConnectedWifi(Context context) {
         NetworkInfo info = ConnectivityUtil.getNetworkInfo(context);
@@ -75,8 +75,8 @@ public class ConnectivityUtil {
     /**
      * Check if there is any connectivity to a mobile network
      *
-     * @param context
-     * @return
+     * @param context the context
+     * @return true if on mobile
      */
     public static boolean isConnectedMobile(Context context) {
         NetworkInfo info = ConnectivityUtil.getNetworkInfo(context);
@@ -86,8 +86,8 @@ public class ConnectivityUtil {
     /**
      * Check if there is fast connectivity
      *
-     * @param context
-     * @return
+     * @param context the context
+     * @return true if connection is "fast"
      */
     public static boolean isConnectedFast(Context context) {
         NetworkInfo info = ConnectivityUtil.getNetworkInfo(context);
@@ -107,11 +107,10 @@ public class ConnectivityUtil {
         } else if (type == ConnectivityManager.TYPE_MOBILE) {
             switch (subType) {
                 case TelephonyManager.NETWORK_TYPE_1xRTT:
+                case TelephonyManager.NETWORK_TYPE_EDGE:
                     return false; // ~ 50-100 kbps
                 case TelephonyManager.NETWORK_TYPE_CDMA:
                     return false; // ~ 14-64 kbps
-                case TelephonyManager.NETWORK_TYPE_EDGE:
-                    return false; // ~ 50-100 kbps
                 case TelephonyManager.NETWORK_TYPE_EVDO_0:
                     return true; // ~ 400-1000 kbps
                 case TelephonyManager.NETWORK_TYPE_EVDO_A:

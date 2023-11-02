@@ -1,7 +1,7 @@
 package fr.guillaumevillena.opendnsupdater.event;
 
 public class InterfaceUpdatedEvent {
-    private String iface;
+    private final String iface;
 
     public InterfaceUpdatedEvent(String iface) {
 

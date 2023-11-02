@@ -13,9 +13,10 @@ import fr.guillaumevillena.opendnsupdater.R;
 
 public class IntroAccountFragment extends Fragment {
 
-    private static final String ARG_LAYOUT_RES_ID = "layoutResId";
-    private int layoutResId;
     private boolean hasAccount;
+
+    public IntroAccountFragment() {
+    }
 
     public static IntroAccountFragment newInstance() {
         return new IntroAccountFragment();

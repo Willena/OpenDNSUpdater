@@ -49,7 +49,7 @@ import static android.content.Context.CONNECTIVITY_SERVICE;
 
 /**
  * Created by guill on 26/06/2018.
- * With the help of stack overflow : https://stackoverflow.com/questions/46163131/android-o-detect-connectivity-change-in-background
+ * With the help of stack overflow : <a href="https://stackoverflow.com/questions/46163131/android-o-detect-connectivity-change-in-background">...</a>
  */
 
 public class ConnectivityJob extends ListenableWorker implements TaskFinished {
@@ -76,7 +76,7 @@ public class ConnectivityJob extends ListenableWorker implements TaskFinished {
                 .setConstraints(new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
                 .build();
 
-        WorkManager.getInstance().enqueueUniquePeriodicWork("connectivity-job", ExistingPeriodicWorkPolicy.REPLACE, request);
+        WorkManager.getInstance(context.getApplicationContext()).enqueueUniquePeriodicWork("connectivity-job", ExistingPeriodicWorkPolicy.REPLACE, request);
 
     }
 
@@ -112,7 +112,6 @@ public class ConnectivityJob extends ListenableWorker implements TaskFinished {
             Set<String> filtered = prefs.getStringSet(PreferenceCodes.APP_FILTER, null);
 
             String type = prefs.getString(PreferenceCodes.APP_FILTER_TYPE, "NONE");
-            assert type != null;
 
             if (type.equals("BLACKLIST") &&
                     filtered != null && (

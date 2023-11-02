@@ -8,7 +8,7 @@ public class DNSServer extends AbstractDNSServer {
 
     private static int totalId = 0;
 
-    private String id;
+    private final String id;
     private int description = 0;
 
     public DNSServer(String address, int description, int port) {

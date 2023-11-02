@@ -30,7 +30,7 @@ import java.util.Set;
 import fr.guillaumevillena.opendnsupdater.R;
 import fr.guillaumevillena.opendnsupdater.utils.ConnectivityUtil;
 import fr.guillaumevillena.opendnsupdater.utils.PreferenceCodes;
-import fr.guillaumevillena.opendnsupdater.utils.RessourceUtil;
+import fr.guillaumevillena.opendnsupdater.utils.ResourceUtil;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -253,7 +253,7 @@ public class GlobalSettingsActivity extends AppCompatPreferenceActivity {
                 MultiSelectListPreference blacklist = (MultiSelectListPreference) findPreference(PreferenceCodes.APP_FILTER);
                 setBlackListToCurrentValue(blacklist);
             } else if (preference.getKey().startsWith("app_about_licenses")) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(RessourceUtil.getId(preference.getKey(), R.string.class))));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(ResourceUtil.getId(preference.getKey(), R.string.class))));
                 startActivity(browserIntent);
             }
 

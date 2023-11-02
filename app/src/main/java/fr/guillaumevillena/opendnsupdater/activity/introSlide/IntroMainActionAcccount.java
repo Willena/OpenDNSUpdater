@@ -15,7 +15,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 
-import com.github.paolorotolo.appintro.ISlidePolicy;
+import com.github.appintro.SlidePolicy;
 import com.google.android.material.snackbar.Snackbar;
 
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
@@ -31,10 +31,8 @@ import static fr.guillaumevillena.opendnsupdater.TestState.RUNNING;
 import static fr.guillaumevillena.opendnsupdater.TestState.SUCCESS;
 import static fr.guillaumevillena.opendnsupdater.TestState.UNKNOWN;
 
-public class IntroMainActionAcccount extends Fragment implements TaskFinished, ISlidePolicy {
+public class IntroMainActionAcccount extends Fragment implements TaskFinished, SlidePolicy {
 
-    private static final String TAG = IntroMainActionAcccount.class.getSimpleName();
-    private View root;
     private boolean connectionOk;
 
     public static IntroMainActionAcccount newInstance() {
@@ -57,7 +55,7 @@ public class IntroMainActionAcccount extends Fragment implements TaskFinished, I
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.intro_main_content_account, container, false);
+        View root = inflater.inflate(R.layout.intro_main_content_account, container, false);
 
         openDnsPassword = root.findViewById(R.id.editOpenDnsPassword);
         openDnsUsername = root.findViewById(R.id.editOpenDnsUsername);

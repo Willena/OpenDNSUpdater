@@ -10,8 +10,6 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.bugsnag.android.Bugsnag;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,15 +86,9 @@ public class OpenDnsUpdater extends Application {
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
-        initalizeCrashCollection();
 
         instance = this;
 
-    }
-
-    public void initalizeCrashCollection() {
-        if (prefs.getBoolean(PreferenceCodes.BUGSNAG_ACTIVATED, false))
-            Bugsnag.init(this);
     }
 
     @Override

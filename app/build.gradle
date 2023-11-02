@@ -4,9 +4,9 @@ plugins {
 }
 
 play {
-    serviceAccountCredentials.set(file("serviceAccountKey.json"))
+    serviceAccountCredentials.set(file("../serviceAccountKey.json"))
     track.set("production")
-    userFraction.set(1.0D)
+    releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.COMPLETED)
 }
 
 
@@ -14,7 +14,7 @@ android {
     signingConfigs {
         config {
             keyAlias 'release'
-            storeFile file('./Keystore.jks')
+            storeFile file('../Keystore.jks')
             keyPassword 'password'
             storePassword 'password'
         }

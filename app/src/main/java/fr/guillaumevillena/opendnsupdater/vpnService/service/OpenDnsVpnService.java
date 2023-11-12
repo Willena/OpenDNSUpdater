@@ -84,7 +84,7 @@ public class OpenDnsVpnService extends VpnService implements Runnable {
                         Intent settingsIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION);
                         settingsIntent.setClass(this, StatusBarBroadcastReceiver.class);
                         PendingIntent pIntent = PendingIntent.getActivity(this, 0,
-                                new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                                new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
                         builder.setWhen(0)
                                 .setContentTitle(getResources().getString(R.string.notice_activated))
@@ -97,10 +97,10 @@ public class OpenDnsVpnService extends VpnService implements Runnable {
                                 .setContentIntent(pIntent)
                                 .addAction(R.drawable.ic_notification_clear, getResources().getString(R.string.button_text_deactivate),
                                         PendingIntent.getBroadcast(this, 0,
-                                                deactivateIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                                                deactivateIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE))
                                 .addAction(R.drawable.ic_notification_settings, getResources().getString(R.string.action_settings),
                                         PendingIntent.getBroadcast(this, 0,
-                                                settingsIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                                                settingsIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
 
 
                         Notification notification = builder.build();
@@ -210,7 +210,6 @@ public class OpenDnsVpnService extends VpnService implements Runnable {
                     .setConfigureIntent(PendingIntent.getActivity(this, 0,
                             new Intent(this, GlobalSettingsActivity.class),
                             PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE));
-            String format = null;
             for (String prefix : new String[]{"10.0.0", "192.0.2", "198.51.100", "203.0.113", "192.168.50"}) {
                 try {
                     builder.addAddress(prefix + ".1", 24);
@@ -218,7 +217,6 @@ public class OpenDnsVpnService extends VpnService implements Runnable {
                     continue;
                 }
 
-                format = prefix + ".%d";
                 break;
             }
 

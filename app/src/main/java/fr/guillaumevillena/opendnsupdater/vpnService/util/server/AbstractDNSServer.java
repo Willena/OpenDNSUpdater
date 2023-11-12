@@ -1,6 +1,8 @@
 package fr.guillaumevillena.opendnsupdater.vpnService.util.server;
 
 
+import androidx.annotation.NonNull;
+
 public class AbstractDNSServer {
     public static final int DNS_SERVER_DEFAULT_PORT = 53;
 
@@ -16,22 +18,15 @@ public class AbstractDNSServer {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public int getPort() {
         return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
     }
 
     public String getName() {
         return "";
     }
 
+    @NonNull
     @Override
     public String toString() {
         return getName();

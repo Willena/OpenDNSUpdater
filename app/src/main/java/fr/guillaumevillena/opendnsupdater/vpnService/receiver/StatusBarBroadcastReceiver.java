@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 import fr.guillaumevillena.opendnsupdater.OpenDnsUpdater;
 import fr.guillaumevillena.opendnsupdater.activity.GlobalSettingsActivity;
@@ -18,10 +19,10 @@ public class StatusBarBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION)) {
+        if (Objects.equals(intent.getAction(), STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION)) {
             OpenDnsUpdater.deactivateService(context);
         }
-        if (intent.getAction().equals(STATUS_BAR_BTN_SETTINGS_CLICK_ACTION)) {
+        if (Objects.equals(intent.getAction(), STATUS_BAR_BTN_SETTINGS_CLICK_ACTION)) {
             Intent settingsIntent = new Intent(context, GlobalSettingsActivity.class);
             settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(settingsIntent);

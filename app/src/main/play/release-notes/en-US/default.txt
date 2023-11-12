@@ -1,2 +1,1 @@
-- Updated targetSdk to 29
-- Updated version of libraries
+- VPNService fix for device with API > 31 (Android S+)
